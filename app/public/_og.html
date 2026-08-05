@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!-- แม่แบบภาพ og:image (1200×630) ที่โผล่ตอนแปะลิงก์ในไลน์/เฟซบุ๊ก
+     ไม่ใช่หน้าเว็บสำหรับคนอ่าน — robots.txt กันไว้แล้ว
+
+     สร้างภาพใหม่: รัน npm run dev แล้วยิงคำสั่งนี้จาก WSL
+       powershell.exe -NoProfile -Command "& 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe' \
+         --headless=new --disable-gpu --no-sandbox --hide-scrollbars --virtual-time-budget=12000 \
+         --window-size=1200,630 --screenshot='<path>\public\assets\img\og.png' \
+         'http://localhost:8788/_og.html'"
+     (เครื่องนี้ไม่มี ImageMagick/PIL จึงใช้เบราว์เซอร์เรนเดอร์แทน — ได้ฟอนต์ไทยถูกต้องด้วย) --><html lang="th"><head><meta charset="utf-8">
+<link rel="stylesheet" href="/assets/fonts.css">
+<style>
+  html,body{margin:0;padding:0}
+  body{position:relative;width:1200px;height:630px;overflow:hidden;
+    font-family:'IBM Plex Sans Thai',sans-serif;
+    background:#12224A;color:#fff;
+    display:grid;grid-template-columns:1fr 470px;align-items:center}
+  .l{padding:0 56px}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:19px;letter-spacing:.16em;
+    text-transform:uppercase;color:#9DB4E8;margin:0 0 18px}
+  h1{font-size:60px;line-height:1.12;margin:0 0 22px;font-weight:700;letter-spacing:-.01em}
+  p{font-size:23px;line-height:1.5;color:#C9D6F0;margin:0 0 30px;max-width:22em}
+  .wm{font-family:'Graduate',serif;font-size:31px;letter-spacing:.07em;
+    border-top:2px solid rgba(255,255,255,.28);padding-top:20px;display:inline-block}
+  .r{height:630px;position:relative;overflow:hidden}
+  .r img{position:absolute;top:50%;left:58%;transform:translate(-50%,-46%);height:112%}
+  .r::after{content:'';position:absolute;inset:0;
+    background:linear-gradient(90deg,#12224A 0%,#12224A 8%,rgba(18,34,74,.72) 34%,rgba(18,34,74,0) 78%)}
+</style></head><body>
+<div class="l">
+  <p class="eyebrow">AMS CMU · Reunion 20 ปี</p>
+  <h1>กองทุนคืนสู่เหย้า<br>เทคนิคการแพทย์ มช. รุ่น 49</h1>
+  <p>บริจาคและสั่งเสื้อรุ่นในหน้าเดียว โอนครั้งเดียวแล้วแนบสลิป · ทุกยอดขึ้นบัญชีสาธารณะโดยไม่เปิดเผยชื่อ</p>
+  <span class="wm">21 พฤศจิกายน 2569</span>
+</div>
+<div class="r"><img src="/assets/img/shirt-front.png" alt=""></div>
+</body></html>

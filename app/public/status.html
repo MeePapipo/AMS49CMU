@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>เช็คสถานะ · AMS49 CMU Reunion 20 ปี</title>
+<meta name="description" content="เช็คสถานะรายการบริจาคและสั่งเสื้อรุ่นด้วยรหัสอ้างอิง">
+<!-- หน้านี้เปิดด้วยรหัสอ้างอิงของแต่ละคน ไม่ควรถูกเก็บเข้าดัชนีค้นหา -->
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/fonts.css?v=1">
+<link rel="stylesheet" href="/assets/system.css?v=1">
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปเนื้อหาหลัก</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand-lock" href="/">
+      <img src="/assets/img/ams-logo.png" alt="คณะเทคนิคการแพทย์ มหาวิทยาลัยเชียงใหม่">
+      <span class="sep" aria-hidden="true"></span>
+      <span><span class="wordmark">AMS49CMU</span><span class="yr" style="display:block">REUNION 20 ปี</span></span>
+    </a>
+    <nav class="nav" aria-label="เมนูหลัก">
+      <a href="/">หน้าหลัก</a>
+      <a href="/support">บริจาคและสั่งเสื้อรุ่น</a>
+      <a href="/status" aria-current="page">เช็คสถานะ</a>
+      <a href="/admin" class="admin-link">แอดมิน</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap section">
+
+  <!-- ค้นหาอยู่ซ้าย ไม่จัดกลาง — composition ต่างจากหน้าอื่น -->
+  <div style="display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:var(--s7);align-items:start" class="status-grid">
+
+    <div class="stack">
+      <div>
+        <p class="eyebrow">หลังส่งเรื่องแล้ว</p>
+        <h1>เช็คสถานะรายการ</h1>
+      </div>
+      <p class="body" style="color:var(--ink-muted)">
+        กรอกรหัสอ้างอิงที่ได้ตอนแนบสลิป ระบบไม่มีการค้นด้วยชื่อ
+        เพราะรุ่นเรามีคนไม่มาก การค้นด้วยชื่อจะทำให้เดาได้ว่าใครบริจาคเท่าไร
+      </p>
+
+      <form id="lookup" class="stack-sm" novalidate>
+        <div class="field" id="f-ref">
+          <label for="i-ref">รหัสอ้างอิง</label>
+          <input class="input mono" id="i-ref" type="text" placeholder="AMS49-XXXXXX"
+                 style="font-size:1.125rem;letter-spacing:.06em;text-transform:uppercase"
+                 autocomplete="off" spellcheck="false" aria-describedby="h-ref">
+          <p class="hint" id="h-ref">ขึ้นต้นด้วย AMS49- ตามด้วยตัวอักษร/ตัวเลข 6 ตัว</p>
+          <p class="err" role="alert"></p>
+        </div>
+        <button class="btn btn-primary btn-lg" type="submit" id="btn-look" style="width:100%">
+          <span class="btn-spin" aria-hidden="true"></span><span>ดูสถานะ</span>
+        </button>
+      </form>
+
+      <div class="panel panel-pad stack-sm">
+        <h3 style="font-size:.9375rem">หารหัสไม่เจอ?</h3>
+        <p class="meta">ทักกรรมการรุ่นพร้อมแจ้งยอดและเวลาที่โอน กรรมการจะค้นจากสลิปให้
+          — แต่จะไม่ประกาศรหัสของใครในกลุ่ม</p>
+      </div>
+    </div>
+
+    <!-- ผลลัพธ์ -->
+    <div id="pane">
+      <div id="pane-idle" class="panel state">
+        <h3>ยังไม่ได้ค้นหา</h3>
+        <p>กรอกรหัสอ้างอิงทางซ้ายเพื่อดูว่ารายการของคุณถึงขั้นไหนแล้ว</p>
+      </div>
+
+      <div id="pane-loading" class="panel panel-pad stack" hidden aria-busy="true">
+        <div class="skeleton" style="width:40%;height:20px"></div>
+        <div class="skeleton" style="width:70%;height:38px"></div>
+        <div class="skeleton" style="width:100%"></div>
+        <div class="skeleton" style="width:85%"></div>
+        <div class="skeleton" style="width:60%"></div>
+      </div>
+
+      <div id="pane-none" class="panel state" hidden>
+        <h3 id="none-title">ไม่พบรหัสนี้</h3>
+        <p id="none-body">ตรวจตัวอักษรอีกครั้ง — รหัสไม่มีตัว <span class="mono">I</span> <span class="mono">O</span>
+          <span class="mono">0</span> <span class="mono">1</span> เพื่อกันสับสน</p>
+        <button class="btn btn-secondary btn-sm" id="btn-retry" style="margin-top:var(--s4)">ลองใหม่</button>
+      </div>
+
+      <div id="pane-found" hidden class="panel" style="overflow:hidden">
+        <div class="panel-head" style="justify-content:space-between">
+          <div>
+            <p class="meta">รหัสอ้างอิง</p>
+            <p class="mono" style="font-size:1.125rem;font-weight:500" id="r-ref"></p>
+          </div>
+          <div id="r-badge"></div>
+        </div>
+
+        <div class="panel-pad stack-lg">
+          <div style="display:flex;gap:var(--s7);flex-wrap:wrap">
+            <div>
+              <p class="meta">ยอดที่แจ้ง</p>
+              <p style="font-size:1.75rem;font-weight:600" class="num"><span id="r-amount"></span> <span style="font-size:1rem;font-weight:400;color:var(--ink-muted)">บาท</span></p>
+              <p class="meta" id="r-split"></p>
+            </div>
+            <div>
+              <p class="meta">เวลาที่โอน</p>
+              <p style="font-size:1.0625rem;font-weight:500" id="r-time"></p>
+            </div>
+            <div>
+              <p class="meta">ไซส์ที่สั่ง</p>
+              <p style="font-size:1.0625rem;font-weight:500" id="r-sizes"></p>
+            </div>
+          </div>
+
+          <ol class="timeline" id="r-timeline" style="border-top:1px solid var(--line);padding-top:var(--s5)"></ol>
+
+          <div id="r-note"></div>
+          <div id="r-shirt"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div>
+      <img src="/assets/img/ams-logo.png" alt="">
+      <p class="meta">คณะกรรมการรุ่น 49 คณะเทคนิคการแพทย์ มหาวิทยาลัยเชียงใหม่</p>
+    </div>
+    <div class="meta">
+      <p><strong style="color:var(--ink)">ทำไมต้องใช้รหัส</strong></p>
+      <p>รหัสอ้างอิงคือกุญแจส่วนตัวของแต่ละรายการ ทำให้หน้าสาธารณะโปร่งใสได้
+         โดยไม่มีใครสืบย้อนได้ว่าเงินก้อนไหนเป็นของใคร</p>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<style>
+@media (max-width:900px){ .status-grid{ grid-template-columns:1fr !important; gap:var(--s6) !important; } }
+</style>
+
+<script src="/assets/app.js?v=1"></script>
+<script src="/assets/page-status.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+# หน้าเก่าที่ถูกรวมเข้ากับหน้าบริจาค/สั่งเสื้อแล้ว
+# ลิงก์เก่าถูกส่งต่อในไลน์กลุ่มรุ่นไปแล้ว จึงต้องเด้งต่อให้ ไม่ใช่ปล่อย 404
+# ปลายทางเขียนแบบไม่มี .html เพราะ Pages เด้ง /support.html → /support อยู่แล้ว
+# ถ้าชี้ไปที่ .html จะกลายเป็นเด้งสองต่อ
+/donate.html   /support   301
+/shirt.html    /support   301
+/report.html   /support   301
+/donate        /support   301
+/shirt         /support   301
+/report        /support   301

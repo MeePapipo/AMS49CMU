@@ -1,0 +1,47 @@
+<!doctype html><meta charset="utf-8"><title>probe</title>
+<body style="margin:0;font:12px/1.5 monospace;white-space:pre-wrap;padding:10px">
+<div id="out">…</div>
+<script>
+var W = 320, out = [], q = ['index.html', 'support.html'];
+function run() {
+  if (!q.length) { document.getElementById('out').textContent = out.join('\n'); return; }
+  var url = q.shift();
+  var f = document.createElement('iframe');
+  f.style.cssText = 'width:' + W + 'px;height:900px;border:0;position:absolute;left:-9999px';
+  f.src = url;
+  document.body.appendChild(f);
+  f.onload = function () {
+    setTimeout(function () {
+      var d = f.contentDocument;
+      out.push('\n=== ' + url + ' @' + W + ' scrollWidth=' + d.documentElement.scrollWidth + ' ===');
+      var all = [].slice.call(d.querySelectorAll('body *'));
+      var wide = all.map(function (el) {
+        var r = el.getBoundingClientRect();
+        return { el: el, right: r.right, w: r.width };
+      }).filter(function (x) { return x.right > W + 1; })
+        .sort(function (a, b) { return b.right - a.right; })
+        .slice(0, 14);
+      wide.forEach(function (x) {
+        var el = x.el;
+        var path = el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') +
+          (el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).join('.') : '');
+        var par = el.parentElement ? el.parentElement.tagName.toLowerCase() +
+          (el.parentElement.className && typeof el.parentElement.className === 'string'
+            ? '.' + el.parentElement.className.trim().split(/\s+/).join('.') : '') : '';
+        var scroller = '';
+        var p = el.parentElement;
+        while (p && p !== d.body) {
+          var ov = f.contentWindow.getComputedStyle(p).overflowX;
+          if (ov === 'auto' || ov === 'scroll') { scroller = ' [in scroller ' + p.tagName.toLowerCase() +
+            (p.className ? '.' + String(p.className).trim().split(/\s+/).join('.') : '') + ']'; break; }
+          p = p.parentElement;
+        }
+        out.push('  right=' + Math.round(x.right) + ' w=' + Math.round(x.w) + '  ' + path +
+          '  < ' + par + scroller + '  "' + (el.textContent || '').trim().slice(0, 30) + '"');
+      });
+      f.remove(); run();
+    }, 700);
+  };
+}
+run();
+</script>

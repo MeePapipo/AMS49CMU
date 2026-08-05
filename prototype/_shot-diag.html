@@ -1,0 +1,92 @@
+<!DOCTYPE html><meta charset="utf-8"><title>diag</title>
+<!-- เครื่องมือตรวจ ไม่ใช่ส่วนหนึ่งของเว็บ — เปิดทุกหน้า/ทุกขั้นในหลายความกว้าง
+     แล้วรายงานว่ามีอะไรล้นขอบจอจนเกิดการเลื่อนแนวนอนไหม -->
+<body style="margin:0;font:12px/1.55 monospace;white-space:pre-wrap;padding:10px">
+<div id="out">running…</div>
+<script>
+var DRAFT = 'ams49.draft.v2';
+var WIDTHS = [320, 360, 390, 768, 1024];
+
+/* prep = สิ่งที่ต้องกดก่อนวัด เช่นเดินไปขั้นที่ต้องการ หรือค้นรหัสให้ขึ้นผลลัพธ์ */
+function fill(d, w, id, v) {
+  var el = d.getElementById(id); if (!el) return;
+  el.value = v;
+  el.dispatchEvent(new w.Event('input', { bubbles: true }));
+  el.dispatchEvent(new w.Event('change', { bubbles: true }));
+}
+function toStep(d, w, step) {
+  var el = d.querySelector('input[data-size="M"]');
+  el.value = '2'; el.dispatchEvent(new w.Event('input', { bubbles: true }));
+  fill(d, w, 'i-donation', '700');
+  if (step === 'order') return;
+  d.querySelector('[data-next="info"]').click();
+  if (step === 'info') return;
+  ['i-name:ทดสอบ ระบบดี', 'i-phone:0812345678', 'i-rname:ผู้รับ ปลายทาง', 'i-rphone:0898765432',
+   'i-addr:99/9 หมู่ 2 ถ.ห้วยแก้ว ต.ช้างเผือก อ.เมือง', 'i-prov:เชียงใหม่', 'i-zip:50300']
+    .forEach(function (p) { var i = p.indexOf(':'); fill(d, w, p.slice(0, i), p.slice(i + 1)); });
+  d.getElementById('i-consent').checked = true;
+  d.querySelector('[data-next="pay"]').click();
+  if (step === 'pay') return;
+  d.querySelector('[data-next="slip"]').click();
+}
+
+var PAGES = [
+  { label: 'index',          url: 'index.html' },
+  { label: 'support ①สั่ง',   url: 'support.html', prep: function (d, w) { toStep(d, w, 'order'); } },
+  { label: 'support ②ข้อมูล', url: 'support.html', prep: function (d, w) { toStep(d, w, 'info'); } },
+  { label: 'support ③โอน',   url: 'support.html', prep: function (d, w) { toStep(d, w, 'pay'); } },
+  { label: 'support ④สลิป',  url: 'support.html', prep: function (d, w) { toStep(d, w, 'slip'); } },
+  { label: 'status ผลลัพธ์',  url: 'status.html?ref=AMS49-W6CX' },
+  { label: 'status ไม่พบ',    url: 'status.html?ref=AMS49-ZZZZ' },
+  { label: 'admin ทั้งหมด',   url: '_shot-admin.html', prep: function (d) {
+      var c = d.querySelector('.chip[data-f="all"]'); if (c) c.click(); } },
+  { label: 'report (redirect)', url: 'report.html' }
+];
+
+var lines = [], q = [], bad = 0;
+PAGES.forEach(function (p) { WIDTHS.forEach(function (w) { q.push([p, w]); }); });
+
+function next() {
+  if (!q.length) {
+    document.getElementById('out').textContent =
+      lines.join('\n') + '\n\n' + (bad ? '❌ OVERFLOW ' + bad + ' จุด' : '✅ ไม่มีการเลื่อนแนวนอนทุกหน้า');
+    return;
+  }
+  var job = q.shift(), p = job[0], w = job[1];
+  try { localStorage.removeItem(DRAFT); } catch (e) {}
+
+  var f = document.createElement('iframe');
+  f.style.cssText = 'width:' + w + 'px;height:900px;border:0;position:absolute;left:-9999px';
+  f.src = p.url;
+  document.body.appendChild(f);
+  f.onload = function () {
+    setTimeout(function () {
+      try {
+        var d = f.contentDocument;
+        if (p.prep) p.prep(d, f.contentWindow);
+      } catch (e) {}
+      setTimeout(function () {
+        try {
+          var d = f.contentDocument, sw = d.documentElement.scrollWidth, over = [];
+          if (sw > w + 1) {
+            var all = d.querySelectorAll('body *');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i], r = el.getBoundingClientRect();
+              if (r.right > w + 1 && el.children.length === 0) {
+                over.push(el.tagName + '.' + (el.className || '') + '@' + Math.round(r.right));
+              }
+            }
+            bad++;
+          }
+          lines.push((sw > w + 1 ? 'OVERFLOW ' : 'ok       ') + pad(p.label) + ' @' + w +
+            ' scrollWidth=' + sw + (over.length ? ' :: ' + over.slice(0, 4).join(' | ') : ''));
+        } catch (e) { lines.push('ERR ' + p.label + ' @' + w + ' ' + e); bad++; }
+        document.getElementById('out').textContent = lines.join('\n');
+        f.remove(); next();
+      }, 450);
+    }, 500);
+  };
+}
+function pad(s) { while (s.length < 20) s += ' '; return s; }
+next();
+</script>

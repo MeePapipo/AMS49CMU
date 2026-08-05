@@ -1,0 +1,330 @@
+<!DOCTYPE html><meta charset="utf-8"><title>flow test</title>
+<!-- เครื่องมือทดสอบ ไม่ใช่ส่วนหนึ่งของเว็บ — ขับ support.html ผ่าน iframe แล้วตรวจของที่ลง Store
+     อยู่ origin เดียวกันจึงล้าง localStorage ให้ก่อนเริ่มแต่ละเคสได้ -->
+<body style="margin:0;font:13px/1.6 monospace;white-space:pre-wrap;padding:12px">
+<div id="out">running…</div>
+<script>
+var KEY = 'ams49.proto.v5', DRAFT = 'ams49.draft.v3';
+var lines = [], fails = 0;
+
+function log(s) { lines.push(s); document.getElementById('out').textContent = lines.join('\n'); }
+function ok(name, cond, extra) {
+  if (!cond) fails++;
+  log((cond ? 'PASS  ' : 'FAIL  ') + name + (extra ? '   [' + extra + ']' : ''));
+}
+function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+function frame(hash) {
+  return new Promise(function (res) {
+    var f = document.createElement('iframe');
+    f.style.cssText = 'width:1200px;height:900px;border:0;position:absolute;left:-9999px';
+    f.src = 'support.html' + (hash || '');
+    f.onload = function () { setTimeout(function () { res(f); }, 250); };
+    document.body.appendChild(f);
+  });
+}
+
+function drive(f) {
+  var d = f.contentDocument, w = f.contentWindow;
+  return {
+    d: d, w: w,
+    $: function (id) { return d.getElementById(id); },
+    set: function (id, v) {
+      var el = d.getElementById(id);
+      el.value = v;
+      el.dispatchEvent(new w.Event('input', { bubbles: true }));
+      el.dispatchEvent(new w.Event('change', { bubbles: true }));
+    },
+    size: function (code, n) {
+      var el = d.querySelector('input[data-size="' + code + '"]');
+      el.value = n;
+      el.dispatchEvent(new w.Event('input', { bubbles: true }));
+    },
+    click: function (sel) { d.querySelector(sel).click(); },
+    txt: function (id) { var e = d.getElementById(id); return e ? e.textContent.trim() : '(no ' + id + ')'; },
+    visible: function (id) { return !d.getElementById(id).hidden; },
+    step: function () {
+      var cur = d.querySelector('#stepper li[aria-current="step"]');
+      if (!d.getElementById('step-done').hidden) return 'done';
+      return cur ? cur.getAttribute('data-step') : '(none)';
+    },
+    slip: function () {
+      var dt = new w.DataTransfer();
+      dt.items.add(new w.File(['slip'], 'slip-test.jpg', { type: 'image/jpeg' }));
+      var i = d.getElementById('i-slip');
+      i.files = dt.files;
+      i.dispatchEvent(new w.Event('change', { bubbles: true }));
+    }
+  };
+}
+
+function fillInfo(p, withShip) {
+  p.set('i-name', 'ทดสอบ ระบบดี');
+  p.set('i-phone', '0812345678');
+  p.set('i-sid', '491110123');
+  p.set('i-email', 'test@example.com');
+  p.set('i-line', 'line_test');
+  if (withShip) {
+    p.set('i-rname', 'ผู้รับ ปลายทาง');
+    p.set('i-rphone', '0898765432');
+    p.set('i-addr', '99/9 หมู่ 2 ถ.ห้วยแก้ว ต.ช้างเผือก อ.เมือง');
+    p.set('i-prov', 'เชียงใหม่');
+    p.set('i-zip', '50300');
+    p.set('i-shipnote', 'โทรก่อนส่ง');
+  }
+  p.$('i-consent').checked = true;
+  p.$('i-consent').dispatchEvent(new p.w.Event('change', { bubbles: true }));
+}
+
+function rows() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
+function newest() { return rows()[0]; }
+function reset() { localStorage.removeItem(KEY); localStorage.removeItem(DRAFT); }
+
+/* ---------------- 1 · ซื้อเสื้ออย่างเดียว ---------------- */
+async function case1() {
+  log('\n=== 1 · เสื้อ M×2 + L×1 บริจาค 0 → ต้องได้ 1,500 ===');
+  reset();
+  var f = await frame(), p = drive(f);
+  p.size('M', 2); p.size('L', 1);
+  await wait(60);
+  ok('ยอดรวมบนแถบสรุป = 1,500', p.txt('rail-total') === '1,500', p.txt('rail-total'));
+  ok('บอกไซส์ถูก', p.txt('rail-sizes') === 'ไซส์ M×2, L×1', p.txt('rail-sizes'));
+  p.click('[data-next="info"]');
+  await wait(80);
+  ok('ไปขั้น 2 ได้', p.step() === 'info', p.step());
+  ok('มีเสื้อ → โชว์ช่องที่อยู่', p.visible('ship-panel'));
+  fillInfo(p, true);
+  p.click('[data-next="pay"]');
+  await wait(80);
+  ok('ไปขั้น 3 ได้', p.step() === 'pay', p.step());
+  ok('ยอดใหญ่บนหน้าโอน = 1,500', p.txt('pay-total') === '1,500', p.txt('pay-total'));
+  ok('ปุ่มคัดลอกยอดได้เลขล้วน 1500',
+     p.$('copy-total').getAttribute('data-copy') === '1500', p.$('copy-total').getAttribute('data-copy'));
+  p.click('[data-next="slip"]');
+  await wait(80);
+  p.set('i-time', '2026-08-05T10:30');
+  p.slip();
+  await wait(60);
+  p.click('#btn-submit');
+  await wait(1100);
+  ok('ไปหน้าจบ', p.step() === 'done', p.step());
+  var r = newest();
+  ok('บันทึกลง Store แล้ว', !!r);
+  if (r) {
+    ok('donation = 0', r.donation === 0, r.donation);
+    ok('shirtQty = 3', r.shirtQty === 3, r.shirtQty);
+    ok('sizes = M,M,L', JSON.stringify(r.sizes) === '["M","M","L"]', JSON.stringify(r.sizes));
+    ok('status = pending', r.status === 'pending', r.status);
+    ok('เก็บที่อยู่แยกส่วน', r.province === 'เชียงใหม่' && r.zip === '50300', r.province + '/' + r.zip);
+    ok('address ประกอบแล้วไม่มีหมายเหตุปน', r.address.indexOf('โทรก่อนส่ง') === -1, r.address);
+    ok('shipNote เก็บแยก', r.shipNote === 'โทรก่อนส่ง', r.shipNote);
+    ok('เก็บ studentId/email/line', r.studentId === '491110123' && r.email === 'test@example.com' && r.lineId === 'line_test');
+  }
+  ok('ล้างร่างหลังส่ง', !localStorage.getItem(DRAFT));
+  f.remove();
+}
+
+/* ---------------- 2 · บริจาคอย่างเดียว ---------------- */
+async function case2() {
+  log('\n=== 2 · บริจาค 2,000 ไม่สั่งเสื้อ → ต้องไม่ถามที่อยู่ ===');
+  reset();
+  var f = await frame(), p = drive(f);
+  p.set('i-donation', '2000');
+  await wait(60);
+  ok('ยอดรวม = 2,000', p.txt('rail-total') === '2,000', p.txt('rail-total'));
+  p.click('[data-next="info"]');
+  await wait(80);
+  ok('ไปขั้น 2 ได้', p.step() === 'info', p.step());
+  ok('ไม่มีเสื้อ → ซ่อนช่องที่อยู่', !p.visible('ship-panel'));
+  ok('ขึ้นคำอธิบายว่าไม่ต้องกรอกที่อยู่', p.visible('no-ship-note'));
+  fillInfo(p, false);
+  p.click('[data-next="pay"]');
+  await wait(80);
+  ok('ผ่านไปขั้น 3 ได้ทั้งที่ไม่มีที่อยู่', p.step() === 'pay', p.step());
+  p.click('[data-next="slip"]');
+  await wait(60);
+  p.set('i-time', '2026-08-05T11:00');
+  p.slip();
+  await wait(60);
+  p.click('#btn-submit');
+  await wait(1100);
+  var r = newest();
+  ok('donation = 2000', r && r.donation === 2000, r && r.donation);
+  ok('shirtQty = 0', r && r.shirtQty === 0, r && r.shirtQty);
+  ok('ที่อยู่ว่างเปล่า', r && r.address === '' && r.province === '');
+  f.remove();
+}
+
+/* ---------------- 3 · ราคาขั้นบันไดของไซส์ใหญ่ ----------------
+   เคสนี้แทนเคส "ไซส์พิเศษ" เดิมที่ถูกยกเลิกไปแล้ว
+   จุดที่จะพังเงียบที่สุดคือมีใครกลับไปคิดเงินแบบ qty × 500 — ยอดจะเหลือ 2,000 แทน 2,140 */
+async function case3() {
+  log('\n=== 3 · M×1 + 2XL×1 + 5XL×1 บริจาค 570 → ต้องได้ 2,140 ===');
+  reset();
+  var f = await frame(), p = drive(f);
+  p.size('M', 1); p.size('2XL', 1); p.size('5XL', 1);
+  p.set('i-donation', '570');
+  await wait(60);
+  // 500 + 520 + 550 = 1,570 บวกบริจาค 570 = 2,140
+  ok('ยอดรวม = 2,140 (ไม่ใช่ 3 × 500 + 570 = 2,070)',
+     p.txt('rail-total') === '2,140', p.txt('rail-total'));
+  ok('เรียงไซส์เล็กไปใหญ่ ไม่ใช่ลำดับที่กด',
+     p.txt('rail-sizes') === 'ไซส์ M×1, 2XL×1, 5XL×1', p.txt('rail-sizes'));
+  ok('มีป้ายส่วนเพิ่มราคาบนแถว 5XL',
+     p.d.querySelector('tr[data-size="5XL"] .qt-plus').textContent === '+50',
+     p.d.querySelector('tr[data-size="5XL"] .qt-plus').textContent);
+  ok('ไซส์ XL ไม่มีป้ายส่วนเพิ่ม', !p.d.querySelector('tr[data-size="XL"] .qt-plus'));
+  ok('ไม่มีแถวไซส์พิเศษเหลืออยู่', !p.d.querySelector('tr[data-size="SPECIAL"]'));
+  p.click('[data-next="info"]');
+  await wait(80);
+  fillInfo(p, true);
+  p.click('[data-next="pay"]');
+  await wait(80);
+  ok('ยอดบนหน้าโอน = 2,140', p.txt('pay-total') === '2,140', p.txt('pay-total'));
+  ok('ปุ่มคัดลอกยอดได้เลขล้วน 2140',
+     p.$('copy-total').getAttribute('data-copy') === '2140', p.$('copy-total').getAttribute('data-copy'));
+  p.click('[data-next="slip"]');
+  await wait(60);
+  p.set('i-time', '2026-08-05T12:00');
+  p.slip();
+  await wait(60);
+  p.click('#btn-submit');
+  await wait(1100);
+  var r = newest();
+  ok('sizes เรียงเล็กไปใหญ่', r && JSON.stringify(r.sizes) === '["M","2XL","5XL"]', r && JSON.stringify(r.sizes));
+  ok('ไม่มีฟิลด์ specialNote หลงเหลือ', r && !('specialNote' in r), r && Object.keys(r).join(','));
+  f.remove();
+}
+
+/* ---------------- 3b · ผู้รับ = ผู้บริจาค ---------------- */
+async function case3b() {
+  log('\n=== 3b · ติ๊ก "ผู้รับเป็นคนเดียวกับผู้บริจาค" → ต้องล็อกช่องและตามค่าตลอด ===');
+  reset();
+  var f = await frame(), p = drive(f);
+  p.size('L', 1);
+  await wait(60);
+  p.click('[data-next="info"]');
+  await wait(80);
+  p.set('i-name', 'ทดสอบ ระบบดี');
+  p.set('i-phone', '0812345678');
+  await wait(60);
+  ok('ยังไม่ติ๊ก → ช่องผู้รับว่างและพิมพ์ได้',
+     p.$('i-rname').value === '' && !p.$('i-rname').readOnly);
+
+  p.$('same-as-donor').checked = true;
+  p.$('same-as-donor').dispatchEvent(new p.w.Event('change', { bubbles: true }));
+  await wait(60);
+  ok('ติ๊กแล้วชื่อผู้รับตามผู้บริจาค', p.$('i-rname').value === 'ทดสอบ ระบบดี', p.$('i-rname').value);
+  ok('ติ๊กแล้วเบอร์ผู้รับตามผู้บริจาค', p.$('i-rphone').value === '0812345678', p.$('i-rphone').value);
+  ok('ช่องถูกล็อกไม่ให้พิมพ์', p.$('i-rname').readOnly && p.$('i-rphone').readOnly);
+
+  /* หัวใจของเคสนี้ — แก้ชื่อผู้บริจาคทีหลังแล้วช่องผู้รับต้องตามไปด้วย ไม่ค้างของเก่า */
+  p.set('i-name', 'เปลี่ยนชื่อ ใหม่');
+  p.set('i-phone', '0899999999');
+  await wait(60);
+  ok('แก้ชื่อผู้บริจาคแล้วผู้รับตามทันที', p.$('i-rname').value === 'เปลี่ยนชื่อ ใหม่', p.$('i-rname').value);
+  ok('แก้เบอร์ผู้บริจาคแล้วผู้รับตามทันที', p.$('i-rphone').value === '0899999999', p.$('i-rphone').value);
+
+  p.$('same-as-donor').checked = false;
+  p.$('same-as-donor').dispatchEvent(new p.w.Event('change', { bubbles: true }));
+  await wait(60);
+  ok('เอาเครื่องหมายถูกออกแล้วพิมพ์เองได้', !p.$('i-rname').readOnly && !p.$('i-rphone').readOnly);
+
+  /* ติ๊กกลับแล้วส่งจริง เพื่อดูว่าค่าที่ลง Store เป็นของผู้บริจาค */
+  p.$('same-as-donor').checked = true;
+  p.$('same-as-donor').dispatchEvent(new p.w.Event('change', { bubbles: true }));
+  await wait(60);
+  p.set('i-addr', '99/9 หมู่ 2 ถ.ห้วยแก้ว ต.ช้างเผือก อ.เมือง');
+  p.set('i-prov', 'เชียงใหม่');
+  p.set('i-zip', '50300');
+  p.$('i-consent').checked = true;
+  p.$('i-consent').dispatchEvent(new p.w.Event('change', { bubbles: true }));
+  p.click('[data-next="pay"]');
+  await wait(80);
+  ok('ผ่านการตรวจไปขั้นโอนได้', p.step() === 'pay', p.step());
+  p.click('[data-next="slip"]');
+  await wait(60);
+  p.set('i-time', '2026-08-05T13:00');
+  p.slip();
+  await wait(60);
+  p.click('#btn-submit');
+  await wait(1100);
+  var r = newest();
+  ok('ลง Store เป็นชื่อผู้บริจาค', r && r.recipient === 'เปลี่ยนชื่อ ใหม่', r && r.recipient);
+  ok('ลง Store เป็นเบอร์ผู้บริจาค', r && r.recipientPhone === '0899999999', r && r.recipientPhone);
+  f.remove();
+}
+
+/* ---------------- 4 · สั่งเยอะ ---------------- */
+async function case4() {
+  log('\n=== 4 · สั่ง 20 ตัว → ไม่บล็อก แต่ต้องเตือน ===');
+  reset();
+  var f = await frame(), p = drive(f);
+  p.size('XL', 20);
+  await wait(60);
+  ok('ยอดรวม = 10,000', p.txt('rail-total') === '10,000', p.txt('rail-total'));
+  ok('ขึ้นคำเตือนสั่งจำนวนมาก', p.visible('bulk-note'));
+  p.size('XL', 99);
+  await wait(60);
+  ok('เพดานต่อไซส์ 99 ตัว = 49,500', p.txt('rail-total') === '49,500', p.txt('rail-total'));
+  p.size('XL', 150);
+  await wait(60);
+  ok('พิมพ์เกิน 99 ถูกตัดเหลือ 99', p.d.querySelector('input[data-size="XL"]').value === '99',
+     p.d.querySelector('input[data-size="XL"]').value);
+  f.remove();
+}
+
+/* ---------------- 5 · ไม่เลือกอะไรเลย ---------------- */
+async function case5() {
+  log('\n=== 5 · ไม่เลือกอะไรเลย → ต้องไปต่อไม่ได้ ===');
+  reset();
+  var f = await frame(), p = drive(f);
+  p.click('[data-next="info"]');
+  await wait(80);
+  ok('ไปต่อไม่ได้', p.step() === 'order', p.step());
+  ok('ขึ้นข้อความบอกว่ายังไม่ได้เลือกอะไร',
+     p.$('err-qty').style.display === 'flex', p.$('err-qty').style.display);
+  f.remove();
+}
+
+/* ---------------- 6 · ร่างค้าง ---------------- */
+async function case6() {
+  log('\n=== 6 · กรอกถึงขั้นโอนแล้วปิดหน้า → เปิดใหม่ต้องกู้ร่างได้ ===');
+  reset();
+  var f = await frame(), p = drive(f);
+  p.size('M', 2);
+  p.set('i-donation', '700');
+  await wait(60);
+  p.click('[data-next="info"]');
+  await wait(80);
+  fillInfo(p, true);
+  p.click('[data-next="pay"]');
+  await wait(120);
+  ok('อยู่ขั้นโอน', p.step() === 'pay', p.step());
+  ok('มีร่างในเครื่อง', !!localStorage.getItem(DRAFT));
+  f.remove();
+
+  var f2 = await frame(), p2 = drive(f2);
+  await wait(120);
+  ok('เปิดใหม่แล้วเจอแบนเนอร์กู้ร่าง', p2.visible('draft-bar'));
+  ok('กลับมาที่ขั้นโอนเหมือนเดิม', p2.step() === 'pay', p2.step());
+  ok('ยอดรวมยังเป็น 1,700', p2.txt('pay-total') === '1,700', p2.txt('pay-total'));
+  ok('ชื่อที่กรอกไว้ยังอยู่', p2.$('i-name').value === 'ทดสอบ ระบบดี', p2.$('i-name').value);
+  ok('จำนวนเสื้อยังอยู่', p2.d.querySelector('input[data-size="M"]').value === '2');
+  p2.click('#draft-clear');
+  await wait(400);
+  ok('กด "เริ่มกรอกใหม่" แล้วร่างหาย', !localStorage.getItem(DRAFT));
+  f2.remove();
+}
+
+(async function () {
+  try {
+    await case1(); await case2(); await case3(); await case3b();
+    await case4(); await case5(); await case6();
+  } catch (e) {
+    log('ERROR ' + (e && e.stack || e)); fails++;
+  }
+  reset();
+  log('\n' + (fails ? '❌ FAILED ' + fails : '✅ ALL PASS'));
+})();
+</script>

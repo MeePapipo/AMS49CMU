@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>กองทุนคืนสู่เหย้า เทคนิคการแพทย์ มช. รุ่น 49 · Reunion 20 ปี</title>
+<meta name="description" content="รายการเงินบริจาคและสั่งเสื้อรุ่นของกองทุน AMS49 CMU Reunion 20 ปี — ทุกยอดตรวจสอบได้ ไม่ระบุตัวตนผู้บริจาค">
+<link rel="canonical" href="/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="กองทุนคืนสู่เหย้า เทคนิคการแพทย์ มช. รุ่น 49">
+<meta property="og:description" content="บริจาคและสั่งเสื้อรุ่นในหน้าเดียว โอนครั้งเดียวแล้วแนบสลิป · ทุกยอดขึ้นบัญชีสาธารณะโดยไม่เปิดเผยชื่อ">
+<meta property="og:image" content="/assets/img/og.png">
+<meta property="og:locale" content="th_TH">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/ams-logo.png">
+<link rel="stylesheet" href="/assets/fonts.css?v=1">
+<link rel="stylesheet" href="/assets/system.css?v=1">
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปเนื้อหาหลัก</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand-lock" href="/">
+      <img src="/assets/img/ams-logo.png" alt="คณะเทคนิคการแพทย์ มหาวิทยาลัยเชียงใหม่">
+      <span class="sep" aria-hidden="true"></span>
+      <span>
+        <span class="wordmark">AMS49CMU</span>
+        <span class="yr" style="display:block">REUNION 20 ปี</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="เมนูหลัก">
+      <a href="/" aria-current="page">หน้าหลัก</a>
+      <a href="/support">บริจาคและสั่งเสื้อรุ่น</a>
+      <a href="/status">เช็คสถานะ</a>
+      <a href="/admin" class="admin-link">แอดมิน</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO — ซ้ายบอกบริบท ขวาคือยอด ไม่จัดกลาง -->
+  <section class="wrap section" style="padding-bottom:var(--s6)">
+    <div style="display:grid;grid-template-columns:minmax(0,6fr) minmax(0,7fr);gap:var(--s7);align-items:end" class="hero-grid">
+      <div class="stack hero-copy">
+        <p class="eyebrow">ประเพณีรับน้องขึ้นดอย · 2549 – 2569</p>
+        <h1>กองทุนคืนสู่เหย้า<br>เทคนิคการแพทย์ มช. <span class="nb">รุ่น 49</span></h1>
+        <p class="body" style="color:var(--ink-muted)">
+          เลือกของและระบุยอดบริจาคในหน้าเดียว ระบบรวมให้เป็นยอดเดียว โอนครั้งเดียวแล้วแนบสลิป ·
+          ทุกยอดถูกตรวจสลิปโดยกรรมการรุ่น แล้วขึ้นในบัญชีสาธารณะด้านล่างภายใน 24 ชั่วโมง
+          <strong style="color:var(--ink)">โดยไม่เปิดเผยชื่อผู้บริจาค</strong>
+        </p>
+        <div class="row">
+          <a class="btn btn-primary btn-lg" href="/support">บริจาคและสั่งเสื้อรุ่น</a>
+          <a class="btn btn-secondary btn-lg" href="/status">เช็คสถานะด้วยรหัสอ้างอิง</a>
+        </div>
+        <p class="meta" style="border-top:1px solid var(--line);padding-top:var(--s3);margin-top:var(--s4)">
+          49111xxxx - ใจ๋เดียว ขึ้นดอย <strong style="color:var(--ink)">21 พฤศจิกายน 2569</strong>
+          <span id="countdown" class="mono"></span>
+        </p>
+      </div>
+
+      <div class="stack-sm">
+        <p class="eyebrow" style="display:flex;align-items:center;gap:8px">
+          เงินบริจาคที่ยืนยันแล้ว
+          <span style="width:7px;height:7px;border-radius:50%;background:var(--verified-fg);display:inline-block" aria-hidden="true"></span>
+          <span style="text-transform:none;letter-spacing:0;font-weight:400">อัปเดตสด</span>
+        </p>
+        <p style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+          <span class="total-figure" id="total">0</span>
+          <span style="font-size:1.5rem;font-weight:600;color:var(--navy-700)">บาท</span>
+        </p>
+        <div class="meter" role="img" aria-label="ความคืบหน้าของยอดบริจาค" id="meter-wrap">
+          <i id="meter" style="width:0%"></i>
+        </div>
+        <!-- เสื้อเป็นการซื้อขาย ไม่ใช่การบริจาค จึงไม่รวมในตัวเลขใหญ่ด้านบน -->
+        <p class="meta" style="border-top:1px solid var(--line);padding-top:var(--s3);margin-top:var(--s3)">
+          <strong style="color:var(--ink)">ยอดขายเสื้อรุ่น <span id="shirt-rev">—</span> บาท</strong>
+          <span id="shirt-n"></span> — นับแยกจากเงินบริจาค
+          เพราะต้นทุนเสื้อและค่าจัดส่งรวมแล้ว 400++ ต่อตัว
+          รายได้หลังหักค่าใช้จ่ายจะนำไปสมทบทุนบริจาคให้คณะฯ อีกทอดหนึ่ง
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAT STRIP — คั่นด้วยเส้น hairline ไม่ใช่การ์ดมนซ้ำ ๆ -->
+  <div class="wrap">
+    <div class="stat-strip">
+      <div>
+        <p class="stat-k">รอตรวจสอบ</p>
+        <p class="stat-v" id="s-pending">—</p>
+        <p class="meta" id="s-pending-c">—</p>
+      </div>
+      <div>
+        <p class="stat-k">จำนวนรายการที่ยืนยันแล้ว</p>
+        <p class="stat-v" id="s-count">—</p>
+        <p class="meta">ไม่นับรายการที่ตรวจไม่ผ่าน</p>
+      </div>
+      <div>
+        <p class="stat-k">เสื้อรุ่นที่ต้องจัดส่ง</p>
+        <p class="stat-v" id="s-shirt">—</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEDGER + RAIL -->
+  <section class="wrap section">
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:var(--s7);align-items:start" class="ledger-grid">
+
+      <div>
+        <div class="row-between" style="margin-bottom:var(--s4)">
+          <div>
+            <h2>รายการเงินบริจาคและสั่งเสื้อรุ่น</h2>
+            <p class="meta">แสดงเวลา ยอด และสถานะเท่านั้น — ไม่แสดงชื่อ ไม่แสดงตัวย่อ</p>
+          </div>
+          <div class="chips" id="ledger-filter" role="group" aria-label="กรองตามสถานะ">
+            <button class="chip" data-filter="all" aria-pressed="true">ทั้งหมด</button>
+            <button class="chip" data-filter="verified" aria-pressed="false">ยืนยันแล้ว</button>
+            <button class="chip" data-filter="pending" aria-pressed="false">รอตรวจสอบ</button>
+          </div>
+        </div>
+
+        <div class="panel" style="overflow:hidden">
+          <div id="ledger-box">
+            <table class="ledger ledger-cards" id="ledger">
+              <caption class="sr">รายการบริจาคแบบไม่ระบุตัวตน</caption>
+              <thead>
+                <tr>
+                  <th scope="col">เวลาที่โอน</th>
+                  <th scope="col">รหัสอ้างอิง</th>
+                  <th scope="col">สถานะ</th>
+                  <th scope="col" style="text-align:right">ยอด (บาท)</th>
+                </tr>
+              </thead>
+              <tbody id="ledger-body"></tbody>
+            </table>
+          </div>
+          <div id="ledger-loading" class="panel-pad stack" aria-busy="true">
+            <div class="skeleton" style="width:100%"></div>
+            <div class="skeleton" style="width:90%"></div>
+            <div class="skeleton" style="width:95%"></div>
+          </div>
+          <div id="ledger-empty" class="state" hidden>
+            <h3>ยังไม่มีรายการในตัวกรองนี้</h3>
+            <p>ลองเลือก “ทั้งหมด” หรือรอรายการถัดไป</p>
+          </div>
+        </div>
+
+        <p class="meta" style="margin-top:var(--s3)">
+          รายการที่ตรวจไม่ผ่านจะยังคงแสดงไว้พร้อมเหตุผล เพื่อให้ตัวเลขรวมตรวจย้อนได้ทั้งเส้นทาง
+        </p>
+      </div>
+
+      <!-- RAIL -->
+      <aside class="stack" style="position:sticky;top:80px">
+        <div class="panel panel-navy panel-pad stack-sm">
+          <h3 style="color:#fff">สั่งก่อน แล้วค่อยโอน</h3>
+          <p class="meta" style="color:#B9C6E0">
+            เลือกเสื้อและระบุยอดบริจาคให้ครบก่อน ระบบจะบอกยอดที่ต้องโอนเป็นก้อนเดียว
+            แล้วจบด้วยการแนบสลิป — ระบบไม่ได้เชื่อมกับธนาคาร กรรมการต้องเทียบสลิปกับ statement ด้วยมือ
+            ยอดจึงขึ้นบัญชีหลังตรวจแล้วเท่านั้น
+          </p>
+          <a class="btn btn-secondary" href="/support" style="width:100%">เริ่มสั่ง / บริจาค</a>
+        </div>
+
+        <div class="panel panel-pad stack-sm">
+          <span class="badge badge-shirt" id="shirt-badge"></span>
+          <h3>เสื้อรุ่น AMS49 เริ่มต้นตัวละ 500 บาท</h3>
+          <p class="meta">ไซส์ SS–XL ตัวละ 500 · 2XL–5XL เพิ่ม 20–50 บาทต่อตัว รวมค่าจัดส่งแล้ว
+            สั่งได้ไม่จำกัดจำนวน เลือกไซส์ผสมกันได้ และไม่ต้องบริจาคก่อน</p>
+          <!-- ของจริงบนตัวคนมาก่อน ลายสกรีนเป็นภาพประกอบ — คนตัดสินใจซื้อเสื้อจาก "ใส่แล้วเป็นยังไง"
+               ไม่ใช่จากไฟล์อาร์ตแบน ๆ ที่เห็นบนเสื้อในรูปอยู่แล้ว -->
+          <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:var(--s2);align-items:start">
+            <img src="/assets/img/shirt-front.png"
+                 alt="นายแบบใส่เสื้อรุ่น AMS49 สีน้ำเงินกรม ทรง oversize สกรีน AMS49CMU ที่หน้าอก"
+                 style="border-radius:var(--r-md);border:1px solid var(--line);background:#fff"
+                 width="896" height="1193" loading="lazy">
+            <div style="display:grid;gap:var(--s2)">
+              <img src="/assets/img/shirt-print.jpg" alt="ลายสกรีนหน้าอก AMS49CMU ตัวอักษรขาวขอบน้ำเงิน"
+                   style="border-radius:var(--r-sm);border:1px solid var(--line)"
+                   width="1774" height="887" loading="lazy">
+              <img src="/assets/img/shirt-back.png" alt="เสื้อรุ่นด้านหลัง มีเส้นไปป์ขาวตามตะเข็บข้าง"
+                   style="border-radius:var(--r-sm);border:1px solid var(--line);background:#fff"
+                   width="896" height="1193" loading="lazy">
+            </div>
+          </div>
+          <p class="meta">คอกลมทรงยุโรป oversize · เนื้อผ้า super soft นุ่มสบาย ·
+            สกรีนขาวขอบน้ำเงิน · มีเส้นไปป์ขาววิ่งตามตะเข็บข้างทั้งด้านหน้าและหลัง</p>
+          <a class="btn btn-secondary" href="/support" style="width:100%">ดูเสื้อและตารางไซส์</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<div class="action-bar">
+  <div class="wrap">
+    <a class="btn btn-primary" href="/support">บริจาคและสั่งเสื้อ</a>
+    <a class="btn btn-secondary" href="/status">เช็คสถานะ</a>
+  </div>
+</div>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div>
+      <img src="/assets/img/ams-logo.png" alt="">
+      <p class="meta">
+        จัดโดยคณะกรรมการรุ่น 49 คณะเทคนิคการแพทย์ มหาวิทยาลัยเชียงใหม่<br>
+        เพื่อสนับสนุนกิจกรรมคืนสู่เหย้าและประเพณีรับน้องขึ้นดอย 21 พฤศจิกายน 2569
+      </p>
+    </div>
+    <div class="meta">
+      <p><strong style="color:var(--ink)">ข้อมูลส่วนบุคคล</strong></p>
+      <p>ชื่อ ที่อยู่ และเบอร์โทร ใช้เพื่อยืนยันยอดและจัดส่งเสื้อเท่านั้น
+         ไม่แสดงบนหน้าสาธารณะ และจะลบหลังปิดโครงการ</p>
+      <p style="margin-top:var(--s3)"><a href="/admin">เข้าระบบแอดมิน</a></p>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<style>
+/* ชื่อกองทุนตั้งใจล็อกเป็นสองบรรทัดด้วย <br>
+   บรรทัดล่าง "เทคนิคการแพทย์ มช. รุ่น 49" ที่ 36px ต้องการ 435px ซึ่งเท่ากับความกว้าง
+   คอลัมน์ซ้ายเดิม (5fr) พอดีเป๊ะ จึงล้นไปเป็นบรรทัดที่สามและทิ้ง "49" ไว้โดด ๆ
+   แก้สองทางพร้อมกัน:
+   1. ขยายคอลัมน์ซ้ายเป็น 6fr (435px → 482px ที่จอ 1440)
+   2. ผูกขนาดตัวอักษรกับ "ความกว้างคอลัมน์จริง" ด้วย cqi แทน vw
+      ของเดิมใช้ vw ซึ่งอิงความกว้างทั้งหน้าจอ พอถึงจอ ~1000px ตัวอักษรยังเต็ม 36px อยู่
+      ทั้งที่คอลัมน์หดลงไปแล้ว — cqi หดตามคอลัมน์จึงไม่มีจุดที่พอดีเป๊ะแบบนั้นอีก
+   อัตราส่วนที่ใช้: บรรทัดล่างกว้าง ~12.1 เท่าของ font-size จึงต้องไม่เกิน 8.2cqi
+   ตั้ง 7.9cqi ไว้ให้เหลือที่ว่างกันฟอนต์สำรองที่กว้างกว่า */
+.hero-copy { container-type: inline-size; }
+.hero-copy h1 { font-size: clamp(1.5rem, 7.9cqi, 2.125rem); }
+/* กัน "49" หลุดไปอยู่บรรทัดเดียวดายบนจอแคบ — nowrap เฉพาะ "รุ่น 49"
+   ไม่ใช่ทั้งบรรทัด เพราะทั้งบรรทัดจะดันจนเลื่อนแนวนอนที่จอ 320px */
+.hero-copy .nb { white-space: nowrap; }
+
+@media (max-width: 1000px) {
+  /* minmax(0,1fr) ไม่ใช่ 1fr — 1fr มีขั้นต่ำเป็น min-content ของตารางบัญชีข้างใน
+     ทำให้แทร็กโป่งเกินจอ 320px แล้วเลื่อนแนวนอนได้ */
+  .hero-grid { grid-template-columns: minmax(0,1fr) !important; gap: var(--s6) !important; align-items: start !important; }
+  .ledger-grid { grid-template-columns: minmax(0,1fr) !important; gap: var(--s6) !important; }
+  .ledger-grid aside { position: static !important; }
+}
+</style>
+
+<script src="/assets/app.js?v=1"></script>
+<script src="/assets/page-index.js?v=1"></script>
+</body>
+</html>

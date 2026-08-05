@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ระบบแอดมิน · AMS49 CMU Reunion 20 ปี</title>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/fonts.css?v=1">
+<link rel="stylesheet" href="/assets/system.css?v=1">
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปเนื้อหาหลัก</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand-lock" href="/">
+      <img src="/assets/img/ams-logo.png" alt="คณะเทคนิคการแพทย์ มหาวิทยาลัยเชียงใหม่">
+      <span class="sep" aria-hidden="true"></span>
+      <span><span class="wordmark">AMS49CMU</span><span class="yr" style="display:block">ระบบกรรมการรุ่น</span></span>
+    </a>
+    <nav class="nav" aria-label="เมนูหลัก">
+      <a href="/">หน้าสาธารณะ</a>
+      <a href="/admin" aria-current="page">แอดมิน</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- กำลังถามเซิร์ฟเวอร์ว่าเราเข้าระบบอยู่หรือยัง -->
+  <section id="checking" class="wrap section">
+    <div class="panel panel-pad stack" style="max-width:420px" aria-busy="true">
+      <div class="skeleton" style="width:60%;height:22px"></div>
+      <div class="skeleton" style="width:100%;height:40px"></div>
+    </div>
+  </section>
+
+  <!-- ล็อกอินด้วยรหัสผ่าน (โหมดค่าเริ่มต้น) -->
+  <section id="login" class="wrap section" hidden>
+    <div class="panel panel-pad stack" style="max-width:420px">
+      <div>
+        <p class="eyebrow">เฉพาะกรรมการรุ่น</p>
+        <h1 style="font-size:1.5rem">เข้าระบบตรวจสอบยอด</h1>
+      </div>
+      <form id="login-form" class="stack-sm" novalidate>
+        <div class="field" id="f-user">
+          <label for="i-user">ชื่อผู้ใช้</label>
+          <input class="input mono" id="i-user" type="text" autocomplete="username"
+                 spellcheck="false" autocapitalize="off">
+          <p class="err" role="alert"></p>
+        </div>
+        <div class="field" id="f-pin">
+          <label for="i-pin">รหัสผ่าน</label>
+          <input class="input mono" id="i-pin" type="password" autocomplete="current-password">
+          <p class="err" role="alert"></p>
+        </div>
+        <button class="btn btn-primary" type="submit" id="btn-login" style="width:100%">
+          <span class="btn-spin" aria-hidden="true"></span><span>เข้าระบบ</span>
+        </button>
+      </form>
+      <p class="meta">รหัสผ่านตรวจที่เซิร์ฟเวอร์ ไม่ได้อยู่ในหน้าเว็บ ·
+        ลองผิดเกิน 5 ครั้งใน 15 นาที ระบบจะพักการล็อกอินจาก IP นั้นชั่วคราว</p>
+    </div>
+  </section>
+
+  <!-- Cloudflare Access เปิดอยู่ แต่ยังไม่ผ่านประตู -->
+  <section id="need-access" class="wrap section" hidden>
+    <div class="panel panel-pad stack" style="max-width:520px">
+      <h1 style="font-size:1.5rem">ต้องเข้าผ่าน Cloudflare Access</h1>
+      <p class="meta">ระบบนี้ตั้งให้ล็อกอินด้วยบัญชี Google ของกรรมการผ่าน Cloudflare Access
+        ถ้าเห็นหน้านี้แปลว่ายังไม่ได้ผ่านประตูนั้น หรือบัญชีที่ใช้ไม่อยู่ในรายชื่อที่อนุญาต</p>
+      <a class="btn btn-primary" href="/admin">ลองเข้าใหม่</a>
+    </div>
+  </section>
+
+  <!-- CONSOLE -->
+  <section id="console" hidden>
+    <div class="wrap section" style="padding-bottom:var(--s5)">
+      <div class="row-between" style="margin-bottom:var(--s5)">
+        <div>
+          <p class="eyebrow">ระบบกรรมการรุ่น · <span id="who"></span></p>
+          <h1>ตรวจสอบยอดและจัดส่งของที่ระลึก</h1>
+        </div>
+        <button class="btn btn-quiet btn-sm" id="logout">ออกจากระบบ</button>
+      </div>
+
+      <!-- เงินสองก้อนต้องเป็นตัวเลขคนละช่อง ไม่ใช่ยัดรวมแล้วอธิบายด้วยบรรทัดเล็ก
+           เพราะ "บริจาคให้คณะฯ" กับ "ขายของ" คนละความหมายทางบัญชี -->
+      <div class="stat-strip">
+        <div>
+          <p class="stat-k">รอตรวจสอบ</p>
+          <p class="stat-v" id="a-pending">—</p>
+          <p class="meta" id="a-pending-amt">—</p>
+        </div>
+        <div>
+          <p class="stat-k">เงินบริจาคที่ยืนยันแล้ว (บาท)</p>
+          <p class="stat-v" id="a-donation">—</p>
+          <p class="meta" id="a-verified-c">—</p>
+        </div>
+        <div>
+          <p class="stat-k">ยอดขายเสื้อที่ยืนยันแล้ว (บาท)</p>
+          <p class="stat-v" id="a-shirtrev">—</p>
+          <p class="meta" id="a-shirt-n">—</p>
+        </div>
+      </div>
+
+      <p class="meta" style="margin-top:var(--s3)">
+        เงินเข้าบัญชีที่ยืนยันแล้วรวม <strong style="color:var(--ink)" class="num" id="a-verified">—</strong> บาท
+        — ตัวเลขบนหน้าสาธารณะคือ “เงินบริจาค” ช่องกลางเท่านั้น ยอดขายเสื้อนับแยกเพราะยังไม่หักต้นทุน
+      </p>
+    </div>
+
+    <div class="wrap" style="padding-bottom:var(--s5)">
+      <!-- ตัวเลขที่ต้องใช้ตอนสั่งผลิต — นับรวมรายการที่ยังรอตรวจด้วย เพราะโรงงานต้องรู้ยอดก่อนเงินเคลียร์
+           แต่ไม่นับรายการที่ตีกลับ -->
+      <div class="panel" style="overflow:hidden">
+        <div class="panel-head">
+          <div class="grow">
+            <h2 style="font-size:1.0625rem">สรุปไซส์เพื่อสั่งผลิต</h2>
+            <p class="meta">รวมรายการที่ยืนยันแล้วและที่ยังรอตรวจสลิป · ไม่รวมรายการที่ตีกลับ</p>
+          </div>
+          <span class="badge badge-shirt" id="a-size-total"></span>
+        </div>
+        <div class="panel-pad stack">
+          <div id="a-size-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:var(--s3)"></div>
+          <div class="callout callout-warn" id="a-size-flags" hidden>
+            <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 6.2v4.6" stroke-linecap="round"/><circle cx="10" cy="13.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+            <span id="a-size-flags-text"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap" style="padding-bottom:var(--s6)">
+      <!-- toolbar -->
+      <div class="panel" style="overflow:hidden">
+        <div class="panel-head no-print" style="gap:var(--s4)">
+          <div class="admin-tools">
+            <div class="chips" id="a-filter" role="group" aria-label="กรองตามสถานะ">
+              <button class="chip" data-f="pending" aria-pressed="true">รอตรวจสอบ</button>
+              <button class="chip" data-f="verified" aria-pressed="false">ยืนยันแล้ว</button>
+              <button class="chip" data-f="rejected" aria-pressed="false">ตรวจไม่ผ่าน</button>
+              <button class="chip" data-f="shipping" aria-pressed="false">รอส่งเสื้อ</button>
+              <button class="chip" data-f="shipped" aria-pressed="false">ส่งแล้ว</button>
+              <button class="chip" data-f="all" aria-pressed="false">ทั้งหมด</button>
+            </div>
+            <div class="grow"></div>
+            <label class="sr" for="i-search">ค้นหา</label>
+            <input class="input search" id="i-search" type="search" placeholder="ค้นชื่อ / รหัส / เบอร์"
+                   autocomplete="off">
+            <div class="tool-btns">
+              <button class="btn btn-secondary btn-sm" id="btn-csv">ดาวน์โหลด CSV</button>
+              <button class="btn btn-secondary btn-sm" id="btn-print">พิมพ์รายการส่ง</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto">
+          <table class="ledger ledger-admin" id="a-table">
+            <caption class="sr">รายการบริจาคทั้งหมดพร้อมข้อมูลผู้บริจาค</caption>
+            <thead>
+              <tr>
+                <th scope="col">รหัส</th>
+                <th scope="col">ชื่อ–นามสกุล</th>
+                <th scope="col">เบอร์</th>
+                <th scope="col">เวลาโอน</th>
+                <th scope="col">เสื้อ</th>
+                <th scope="col">สถานะ</th>
+                <th scope="col" style="text-align:right">บริจาค</th>
+                <th scope="col" style="text-align:right">ค่าเสื้อ</th>
+                <th scope="col" style="text-align:right">รวมที่โอน</th>
+                <th scope="col" class="no-print" style="text-align:right">จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="a-body"></tbody>
+          </table>
+        </div>
+
+        <div id="a-loading" class="panel-pad stack" aria-busy="true">
+          <div class="skeleton" style="width:100%"></div>
+          <div class="skeleton" style="width:92%"></div>
+          <div class="skeleton" style="width:96%"></div>
+        </div>
+
+        <div id="a-empty" class="state" hidden>
+          <h3>ไม่มีรายการในมุมมองนี้</h3>
+          <p>ลองเปลี่ยนตัวกรอง หรือล้างคำค้น</p>
+        </div>
+      </div>
+
+      <p class="meta no-print" style="margin-top:var(--s3)">
+        “รอส่งเสื้อ” = ยืนยันยอดแล้ว สั่งเสื้อไว้ มีที่อยู่ และยังไม่ได้กดว่าส่งแล้ว —
+        ใช้ปุ่มพิมพ์เพื่อทำใบปะหน้าพัสดุ · ถ้าต้องการทั้งชื่อ ที่อยู่ และยอดในไฟล์เดียว ใช้ปุ่ม CSV
+      </p>
+    </div>
+
+    <!-- บันทึกการใช้งาน -->
+    <div class="wrap no-print" style="padding-bottom:var(--s8)">
+      <details class="panel" style="overflow:hidden">
+        <summary class="panel-head" style="cursor:pointer;list-style:none">
+          <div class="grow">
+            <h2 style="font-size:1.0625rem">บันทึกการใช้งาน</h2>
+            <p class="meta">ใครยืนยัน ใครตีกลับ ใครเปิดดูสลิปของใคร — กดเพื่อดู</p>
+          </div>
+        </summary>
+        <div class="panel-pad">
+          <div id="audit-list" class="stack-sm"></div>
+        </div>
+      </details>
+    </div>
+  </section>
+</main>
+
+<!-- ตรวจสลิป -->
+<dialog id="dlg" aria-labelledby="d-ref">
+  <div class="panel-head" style="border-radius:0">
+    <div class="grow">
+      <p class="meta">ตรวจสลิป</p>
+      <p class="mono" style="font-size:1.0625rem;font-weight:500" id="d-ref"></p>
+    </div>
+    <button type="button" class="btn btn-quiet btn-sm" id="d-close" aria-label="ปิด">✕</button>
+  </div>
+  <div class="panel-pad stack">
+    <div style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:var(--s5)" id="d-grid">
+      <div class="stack-sm">
+        <div id="d-slip-box"
+             style="aspect-ratio:3/4;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface-2);display:grid;place-items:center;text-align:center;padding:var(--s3);overflow:hidden">
+          <img id="d-slip-img" alt="ภาพสลิปที่ผู้บริจาคแนบมา" hidden
+               style="width:100%;height:100%;object-fit:contain">
+          <div id="d-slip-none">
+            <p class="meta">ไม่มีไฟล์สลิป</p>
+            <p class="meta" style="color:var(--ink-faint)" id="d-slip-why"></p>
+          </div>
+        </div>
+        <a class="btn btn-secondary btn-sm" id="d-slip-open" href="#" target="_blank" rel="noopener" hidden
+           style="width:100%">เปิดไฟล์เต็มในแท็บใหม่</a>
+      </div>
+
+      <div class="stack-sm" style="min-width:0">
+        <!-- เงินมาก่อน เพราะงานหลักของหน้านี้คือเทียบยอดกับ statement -->
+        <dl class="sum-list">
+          <dt>เงินบริจาคให้คณะฯ</dt><dd id="d-don"></dd>
+          <dt id="d-shirt-k">ค่าเสื้อ</dt><dd id="d-shirtamt"></dd>
+        </dl>
+        <div class="sum-total"><span>ยอดที่ต้องเห็นในสลิป</span><b><span id="d-amt"></span> บาท</b></div>
+        <p class="meta" id="d-pricenote" hidden></p>
+        <div class="callout callout-warn" id="d-drift" hidden>
+          <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 6.2v4.6" stroke-linecap="round"/><circle cx="10" cy="13.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+          <span id="d-drift-text"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 9.4v4.4" stroke-linecap="round"/><circle cx="10" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+      <span>เทียบยอดและเวลากับ statement ของบัญชี <span class="mono" id="d-acc"></span> ก่อนกดยืนยัน ·
+        โอนเมื่อ <strong id="d-time"></strong></span>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <p class="cf-label" style="margin-bottom:var(--s2)">ผู้บริจาค</p>
+        <dl style="margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px var(--s3);font-size:.875rem">
+          <dt style="color:var(--ink-muted)">ชื่อ</dt><dd style="margin:0" id="d-name"></dd>
+          <dt style="color:var(--ink-muted)">รหัส นศ.</dt><dd style="margin:0" class="mono" id="d-sid"></dd>
+          <dt style="color:var(--ink-muted)">เบอร์</dt><dd style="margin:0" class="mono" id="d-phone"></dd>
+          <dt style="color:var(--ink-muted)">อีเมล</dt><dd style="margin:0;word-break:break-all" id="d-email"></dd>
+          <dt style="color:var(--ink-muted)">LINE</dt><dd style="margin:0" id="d-line"></dd>
+        </dl>
+      </div>
+      <div>
+        <p class="cf-label" style="margin-bottom:var(--s2)">เสื้อและการจัดส่ง</p>
+        <dl style="margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px var(--s3);font-size:.875rem">
+          <dt style="color:var(--ink-muted)">ไซส์</dt><dd style="margin:0" id="d-sizes"></dd>
+          <dt style="color:var(--ink-muted)">ผู้รับ</dt><dd style="margin:0" id="d-recipient"></dd>
+          <dt style="color:var(--ink-muted)">ที่อยู่</dt><dd style="margin:0" id="d-addr"></dd>
+          <dt style="color:var(--ink-muted)">หมายเหตุ</dt><dd style="margin:0" id="d-shipnote"></dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="field" id="f-reason" hidden>
+      <label for="i-reason">เหตุผลที่ตีกลับ <span class="req" aria-hidden="true">*</span></label>
+      <input class="input" id="i-reason" type="text" placeholder="เช่น ยอดในสลิปไม่ตรงกับที่แจ้ง" maxlength="300">
+      <p class="hint">ข้อความนี้จะแสดงให้ผู้บริจาคเห็นในหน้าเช็คสถานะ</p>
+      <p class="err" role="alert"></p>
+    </div>
+
+    <p class="err" id="d-error" role="alert" style="display:none"></p>
+
+    <!-- PDPA — ปุ่มลบถาวร ซ่อนไว้ใต้ details เพราะกดแล้วย้อนไม่ได้
+         แต่ต้องมีอยู่จริง ไม่งั้นข้อความยินยอมที่สัญญาว่า "จะลบเมื่อปิดโครงการ" ก็เป็นแค่ตัวหนังสือ -->
+    <details id="d-danger" style="border-top:1px solid var(--line);padding-top:var(--s3)">
+      <summary class="meta" style="cursor:pointer">ปิดโครงการ · ลบข้อมูลส่วนบุคคลของรายการนี้</summary>
+      <div class="stack-sm" style="margin-top:var(--s3)">
+        <p class="meta">ลบชื่อ เบอร์ อีเมล LINE ที่อยู่ และ<strong>ไฟล์สลิปออกจากที่เก็บจริง</strong>
+          เหลือไว้แค่รหัสอ้างอิง ยอด และสถานะ เพื่อให้ยอดรวมยังตรวจย้อนได้
+          — ใช้ตอนปิดโครงการเท่านั้น กดแล้วเอากลับมาไม่ได้</p>
+        <button class="btn btn-danger btn-sm" type="button" id="d-purge">ลบข้อมูลส่วนบุคคลถาวร</button>
+      </div>
+    </details>
+
+    <div class="row dlg-actions" style="justify-content:flex-end;flex-wrap:wrap">
+      <button class="btn btn-quiet" type="button" id="d-cancel">ปิด</button>
+      <button class="btn btn-secondary" type="button" id="d-ship" hidden>ส่งของแล้ว · ลบที่อยู่</button>
+      <button class="btn btn-secondary" type="button" id="d-reopen" hidden>ดึงกลับมารอตรวจ</button>
+      <button class="btn btn-danger" type="button" id="d-reject">ตีกลับ</button>
+      <button class="btn btn-primary" type="button" id="d-approve">ยืนยันยอด</button>
+    </div>
+  </div>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<style>
+/* modal ตรวจสลิป — จอแคบเอาภาพขึ้นบน รายละเอียดอยู่ล่าง ไม่บีบเป็นสองคอลัมน์ */
+@media (max-width:640px){
+  #d-grid{ grid-template-columns:minmax(0,1fr) !important; gap:var(--s4) !important; }
+  #d-grid > div:first-child{ max-width:220px; }
+}
+/* หัวคอนโซล — ปุ่มออกจากระบบไม่ต้องแย่งบรรทัดกับหัวเรื่อง */
+@media (max-width:520px){
+  #console .row-between{ align-items:flex-start; }
+  #console h1{ font-size:1.375rem; }
+}
+details > summary::-webkit-details-marker{ display:none; }
+</style>
+
+<script src="/assets/app.js?v=1"></script>
+<script src="/assets/page-admin.js?v=1"></script>
+</body>
+</html>

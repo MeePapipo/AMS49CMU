@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>บริจาคและสั่งเสื้อรุ่น · AMS49 CMU Reunion 20 ปี</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Graduate&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/system.css?v=6">
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปเนื้อหาหลัก</a>
+
+<div class="proto-bar">
+  <div class="wrap">
+    <strong>PROTOTYPE</strong>
+    <span>เลขบัญชีเป็นข้อมูลจริง · ยอดและรายการเป็นตัวอย่าง — ฟอร์มนี้บันทึกลงเครื่องคุณเท่านั้น ไม่ได้ส่งออกไปที่ไหน</span>
+    <button id="reset-proto" class="btn btn-sm" style="margin-left:auto;background:#3B4152;color:#fff">รีเซ็ตข้อมูลตัวอย่าง</button>
+  </div>
+</div>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand-lock" href="index.html">
+      <img src="assets/img/ams-logo.png" alt="คณะเทคนิคการแพทย์ มหาวิทยาลัยเชียงใหม่">
+      <span class="sep" aria-hidden="true"></span>
+      <span><span class="wordmark">AMS49CMU</span><span class="yr" style="display:block">REUNION 20 ปี</span></span>
+    </a>
+    <nav class="nav" aria-label="เมนูหลัก">
+      <a href="index.html">หน้าหลัก</a>
+      <a href="support.html" aria-current="page">บริจาคและสั่งเสื้อรุ่น</a>
+      <a href="status.html">เช็คสถานะ</a>
+      <a href="admin.html" class="admin-link">แอดมิน</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- INTRO — บอกให้จบว่าจ่ายครั้งเดียว ก่อนจะเจอฟอร์ม -->
+  <section class="wrap section" style="padding-bottom:var(--s5)">
+    <div style="max-width:64ch">
+      <h1>บริจาคและสั่งเสื้อรุ่น</h1>
+      <p class="body" style="color:var(--ink-muted);margin-top:var(--s2)">
+        เลือกเสื้อและระบุยอดที่อยากบริจาคก่อน ระบบจะรวมเป็น<strong style="color:var(--ink)">ยอดเดียว</strong>ให้
+        คุณโอนครั้งเดียวแล้วแนบสลิป ไม่ต้องบวกเลขเอง
+        จะบริจาคอย่างเดียว ซื้อเสื้ออย่างเดียว หรือทำทั้งสองอย่างก็ได้ ไม่มีขั้นต่ำ
+      </p>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:var(--s5);max-width:78ch">
+      <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 9.4v4.4" stroke-linecap="round"/><circle cx="10" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+      <span>
+        <strong>เงินสองก้อนนี้นับแยกกัน</strong><br>
+        <strong style="color:var(--ink)">เงินบริจาค</strong> เข้าคณะเทคนิคการแพทย์ มช. เต็มจำนวนที่ระบุ ·
+        <strong style="color:var(--ink)">ค่าเสื้อตัวละ 500 บาท</strong> (ไซส์ 2XL ขึ้นไปเพิ่ม 20–50 บาท)
+        เป็นการซื้อของที่ระลึก
+        ต้นทุนเสื้อรวมค่าจัดส่งแล้ว 400++ ต่อตัว รายได้ส่วนที่เหลือจะนำไปสมทบทุนบริจาคให้คณะฯ อีกทอดหนึ่ง
+      </span>
+    </div>
+  </section>
+
+  <!-- STEPPER — ขั้นที่ผ่านแล้วกดย้อนกลับมาแก้ได้ -->
+  <div class="wrap" style="padding-bottom:var(--s5)">
+    <ol class="steps" id="stepper">
+      <li data-step="order" aria-current="step">
+        <button type="button"><b>1</b><span>เลือกของ + ยอดบริจาค</span></button>
+      </li>
+      <li data-step="info">
+        <button type="button" disabled><b>2</b><span>ข้อมูลผู้บริจาค</span></button>
+      </li>
+      <li data-step="pay">
+        <button type="button" disabled><b>3</b><span>โอนยอดรวม</span></button>
+      </li>
+      <li data-step="slip">
+        <button type="button" disabled><b>4</b><span>แนบสลิป</span></button>
+      </li>
+    </ol>
+  </div>
+
+  <!-- แบนเนอร์กู้ร่าง -->
+  <div class="wrap" id="draft-bar" hidden style="padding-bottom:var(--s5)">
+    <div class="callout callout-warn" style="align-items:center">
+      <span aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.6V8l2.4 1.5" stroke-linecap="round"/></svg></span>
+      <span class="grow">กู้รายการที่คุณกรอกค้างไว้ในเครื่องนี้แล้ว — <strong id="draft-sum"></strong></span>
+      <button type="button" class="btn btn-sm btn-danger" id="draft-clear">เริ่มกรอกใหม่</button>
+    </div>
+  </div>
+
+  <div class="wrap section" style="padding-top:0">
+    <div class="wiz-grid" style="display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:var(--s7);align-items:start">
+      <div id="wiz-col">
+
+        <!-- ================= ขั้น 1 · เลือกของ ================= -->
+        <section id="step-order" class="stack-lg" aria-labelledby="h-order">
+          <div>
+            <h2 class="h1" id="h-order" tabindex="-1">เลือกเสื้อและระบุยอดบริจาค</h2>
+            <p class="meta">เลือกอย่างใดอย่างหนึ่งหรือทั้งคู่ก็ได้ ระบบจะรวมเป็นยอดเดียวให้ในขั้นถัดไป</p>
+          </div>
+
+          <!-- ตัวเสื้อคือของจริงที่ต้องตัดสินใจจากภาพ ภาพจึงมาก่อนตัวนับ -->
+          <div class="panel panel-pad stack">
+            <div class="hero-shirt" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s5);align-items:start">
+              <div class="stack-sm">
+                <span class="badge badge-shirt"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M5.6 2L2 3.9l1.2 2.6 1.3-.6V14h7V5.9l1.3.6L14 3.9 10.4 2A2.4 2.4 0 015.6 2z"/></svg>ของที่ระลึก</span>
+                <h3>เสื้อรุ่น AMS49CMU · เริ่มต้นตัวละ 500 บาท</h3>
+                <p class="meta">เสื้อยืดคอกลมทรงยุโรป (oversize) สีน้ำเงินกรม
+                  <strong style="color:var(--ink)">เนื้อผ้า super soft นุ่มสบาย</strong>
+                  สกรีนหน้าอก <span class="mono">AMS49CMU</span> ตัวอักษรขาวขอบน้ำเงิน
+                  มีเส้นไปป์ขาววิ่งตามตะเข็บข้างทั้งด้านหน้าและหลัง</p>
+                <dl style="margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px var(--s4);font-size:.875rem;border-top:1px solid var(--line);padding-top:var(--s3)">
+                  <dt style="color:var(--ink-muted)">ราคา</dt><dd style="margin:0"><strong>500 บาทต่อตัว</strong> สำหรับไซส์ SS–XL รวมค่าจัดส่งแล้ว<br>
+                    <span style="color:var(--ink-muted)">ไซส์ใหญ่บวกเพิ่มต่อตัว — 2XL +20 · 3XL +30 · 4XL +40 · 5XL +50</span></dd>
+                  <dt style="color:var(--ink-muted)">ไซส์</dt><dd style="margin:0">SS – 5XL</dd>
+                  <dt style="color:var(--ink-muted)">จำนวน</dt><dd style="margin:0">สั่งได้ไม่จำกัด เลือกไซส์ผสมกันได้</dd>
+                  <dt style="color:var(--ink-muted)">จัดส่ง</dt><dd style="margin:0">คาดว่าจัดส่งได้หลังจากปิดยอดสั่งประมาณ 3 สัปดาห์</dd>
+                </dl>
+              </div>
+              <figure style="margin:0;display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)">
+                <img src="assets/img/shirt-front.png" alt="เสื้อรุ่นด้านหน้า สีน้ำเงินกรม สกรีน AMS49CMU ที่หน้าอก"
+                     style="border-radius:var(--r-md);border:1px solid var(--line);background:#fff" width="896" height="1193" loading="lazy">
+                <img src="assets/img/shirt-back.png" alt="เสื้อรุ่นด้านหลัง สีน้ำเงินกรม มีเส้นไปป์ขาวตามตะเข็บข้าง"
+                     style="border-radius:var(--r-md);border:1px solid var(--line);background:#fff" width="896" height="1193" loading="lazy">
+              </figure>
+            </div>
+          </div>
+
+          <!-- ตัวนับรายไซส์ — ตารางนี้ทำหน้าที่เป็นตารางเทียบไซส์ในตัว -->
+          <div class="panel" style="overflow:hidden">
+            <div class="panel-head">
+              <div class="grow">
+                <h3>ใส่จำนวนเสื้อที่ต้องการในแต่ละไซส์</h3>
+                <p class="meta">ตัวเลขเป็นนิ้ว วัดจากตัวเสื้อวางราบ · ไม่สั่งเสื้อก็ปล่อยว่างไว้ทั้งหมด</p>
+              </div>
+            </div>
+            <div class="panel-pad stack">
+              <div id="qty"></div>
+
+              <!-- งานตัดเย็บไม่เป๊ะเท่าเครื่องจักร — บอกไว้ก่อนเลือก ดีกว่ามาเถียงกันตอนของถึงมือ -->
+              <p class="meta" style="border-top:1px solid var(--line);padding-top:var(--s3)">
+                <strong style="color:var(--ink)">หมายเหตุ</strong> ขนาดเสื้ออาจคลาดเคลื่อน
+                <strong style="color:var(--ink)">+ หรือ − ไม่เกิน 1 นิ้ว</strong> จากมาตรฐานในตาราง
+                ถือเป็นเรื่องปกติของงานตัดเย็บ · ไซส์ 2XL ขึ้นไปมีส่วนเพิ่มจากราคาฐาน 500 บาท
+                ตามตัวเลขที่กำกับไว้ข้างรหัสไซส์
+              </p>
+
+              <p class="err" id="err-qty" role="alert" style="display:none"></p>
+
+              <div class="callout callout-warn" id="bulk-note" hidden>
+                <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 6.2v4.6" stroke-linecap="round"/><circle cx="10" cy="13.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+                <span>สั่งไว้ <strong><span id="bulk-n"></span> ตัว</strong> — สั่งได้ไม่จำกัด
+                  แต่กรรมการจะโทรยืนยันจำนวนกับคุณก่อนส่งเข้าโรงงาน กันกดพลาด</span>
+              </div>
+
+              <!-- เดิมซ่อนไว้ใน <details> — กางออกถาวรเพราะเป็นข้อมูลที่ต้องใช้ตัดสินใจ
+                   ไม่ใช่ของแถมที่ค่อยเปิดดูทีหลัง -->
+              <div class="stack" style="border-top:1px solid var(--line);padding-top:var(--s4)">
+                <div>
+                  <h4 style="font-size:.9375rem">ตารางไซส์ต้นฉบับจากผู้ผลิต และวิธีวัด</h4>
+                  <p class="meta">เอาเสื้อที่ใส่พอดีมาวางราบ วัดรอบอกจากใต้วงแขนข้างหนึ่งไปอีกข้างแล้วคูณสอง
+                    ทรงนี้เป็น oversize ถ้าไม่อยากหลวมมาก เลือกไซส์ที่รอบอกใกล้เคียงเสื้อตัวโปรด</p>
+                </div>
+                <img src="assets/img/size-chart.jpg" alt="ตารางไซส์ต้นฉบับจากผู้ผลิต เสื้อยืดคอกลมทรงยุโรป ไซส์ SS ถึง 3XL บอกรอบอก ไหล่กว้าง และความยาวเสื้อเป็นนิ้ว"
+                     style="border:1px solid var(--line);border-radius:var(--r-md)" loading="lazy">
+                <!-- ภาพต้นฉบับมีถึง 3XL เท่านั้น 4XL/5XL เพิ่มมาทีหลัง ต้องบอกไว้ ไม่งั้นดูเหมือนตกหล่น -->
+                <p class="meta">ภาพนี้เป็นตารางต้นฉบับจากผู้ผลิตซึ่งมีถึง <strong style="color:var(--ink)">3XL</strong> เท่านั้น
+                  — ไซส์ <strong style="color:var(--ink)">4XL</strong> (รอบอก 52" ไหล่ 22" ยาว 33") และ
+                  <strong style="color:var(--ink)">5XL</strong> (รอบอก 54" ไหล่ 22.5" ยาว 34") เป็นไซส์ที่เพิ่มเข้ามาภายหลัง
+                  จึงยังไม่อยู่ในภาพ ให้ยึดตารางเลือกจำนวนด้านบนซึ่งครบทุกไซส์</p>
+
+                <div style="border-top:1px solid var(--line);padding-top:var(--s4)">
+                  <h4 style="font-size:.9375rem">ตัวอย่างการแต่งตัว</h4>
+                  <p class="meta">เสื้อทรง oversize แมตช์ได้หลายแบบ — ดูไว้ประกอบการเลือกไซส์ว่าอยากได้ทรงหลวมแค่ไหน</p>
+                </div>
+                <img src="assets/img/shirt-detail.jpg" alt="ตัวอย่างการแต่งตัวกับเสื้อรุ่น 6 แบบ ได้แก่ กางเกงขากว้างสีดำ กางเกงคาร์โก้สีเทาเข้ม ยีนส์ทรงตรงสีน้ำเงินเข้ม กระโปรงพลีทยาวสีดำ กระโปรงยีนส์ยาวผ่าหน้า และกางเกงผ้าทรงตรงสีครีม"
+                     style="border:1px solid var(--line);border-radius:var(--r-md)" loading="lazy">
+              </div>
+            </div>
+          </div>
+
+          <!-- เงินบริจาค -->
+          <div class="panel panel-pad stack" style="border-top:3px solid var(--navy-700)">
+            <div>
+              <h3>เงินบริจาคให้คณะเทคนิคการแพทย์ มช.</h3>
+              <p class="meta">เข้าคณะฯ เต็มจำนวนที่ระบุ ไม่มีขั้นต่ำ · ไม่อยากบริจาคก็ใส่ 0 ได้</p>
+            </div>
+
+            <div class="chips" role="group" aria-label="ยอดบริจาคที่ใช้บ่อย" id="amount-quick">
+              <button type="button" class="chip" data-amt="0">ไม่บริจาค</button>
+              <button type="button" class="chip" data-amt="500">500</button>
+              <button type="button" class="chip" data-amt="1000">1,000</button>
+              <button type="button" class="chip" data-amt="2000">2,000</button>
+              <button type="button" class="chip" data-amt="5000">5,000</button>
+            </div>
+
+            <div class="field" id="f-donation" style="max-width:280px">
+              <label for="i-donation">ยอดบริจาค (บาท)</label>
+              <input class="input input-money num" id="i-donation" type="text" inputmode="numeric"
+                     value="0" autocomplete="off" aria-describedby="h-donation">
+              <p class="hint" id="h-donation">ตัวเลขเท่านั้น ไม่ต้องใส่ลูกน้ำ</p>
+              <p class="err" role="alert"></p>
+            </div>
+          </div>
+
+          <div class="wizard-nav">
+            <span class="grow"></span>
+            <button type="button" class="btn btn-primary btn-lg" data-next="info">ถัดไป · กรอกข้อมูลผู้บริจาค</button>
+          </div>
+        </section>
+
+        <!-- ================= ขั้น 2 · ข้อมูลผู้บริจาค ================= -->
+        <section id="step-info" class="stack-lg" aria-labelledby="h-info" hidden>
+          <div>
+            <h2 class="h1" id="h-info" tabindex="-1">ข้อมูลผู้บริจาค</h2>
+            <p class="meta">กรรมการใช้ข้อมูลนี้จับคู่กับสลิปและติดต่อกลับ — ไม่แสดงบนหน้าสาธารณะ</p>
+          </div>
+
+          <div class="panel panel-pad stack">
+            <div class="field" id="f-name">
+              <label for="i-name">ชื่อ–นามสกุล <span class="req" aria-hidden="true">*</span></label>
+              <input class="input" id="i-name" type="text" autocomplete="name" placeholder="เช่น สมชาย ใจดี">
+              <p class="err" role="alert"></p>
+            </div>
+
+            <div class="grid-2">
+              <div class="field" id="f-phone">
+                <label for="i-phone">เบอร์โทรติดต่อกลับ <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="i-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="08xxxxxxxx">
+                <p class="hint">ใช้กรณีสลิปไม่ชัดหรือยอดไม่ตรง</p>
+                <p class="err" role="alert"></p>
+              </div>
+              <div class="field" id="f-sid">
+                <label for="i-sid">รหัสนักศึกษา</label>
+                <input class="input mono" id="i-sid" type="text" inputmode="numeric" placeholder="49xxxxxxx" autocomplete="off">
+                <p class="hint">ไม่บังคับ — ช่วยกรรมการยืนยันว่าเป็นคนรุ่นเรา</p>
+                <p class="err" role="alert"></p>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field" id="f-email">
+                <label for="i-email">อีเมล</label>
+                <input class="input" id="i-email" type="email" autocomplete="email" placeholder="you@example.com">
+                <p class="err" role="alert"></p>
+              </div>
+              <div class="field" id="f-line">
+                <label for="i-line">LINE ID</label>
+                <input class="input" id="i-line" type="text" autocomplete="off">
+                <p class="hint">ไม่บังคับ — กรรมการทักได้เร็วกว่าโทร</p>
+                <p class="err" role="alert"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ไม่ได้สั่งเสื้อ = ไม่มีของต้องส่ง = ไม่ต้องถามที่อยู่ -->
+          <div class="callout callout-info" id="no-ship-note" hidden>
+            <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 9.4v4.4" stroke-linecap="round"/><circle cx="10" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+            <span>รายการนี้เป็นเงินบริจาคอย่างเดียว ไม่มีของต้องจัดส่ง — <strong>ไม่ต้องกรอกที่อยู่</strong></span>
+          </div>
+
+          <div class="panel panel-pad stack" id="ship-panel" style="border-top:3px solid var(--purple-500)" hidden>
+            <div class="row-between">
+              <div>
+                <h3>ที่อยู่จัดส่งเสื้อ</h3>
+                <p class="meta">เห็นเฉพาะกรรมการที่ดูแลการส่งของ · ใช้ทำใบปะหน้าพัสดุแล้วลบทิ้งเมื่อส่งครบ</p>
+              </div>
+              <span class="badge badge-shirt" id="ship-qty"></span>
+            </div>
+
+            <!-- ตัวเลือกนี้คุมทั้งชื่อและเบอร์ จึงอยู่เหนือทั้งคู่ ไม่ใช่ซ่อนเป็นลิงก์ใต้ช่องใดช่องหนึ่ง
+                 ติ๊กแล้วช่องจะล็อกและตามค่าผู้บริจาคตลอด — แก้ชื่อผู้บริจาคทีหลังก็ไม่ค้างของเก่า -->
+            <label class="check" style="padding:var(--s3);border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface-2)">
+              <input type="checkbox" id="same-as-donor">
+              <span class="meta"><strong style="color:var(--ink)">ผู้รับเป็นคนเดียวกับผู้บริจาค</strong><br>
+                ใช้ชื่อและเบอร์โทรเดียวกัน ไม่ต้องกรอกซ้ำ</span>
+            </label>
+
+            <div class="grid-2">
+              <div class="field" id="f-rname">
+                <label for="i-rname">ชื่อผู้รับ <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="i-rname" type="text" autocomplete="name">
+                <p class="hint" id="h-rname">ชื่อที่จะให้ขนส่งเรียกตอนเข้าส่ง</p>
+                <p class="err" role="alert"></p>
+              </div>
+              <div class="field" id="f-rphone">
+                <label for="i-rphone">เบอร์โทรผู้รับ <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="i-rphone" type="tel" inputmode="tel" autocomplete="tel">
+                <p class="hint">ขนส่งจะโทรหาเบอร์นี้ตอนเข้าส่ง</p>
+                <p class="err" role="alert"></p>
+              </div>
+            </div>
+
+            <div class="field" id="f-addr">
+              <label for="i-addr">ที่อยู่ <span class="req" aria-hidden="true">*</span></label>
+              <textarea class="textarea" id="i-addr" autocomplete="street-address"
+                        placeholder="บ้านเลขที่ หมู่ ซอย ถนน แขวง/ตำบล เขต/อำเภอ"></textarea>
+              <p class="hint">ใส่ให้ครบถึงระดับตำบล/แขวง</p>
+              <p class="err" role="alert"></p>
+            </div>
+
+            <div class="grid-2">
+              <div class="field" id="f-prov">
+                <label for="i-prov">จังหวัด <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="i-prov" type="text" autocomplete="address-level1">
+                <p class="err" role="alert"></p>
+              </div>
+              <div class="field" id="f-zip">
+                <label for="i-zip">รหัสไปรษณีย์ <span class="req" aria-hidden="true">*</span></label>
+                <input class="input mono" id="i-zip" type="text" inputmode="numeric" maxlength="5">
+                <p class="err" role="alert"></p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="i-shipnote">หมายเหตุการจัดส่ง</label>
+              <input class="input" id="i-shipnote" type="text" placeholder="เช่น ฝากไว้ที่ป้อมยาม / โทรก่อนส่ง">
+            </div>
+          </div>
+
+          <div class="panel panel-pad">
+            <label class="check">
+              <input type="checkbox" id="i-consent">
+              <span class="meta">ยินยอมให้กรรมการรุ่นเก็บชื่อ เบอร์โทร ที่อยู่ และสลิป
+                เพื่อตรวจสอบยอดและจัดส่งของที่ระลึก และให้ลบข้อมูลเมื่อปิดโครงการ</span>
+            </label>
+            <p class="err" id="err-consent" role="alert" style="display:none;margin-top:var(--s2)"></p>
+          </div>
+
+          <div class="wizard-nav">
+            <button type="button" class="btn btn-quiet" data-back="order">ย้อนกลับ</button>
+            <span class="grow"></span>
+            <button type="button" class="btn btn-primary btn-lg" data-next="pay">ถัดไป · ดูยอดที่ต้องโอน</button>
+          </div>
+        </section>
+
+        <!-- ================= ขั้น 3 · โอน ================= -->
+        <section id="step-pay" class="stack-lg" aria-labelledby="h-pay" hidden>
+          <div>
+            <h2 class="h1" id="h-pay" tabindex="-1">โอนยอดนี้ครั้งเดียว</h2>
+            <p class="meta">ยอดนี้รวมค่าเสื้อและเงินบริจาคไว้แล้ว — โอนให้ตรงเป๊ะ กรรมการจะเทียบกับ statement</p>
+          </div>
+
+          <div class="panel panel-navy" style="overflow:hidden">
+            <div class="pay-slate">
+              <p class="pay-k">ยอดที่ต้องโอน</p>
+              <p class="pay-v"><span id="pay-total">0</span> <span class="pay-unit">บาท</span></p>
+              <p class="pay-break" id="pay-break"></p>
+              <button type="button" class="cf-btn" id="copy-total" data-copy="0">
+                <span class="cf-btn-label">คัดลอกยอด</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="panel panel-pad stack-lg">
+            <div class="copyfield">
+              <span class="cf-label" id="lbl-acc">เลขที่บัญชี · ธนาคารกรุงไทย สาขาเซ็นทรัล เชียงใหม่</span>
+              <div class="cf-row">
+                <span class="cf-val" id="acc-val" aria-labelledby="lbl-acc">666-1-17730-6</span>
+                <button type="button" class="cf-btn" data-copy="6661177306" aria-label="คัดลอกเลขที่บัญชี 666-1-17730-6">
+                  <span class="cf-btn-label">คัดลอก</span>
+                </button>
+              </div>
+              <p class="meta">คัดลอกแล้วจะได้เป็นตัวเลขล้วน <span class="mono">6661177306</span> วางในแอปธนาคารได้ทันที</p>
+            </div>
+
+            <div class="copyfield">
+              <span class="cf-label" id="lbl-name">ชื่อบัญชี — เป็นบัญชีร่วม 2 ชื่อ</span>
+              <div class="cf-row">
+                <span class="cf-val" data-plain aria-labelledby="lbl-name">น.ส.ปิ่นปินันท์ ร่มโพธิ์ และ นายธเนศ ชัชวาลชัยทรัพย์</span>
+                <button type="button" class="cf-btn" data-copy="น.ส.ปิ่นปินันท์ ร่มโพธิ์ และ นายธเนศ ชัชวาลชัยทรัพย์" aria-label="คัดลอกชื่อบัญชี">
+                  <span class="cf-btn-label">คัดลอก</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="callout callout-warn">
+              <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 6.2v4.6" stroke-linecap="round"/><circle cx="10" cy="13.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+              <span>
+                <strong>ตรวจชื่อปลายทางก่อนกดยืนยันทุกครั้ง</strong><br>
+                แอปธนาคารจะขึ้นชื่อทั้งสองท่าน ถ้าขึ้นชื่อเดียวหรือชื่ออื่น แปลว่าเลขบัญชีผิด กรุณาหยุดแล้วคัดลอกใหม่
+              </span>
+            </div>
+
+            <!-- เหตุผลที่ไม่มี QR ต้องอยู่ตรงนี้ ไม่งั้นทุกคนจะถามซ้ำว่าทำไมไม่ทำ -->
+            <div class="callout callout-info">
+              <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 9.4v4.4" stroke-linecap="round"/><circle cx="10" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+              <span><strong>ไม่มี QR พร้อมเพย์</strong> — บัญชีนี้เป็นบัญชีร่วมสองชื่อ ซึ่งผูกพร้อมเพย์ไม่ได้
+                จึงต้องพิมพ์ยอดเอง ใช้ปุ่ม “คัดลอกยอด” ด้านบนแล้ววางในแอปธนาคารจะปลอดภัยกว่าพิมพ์</span>
+            </div>
+          </div>
+
+          <div class="panel panel-pad stack">
+            <div class="row-between">
+              <h3>รายการที่จะโอน</h3>
+              <button type="button" class="btn btn-secondary btn-sm" data-back="order">แก้รายการ</button>
+            </div>
+            <dl class="sum-list" id="pay-recap"></dl>
+            <div class="sum-total"><span>รวมที่ต้องโอน</span><b><span id="pay-total-2">0</span> บาท</b></div>
+            <p class="meta" style="border-top:1px solid var(--line);padding-top:var(--s3)">
+              บันทึกร่างไว้ในเครื่องนี้แล้ว — ปิดหน้าไปเปิดแอปธนาคารแล้วกลับมาต่อได้ ข้อมูลไม่หาย
+            </p>
+          </div>
+
+          <div class="wizard-nav">
+            <button type="button" class="btn btn-quiet" data-back="info">ย้อนกลับ</button>
+            <span class="grow"></span>
+            <button type="button" class="btn btn-primary btn-lg" data-next="slip">โอนแล้ว · ไปแนบสลิป</button>
+          </div>
+        </section>
+
+        <!-- ================= ขั้น 4 · แนบสลิป ================= -->
+        <section id="step-slip" class="stack-lg" aria-labelledby="h-slip" hidden>
+          <div>
+            <h2 class="h1" id="h-slip" tabindex="-1">แนบสลิปให้กรรมการตรวจ</h2>
+            <p class="meta">ระบบไม่ได้เชื่อมกับธนาคาร กรรมการต้องเปิด statement เทียบกับสลิปทีละรายการ</p>
+          </div>
+
+          <div class="panel panel-pad stack-lg">
+            <!-- ไม่ต้องกรอกยอดซ้ำ — ยอดคือค่าที่ระบบคำนวณไว้แล้ว นี่คือกำไรของ flow นี้ -->
+            <div class="callout callout-info" style="align-items:center">
+              <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 9.4v4.4" stroke-linecap="round"/><circle cx="10" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+              <span class="grow">ยอดในสลิปต้องเป็น <strong class="num" id="slip-total"></strong> บาทพอดี
+                ไม่ต้องกรอกยอดเอง ระบบใช้ยอดที่คำนวณไว้
+                <br><span class="meta">ถ้าโอนไปแล้วยอดไม่ตรง กรรมการจะตีกลับพร้อมเหตุผล แล้วค่อยแจ้งใหม่</span></span>
+            </div>
+
+            <div class="field" id="f-time" style="max-width:320px">
+              <label for="i-time">วัน–เวลาที่โอน <span class="req" aria-hidden="true">*</span></label>
+              <input class="input" id="i-time" type="datetime-local">
+              <p class="hint">ดูจากสลิป ต้องตรงถึงระดับนาที</p>
+              <p class="err" role="alert"></p>
+            </div>
+
+            <div class="field" id="f-slip">
+              <label for="i-slip">ไฟล์สลิป <span class="req" aria-hidden="true">*</span></label>
+              <input type="file" id="i-slip" accept="image/png,image/jpeg,image/webp,application/pdf"
+                     class="sr" aria-describedby="h-slipfile">
+              <div class="drop" id="drop" data-state="empty" role="button" tabindex="0"
+                   aria-controls="i-slip" aria-label="เลือกไฟล์สลิป หรือลากไฟล์มาวาง">
+                <div id="drop-empty">
+                  <p style="font-weight:600">ลากไฟล์สลิปมาวาง หรือกดเพื่อเลือก</p>
+                  <p class="meta">JPG, PNG, WEBP หรือ PDF · ไม่เกิน 5 MB</p>
+                </div>
+                <div id="drop-filled" class="drop-preview" hidden>
+                  <img id="drop-img" alt="ตัวอย่างสลิปที่แนบ" src="">
+                  <div class="grow" style="min-width:0">
+                    <p style="font-weight:600;word-break:break-all" id="drop-name"></p>
+                    <p class="meta" id="drop-size"></p>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-danger" id="drop-clear">เอาออก</button>
+                </div>
+              </div>
+              <p class="hint" id="h-slipfile">ต้องเห็น <strong>ยอดเงิน</strong> <strong>วันเวลา</strong>
+                และ <strong>เลขบัญชีปลายทาง</strong> ครบ</p>
+              <p class="err" role="alert"></p>
+            </div>
+          </div>
+
+          <div class="wizard-nav">
+            <button type="button" class="btn btn-quiet" data-back="pay">ย้อนกลับ</button>
+            <span class="grow"></span>
+            <button type="button" class="btn btn-primary btn-lg" id="btn-submit">
+              <span class="btn-spin" aria-hidden="true"></span><span>ส่งให้กรรมการตรวจสอบ</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ================= สำเร็จ ================= -->
+        <section id="step-done" hidden aria-labelledby="h-done">
+          <div class="panel" style="overflow:hidden;max-width:640px">
+            <div style="background:var(--verified-bg);border-bottom:1px solid var(--verified-line);padding:var(--s5)">
+              <div class="row" style="gap:var(--s3)">
+                <span style="width:34px;height:34px;border-radius:50%;background:var(--verified-fg);color:#fff;display:grid;place-items:center" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>
+                </span>
+                <div>
+                  <h2 id="h-done" tabindex="-1" style="font-size:1.375rem;color:var(--verified-fg)">ส่งเรียบร้อย</h2>
+                  <p class="meta" style="color:var(--verified-fg)">รายการขึ้นบัญชีสาธารณะแล้วในสถานะ “รอตรวจสอบ”</p>
+                </div>
+              </div>
+            </div>
+            <div class="panel-pad stack-lg">
+              <div class="copyfield">
+                <span class="cf-label" id="lbl-ref">รหัสอ้างอิงของคุณ — เก็บไว้ให้ดี</span>
+                <div class="cf-row">
+                  <span class="cf-val" id="done-ref" aria-labelledby="lbl-ref"></span>
+                  <button type="button" class="cf-btn" id="done-copy" data-copy="">
+                    <span class="cf-btn-label">คัดลอก</span>
+                  </button>
+                </div>
+                <p class="meta">ไม่มีระบบค้นด้วยชื่อ เพื่อไม่ให้ใครสืบย้อนว่าใครบริจาคเท่าไร —
+                  รหัสนี้คือทางเดียวที่จะเปิดดูรายการของคุณ</p>
+              </div>
+
+              <dl class="sum-list" id="done-recap" style="border-top:1px solid var(--line);padding-top:var(--s5)"></dl>
+
+              <div class="row">
+                <a class="btn btn-secondary" id="done-status-link" href="status.html">ดูสถานะรายการนี้</a>
+                <a class="btn btn-quiet" href="index.html">กลับหน้าหลัก</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- สรุปยอดสด — เห็นตลอดตอนกรอก -->
+      <aside id="summary-rail" class="stack" style="position:sticky;top:80px">
+        <div class="panel panel-pad stack-sm">
+          <h3>สรุปยอด</h3>
+          <dl class="sum-list" id="rail-list"></dl>
+          <div class="sum-total"><span>รวมที่ต้องโอน</span><b><span id="rail-total">0</span> บาท</b></div>
+          <p class="meta" id="rail-sizes"></p>
+        </div>
+        <div class="panel panel-pad stack-sm">
+          <h3 style="font-size:.9375rem">ทำไมต้องแนบสลิปเอง</h3>
+          <p class="meta">บัญชีนี้เป็นบัญชีร่วมของกรรมการรุ่น ไม่ใช่บัญชีนิติบุคคลที่ต่อ API ธนาคารได้
+            ระบบจึงไม่เห็นเงินเข้าเอง กรรมการต้องเปิด statement เทียบกับสลิปทีละรายการ
+            นี่คือเหตุผลที่มีสถานะ “รอตรวจสอบ”</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- แถบล่างจอมือถือ — ต้องเห็นยอดรวมตลอด ไม่ใช่แค่ปุ่ม -->
+<div class="action-bar" id="bar">
+  <div class="wrap">
+    <span class="bar-total">
+      <span class="bar-k">ยอดรวม</span>
+      <span class="bar-v"><span id="bar-amount">0</span> บาท</span>
+    </span>
+    <button type="button" class="btn btn-primary" id="bar-btn">ถัดไป</button>
+  </div>
+</div>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div>
+      <img src="assets/img/ams-logo.png" alt="">
+      <p class="meta">คณะกรรมการรุ่น 49 คณะเทคนิคการแพทย์ มหาวิทยาลัยเชียงใหม่</p>
+    </div>
+    <div class="meta">
+      <p><strong style="color:var(--ink)">ความปลอดภัยและข้อมูลของคุณ</strong></p>
+      <p>หน้านี้แสดงเลขบัญชีเป็นข้อความเท่านั้น ไม่เผยแพร่ภาพถ่ายสมุดบัญชี
+         เพราะภาพต้นฉบับมีลายเซ็นและตราประทับธนาคารติดมาด้วย ·
+         ที่อยู่ที่กรอกใช้เพื่อจัดส่งเสื้อเท่านั้น กรรมการดึงออกมาเป็นใบปะหน้าพัสดุ และลบทิ้งเมื่อส่งครบทุกคน</p>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<style>
+@media (max-width:1000px){
+  /* ต้องเป็น minmax(0,1fr) ไม่ใช่ 1fr — 1fr มีขั้นต่ำเป็น min-content ของสิ่งที่อยู่ข้างใน
+     พอมีตารางไซส์อยู่ในนั้น แทร็กจะโป่งออกจนจอ 320px เลื่อนแนวนอนได้ */
+  .wiz-grid{ grid-template-columns:minmax(0,1fr) !important; gap:var(--s6) !important; }
+  .wiz-grid aside{ position:static !important; }
+  /* rail ซ้ำกับแถบยอดล่างจอ — บนมือถือเก็บเฉพาะกล่องอธิบาย ไม่ต้องโชว์ยอดสองที่ */
+  #summary-rail > div:first-child{ display:none; }
+}
+@media (max-width:760px){
+  .hero-shirt{ grid-template-columns:1fr !important; }
+  .hero-shirt figure{ order:-1; max-width:420px; }
+}
+</style>
+
+<script src="assets/app.js?v=6"></script>
+<script>
+(function () {
+  'use strict';
+  var A = window.AMS;
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* กันเบราว์เซอร์ที่แคช app.js คนละเวอร์ชันกับหน้านี้ไว้ — เคยเกิดจริงมาแล้ว
+     อาการคือยอดรวมค้างไม่ขยับ แต่ช่องจำนวนยังเดินได้ ผู้ใช้จึงไม่รู้ตัวว่ายอดผิด
+     หน้านี้เป็นหน้าที่ผู้ใช้ตัดสินใจโอนเงิน ยอมหยุดทั้งหน้าดีกว่าปล่อยให้โอนตามเลขที่ผิด
+     ?v= ที่ท้ายลิงก์ควรกันไว้ชั้นหนึ่งแล้ว นี่คือชั้นสุดท้ายเผื่อมีใครลืมขึ้นเลข */
+  if (!A || A.ASSET_VERSION !== '6') {
+    var warn = document.createElement('div');
+    warn.className = 'wrap section';
+    warn.innerHTML = '<div class="callout callout-danger">' +
+      '<span aria-hidden="true">!</span><span><strong>หน้านี้โหลดไฟล์ไม่ครบหรือได้ไฟล์เก่าจากแคช</strong><br>' +
+      'ยอดเงินอาจคำนวณไม่ถูกต้อง กรุณากด <strong>Ctrl+Shift+R</strong> (หรือ Cmd+Shift+R บน Mac) ' +
+      'เพื่อโหลดใหม่ก่อนใช้งาน — อย่าเพิ่งโอนเงินตามยอดที่เห็นบนหน้านี้</span></div>';
+    document.getElementById('main').prepend(warn);
+    return;
+  }
+
+  var ORDER = ['order', 'info', 'pay', 'slip'];
+  var step = 'order';
+  var maxIdx = 0;        // ขั้นไกลสุดที่ผ่านการตรวจมาแล้ว — ใช้ปลดล็อกปุ่มบนแถบขั้นตอน
+  var slipFile = null;
+  var submitted = false;
+  var MAXBYTES = 5 * 1024 * 1024;
+
+  var qtyEl = $('qty');
+  A.buildQtyPicker(qtyEl, {});
+
+  /* ---------- อ่านค่าจากฟอร์ม ---------- */
+  function val(id) { return ($(id).value || '').trim(); }
+  function digits(id) { return ($(id).value || '').replace(/[^0-9]/g, ''); }
+
+  /* รวมสถานะ "ของที่สั่ง + ยอดบริจาค" ไว้ที่เดียว ทุกที่ในหน้านี้อ่านผ่านฟังก์ชันนี้
+     ค่าเสื้อคิดรายไซส์ผ่าน priceForSize() ไม่ใช่ qty × 500 เพราะ 2XL–5XL มีส่วนเพิ่มรายไซส์
+     surcharge แยกออกมาเพื่ออธิบายให้ผู้ใช้เห็นว่าทำไมยอดไม่ลงตัวเป็นหลักร้อย */
+  function order() {
+    var q = A.readQtyPicker(qtyEl);
+    var shirt = 0, surcharge = 0;
+    Object.keys(q.counts).forEach(function (k) {
+      shirt += q.counts[k] * A.priceForSize(k);
+      surcharge += q.counts[k] * A.extraForSize(k);
+    });
+    var don = parseInt(digits('i-donation'), 10) || 0;
+    return {
+      counts: q.counts, sizes: q.sizes, qty: q.total,
+      shirt: shirt, surcharge: surcharge, donation: don, total: shirt + don
+    };
+  }
+
+  /* ---------- สรุปยอด (rail + แถบล่างจอ + ขั้นโอน) ---------- */
+  function lines(o) {
+    var s = '';
+    if (o.qty) {
+      /* เลิกเขียน "× 500" — ราคาต่อตัวไม่เท่ากันแล้ว บอกส่วนเพิ่มรวมแทนจะตรงกว่า */
+      s += '<dt>เสื้อรุ่น ' + o.qty + ' ตัว' +
+           (o.surcharge ? '<br><span class="meta">รวมส่วนเพิ่มไซส์ใหญ่ ' + A.baht(o.surcharge) + ' บาท</span>' : '') +
+           '</dt><dd>' + A.baht(o.shirt) + '</dd>';
+    }
+    s += '<dt>เงินบริจาคให้คณะฯ</dt><dd>' + A.baht(o.donation) + '</dd>';
+    return s;
+  }
+
+  function renderSummary() {
+    var o = order();
+
+    $('rail-list').innerHTML = lines(o);
+    $('rail-total').textContent = A.baht(o.total);
+    $('rail-sizes').textContent = o.qty ? 'ไซส์ ' + A.sizeSummary(o.sizes) : 'ยังไม่ได้เลือกเสื้อ';
+    $('bar-amount').textContent = A.baht(o.total);
+
+    /* สั่งเยอะไม่ผิด แต่ต้องให้กรรมการรู้ตัวก่อนสั่งผลิต */
+    $('bulk-note').hidden = o.qty <= A.BULK_HINT;
+    $('bulk-n').textContent = o.qty;
+
+    /* ไม่มีเสื้อ = ไม่มีของต้องส่ง = ไม่ถามที่อยู่ */
+    $('ship-panel').hidden = o.qty === 0;
+    $('no-ship-note').hidden = o.qty > 0;
+    $('ship-qty').textContent = o.qty + ' ตัว · ' + A.sizeSummary(o.sizes);
+
+    $('pay-total').textContent = A.baht(o.total);
+    $('pay-total-2').textContent = A.baht(o.total);
+    $('copy-total').setAttribute('data-copy', String(o.total));
+    $('pay-break').textContent = o.qty
+      ? 'เสื้อ ' + o.qty + ' ตัว ' + A.baht(o.shirt) + ' + บริจาค ' + A.baht(o.donation)
+      : 'เงินบริจาคทั้งก้อน';
+    $('pay-recap').innerHTML = lines(o) +
+      (o.qty ? '<dt>ไซส์</dt><dd>' + A.esc(A.sizeSummary(o.sizes)) + '</dd>' : '');
+    $('slip-total').textContent = A.baht(o.total);
+
+    /* ปุ่มยอดด่วนติดไฟเมื่อค่าตรงกับที่พิมพ์อยู่ */
+    [].forEach.call($('amount-quick').querySelectorAll('.chip'), function (c) {
+      c.setAttribute('aria-pressed', String(Number(c.getAttribute('data-amt')) === o.donation));
+    });
+  }
+
+  /* ---------- ร่างในเครื่อง ---------- */
+  function snapshot() {
+    var o = order();
+    return {
+      step: step, maxIdx: maxIdx,
+      counts: o.counts, donation: o.donation,
+      name: val('i-name'), studentId: digits('i-sid'), phone: digits('i-phone'),
+      email: val('i-email'), lineId: val('i-line'),
+      recipient: val('i-rname'), recipientPhone: digits('i-rphone'),
+      addrLine: val('i-addr'), province: val('i-prov'), zip: digits('i-zip'),
+      shipNote: val('i-shipnote'), consent: $('i-consent').checked,
+      sameAsDonor: $('same-as-donor').checked
+    };
+  }
+  /* restoring = กันเขียนทับร่างระหว่างที่กำลังกู้ร่างอยู่ — ตอนเติมค่ากลับเข้าฟอร์มทีละช่อง
+     สถานะยังไม่ครบ ถ้าปล่อยให้ save ระหว่างนั้นร่างจะถูกทับด้วยของครึ่ง ๆ กลาง ๆ */
+  var restoring = false;
+  function saveDraft() { if (!submitted && !restoring) A.Draft.save(snapshot()); }
+
+  /* ---------- ตรวจความครบถ้วน ----------
+     report = true → ย้อมช่องแดงและเลื่อนไปหา · false → ถามเฉย ๆ ไม่รบกวนหน้าจอ */
+  function focusBad(el) {
+    var f = el.querySelector('.input,.textarea,input,select') || el;
+    try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); }
+    el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
+  function validOrder(report) {
+    var o = order(), ok = true, bad = null;
+    var e = $('err-qty');
+
+    if (!o.qty && !o.donation) {
+      ok = false;
+      if (report) {
+        e.style.display = 'flex';
+        e.innerHTML = A.ICON.alert +
+          '<span>ยังไม่ได้เลือกอะไรเลย — ใส่จำนวนเสื้ออย่างน้อย 1 ตัว หรือระบุยอดบริจาค</span>';
+        bad = $('qty');
+      }
+    } else if (report) { e.style.display = 'none'; }
+
+    if (report && bad) { A.toast('ยังกรอกไม่ครบ'); focusBad(bad); }
+    return ok;
+  }
+
+  function validInfo(report) {
+    var o = order(), ok = true, bad = null;
+    function ck(fid, cond, msg) {
+      var f = $(fid);
+      if (cond) { A.clearInvalid(f); }
+      else { ok = false; if (report) A.setInvalid(f, msg); bad = bad || f; }
+    }
+    ck('f-name', val('i-name').length >= 3, 'กรอกชื่อ–นามสกุลให้ครบ');
+    ck('f-phone', /^0\d{8,9}$/.test(digits('i-phone')), 'เบอร์โทร 9–10 หลัก ขึ้นต้นด้วย 0');
+    ck('f-sid', !val('i-sid') || /^\d{8,10}$/.test(digits('i-sid')), 'รหัสนักศึกษาเป็นตัวเลข 8–10 หลัก หรือเว้นว่างไว้');
+    ck('f-email', !val('i-email') || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('i-email')), 'รูปแบบอีเมลไม่ถูกต้อง หรือเว้นว่างไว้');
+
+    if (o.qty > 0) {
+      ck('f-rname', val('i-rname').length >= 3, 'กรอกชื่อผู้รับ');
+      ck('f-rphone', /^0\d{8,9}$/.test(digits('i-rphone')), 'เบอร์ผู้รับ 9–10 หลัก ขึ้นต้นด้วย 0');
+      ck('f-addr', val('i-addr').length >= 10, 'ที่อยู่สั้นเกินไป ใส่ให้ครบถึงตำบล/แขวง');
+      ck('f-prov', val('i-prov').length >= 2, 'กรอกจังหวัด');
+      ck('f-zip', /^\d{5}$/.test(digits('i-zip')), 'รหัสไปรษณีย์ต้องเป็นเลข 5 หลัก');
+    }
+
+    var ce = $('err-consent');
+    if ($('i-consent').checked) { ce.style.display = 'none'; }
+    else {
+      ok = false;
+      if (report) {
+        ce.style.display = 'flex';
+        ce.innerHTML = A.ICON.alert + '<span>ต้องยินยอมก่อนจึงจะไปต่อได้</span>';
+      }
+      bad = bad || $('i-consent').closest('.panel');
+    }
+
+    if (report && bad) { A.toast('ยังกรอกไม่ครบ — ดูช่องที่ขึ้นสีแดง'); focusBad(bad); }
+    return ok;
+  }
+
+  /* ---------- เดินขั้น ---------- */
+  function go(name, opts) {
+    opts = opts || {};
+    step = name;
+    ORDER.concat(['done']).forEach(function (k) { $('step-' + k).hidden = k !== name; });
+
+    var cur = ORDER.indexOf(name);
+    var done = name === 'done';
+    [].forEach.call($('stepper').children, function (li, i) {
+      var btn = li.querySelector('button');
+      li.setAttribute('data-done', String(done || i < cur));
+      if (!done && i === cur) li.setAttribute('aria-current', 'step');
+      else li.removeAttribute('aria-current');
+      btn.disabled = done || i > maxIdx;
+    });
+
+    $('summary-rail').hidden = done;
+    $('bar').hidden = done;
+    $('bar-btn').textContent =
+      name === 'pay' ? 'ไปแนบสลิป' : (name === 'slip' ? 'ส่งตรวจสอบ' : 'ถัดไป');
+
+    if (opts.hash !== false && location.hash.replace('#', '') !== name) {
+      location.hash = '#' + name;
+    }
+    if (!opts.quiet) {
+      var h = $('h-' + name);
+      if (h) { try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); } }
+      window.scrollTo({ top: Math.max(0, $('stepper').getBoundingClientRect().top + window.pageYOffset - 76), behavior: 'smooth' });
+    }
+    saveDraft();
+  }
+
+  /* ไปข้างหน้าได้ก็ต่อเมื่อขั้นก่อนหน้าครบจริง — ตรวจย้อนทุกขั้น ไม่ใช่แค่ขั้นติดกัน
+     เพราะผู้ใช้กดแถบขั้นตอนย้อนไปลบของออกแล้วกดหน้าต่อได้ */
+  function tryGo(next) {
+    if (next !== 'order' && !validOrder(false)) { go('order'); validOrder(true); return; }
+    if ((next === 'pay' || next === 'slip') && !validInfo(false)) { go('info'); validInfo(true); return; }
+    if (next === 'info' && !validOrder(true)) return;
+    if (next === 'pay' && !validInfo(true)) return;
+    maxIdx = Math.max(maxIdx, ORDER.indexOf(next));
+    go(next);
+  }
+
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest ? e.target.closest('[data-next],[data-back]') : null;
+    if (!el) return;
+    var n = el.getAttribute('data-next');
+    if (n) tryGo(n); else go(el.getAttribute('data-back'));
+  });
+
+  [].forEach.call($('stepper').querySelectorAll('button'), function (btn, i) {
+    btn.addEventListener('click', function () {
+      if (i <= ORDER.indexOf(step)) go(ORDER[i]); else tryGo(ORDER[i]);
+    });
+  });
+
+  $('bar-btn').addEventListener('click', function () {
+    if (step === 'slip') { $('btn-submit').click(); return; }
+    tryGo(ORDER[ORDER.indexOf(step) + 1]);
+  });
+
+  window.addEventListener('hashchange', function () {
+    var h = location.hash.replace('#', '');
+    if (!h || h === step || submitted || ORDER.indexOf(h) === -1) return;
+    if (ORDER.indexOf(h) > maxIdx) { location.hash = '#' + step; return; }
+    go(h, { hash: false });
+  });
+
+  /* ---------- ผูก input ทั้งหน้าเข้ากับการคำนวณและร่าง ---------- */
+  function sync() { renderSummary(); saveDraft(); }
+  qtyEl.addEventListener('qtychange', sync);
+  $('wiz-col').addEventListener('input', sync);
+  $('wiz-col').addEventListener('change', sync);
+
+  $('i-donation').addEventListener('focus', function () {
+    if (this.value === '0') { this.value = ''; }
+  });
+  $('i-donation').addEventListener('blur', function () {
+    this.value = String(parseInt(digits('i-donation'), 10) || 0);
+    sync();
+  });
+  $('i-consent').addEventListener('change', function () {
+    if (this.checked) $('err-consent').style.display = 'none';
+  });
+
+  [].forEach.call($('amount-quick').querySelectorAll('.chip'), function (c) {
+    c.addEventListener('click', function () {
+      $('i-donation').value = c.getAttribute('data-amt');
+      sync();
+    });
+  });
+
+  /* ---------- ผู้รับ = ผู้บริจาค ----------
+     เป็นตัวเลือกค้างสถานะ ไม่ใช่ปุ่มคัดลอกครั้งเดียว — ติ๊กไว้แล้วช่องผู้รับจะล็อกและ
+     ตามค่าผู้บริจาคตลอด ถ้าเป็นปุ่มคัดลอก ผู้ใช้ที่ย้อนกลับไปแก้ชื่อตัวเองจะเหลือชื่อเก่าค้าง
+     ในช่องผู้รับโดยไม่มีอะไรเตือน แล้วพัสดุจะจ่าหน้าผิด */
+  var sameChk = $('same-as-donor');
+  function applySame() {
+    var on = sameChk.checked;
+    $('i-rname').readOnly = on;
+    $('i-rphone').readOnly = on;
+    $('h-rname').textContent = on
+      ? 'ล็อกตามข้อมูลผู้บริจาค — เอาเครื่องหมายถูกออกถ้าต้องการส่งให้คนอื่น'
+      : 'ชื่อที่จะให้ขนส่งเรียกตอนเข้าส่ง';
+    if (on) {
+      $('i-rname').value = val('i-name');
+      $('i-rphone').value = digits('i-phone');
+      A.clearInvalid($('f-rname'));
+      A.clearInvalid($('f-rphone'));
+    }
+  }
+  sameChk.addEventListener('change', function () {
+    applySame();
+    if (!sameChk.checked) $('i-rname').focus();
+    sync();
+  });
+  /* ผู้บริจาคกลับมาแก้ชื่อ/เบอร์ทีหลัง ช่องผู้รับต้องตามไปด้วยทันที
+     ผูกที่ช่องโดยตรงเพื่อให้ทำงานก่อน listener รวมบน #wiz-col ที่เป็นตัวบันทึกร่าง */
+  ['i-name', 'i-phone'].forEach(function (id) {
+    $(id).addEventListener('input', function () { if (sameChk.checked) applySame(); });
+  });
+
+  /* ---------- สลิป: empty / over / filled / error ---------- */
+  function setSlip(file) {
+    var f = $('f-slip');
+    if (!file) {
+      slipFile = null;
+      $('drop').dataset.state = 'empty';
+      $('drop-empty').hidden = false;
+      $('drop-filled').hidden = true;
+      return;
+    }
+    var okType = /^image\/(png|jpeg|webp)$/.test(file.type) || file.type === 'application/pdf';
+    if (!okType) {
+      $('drop').dataset.state = 'error';
+      A.setInvalid(f, 'ไฟล์ต้องเป็น JPG, PNG, WEBP หรือ PDF เท่านั้น'); return;
+    }
+    if (file.size > MAXBYTES) {
+      $('drop').dataset.state = 'error';
+      A.setInvalid(f, 'ไฟล์ใหญ่เกิน 5 MB (ไฟล์นี้ ' + (file.size / 1048576).toFixed(1) + ' MB) ลองถ่ายภาพหน้าจอแทน');
+      return;
+    }
+    A.clearInvalid(f);
+    slipFile = file;
+    $('drop').dataset.state = 'filled';
+    $('drop-empty').hidden = true;
+    $('drop-filled').hidden = false;
+    $('drop-name').textContent = file.name;
+    $('drop-size').textContent = (file.size / 1024).toFixed(0) + ' KB · แนบแล้ว';
+    var img = $('drop-img');
+    if (file.type === 'application/pdf') { img.style.display = 'none'; }
+    else { img.style.display = ''; img.src = URL.createObjectURL(file); }
+  }
+
+  $('drop').addEventListener('click', function (e) { if (e.target.id !== 'drop-clear') $('i-slip').click(); });
+  $('drop').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('i-slip').click(); }
+  });
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    $('drop').addEventListener(ev, function (e) {
+      e.preventDefault(); if ($('drop').dataset.state !== 'filled') $('drop').dataset.state = 'over';
+    });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    $('drop').addEventListener(ev, function (e) {
+      e.preventDefault(); if ($('drop').dataset.state === 'over') $('drop').dataset.state = 'empty';
+    });
+  });
+  $('drop').addEventListener('drop', function (e) { if (e.dataTransfer.files[0]) setSlip(e.dataTransfer.files[0]); });
+  $('i-slip').addEventListener('change', function () { setSlip($('i-slip').files[0]); });
+  $('drop-clear').addEventListener('click', function (e) {
+    e.stopPropagation(); $('i-slip').value = ''; setSlip(null);
+  });
+
+  /* ---------- ส่ง ---------- */
+  $('btn-submit').addEventListener('click', function () {
+    if (!validOrder(false)) { go('order'); validOrder(true); return; }
+    if (!validInfo(false)) { go('info'); validInfo(true); return; }
+
+    var bad = null;
+    if ($('i-time').value) A.clearInvalid($('f-time'));
+    else { A.setInvalid($('f-time'), 'เลือกวันและเวลาที่โอนตามสลิป'); bad = $('f-time'); }
+    if (slipFile) A.clearInvalid($('f-slip'));
+    else { A.setInvalid($('f-slip'), 'ต้องแนบสลิปการโอน'); bad = bad || $('f-slip'); }
+    if (bad) { A.toast('ยังกรอกไม่ครบ — ดูช่องที่ขึ้นสีแดง'); focusBad(bad); return; }
+
+    var btn = $('btn-submit');
+    btn.dataset.loading = 'true';
+    btn.querySelector('span:last-child').textContent = 'กำลังส่ง…';
+
+    setTimeout(function () {
+      var o = order();
+      var ref = A.newRef();
+      var ship = o.qty > 0;
+      var now = new Date();
+      var pad = function (x) { return String(x).padStart(2, '0'); };
+      var iso = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) +
+                'T' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+
+      A.Store.add({
+        ref: ref,
+        donation: o.donation,
+        shirtQty: o.qty,
+        sizes: o.sizes,
+        transferAt: $('i-time').value,
+        status: 'pending',
+        name: val('i-name'),
+        studentId: digits('i-sid'),
+        phone: digits('i-phone'),
+        email: val('i-email'),
+        lineId: val('i-line'),
+        recipient: ship ? val('i-rname') : '',
+        recipientPhone: ship ? digits('i-rphone') : '',
+        addrLine: ship ? val('i-addr') : '',
+        province: ship ? val('i-prov') : '',
+        zip: ship ? digits('i-zip') : '',
+        shipNote: ship ? val('i-shipnote') : '',
+        address: ship ? A.composeAddress({ line: val('i-addr'), province: val('i-prov'), zip: digits('i-zip') }) : '',
+        slip: slipFile.name,
+        submittedAt: iso,
+        verifiedAt: null,
+        note: ''
+      });
+
+      submitted = true;
+      A.Draft.clear();
+
+      $('done-ref').textContent = ref;
+      $('done-copy').setAttribute('data-copy', ref);
+      A.bindCopy($('step-done'));
+      $('done-recap').innerHTML =
+        (o.qty ? '<dt>เสื้อรุ่น ' + o.qty + ' ตัว</dt><dd>' + A.baht(o.shirt) + ' บาท</dd>' +
+                 '<dt>ไซส์</dt><dd>' + A.esc(A.sizeSummary(o.sizes)) + '</dd>' : '') +
+        '<dt>เงินบริจาค</dt><dd>' + A.baht(o.donation) + ' บาท</dd>' +
+        '<dt>ยอดที่โอน</dt><dd><strong>' + A.baht(o.total) + ' บาท</strong></dd>' +
+        '<dt>เวลาโอน</dt><dd>' + A.thDate($('i-time').value) + '</dd>' +
+        '<dt>สถานะ</dt><dd>' + A.badge('pending') + '</dd>';
+      $('done-status-link').href = 'status.html?ref=' + ref;
+
+      go('done', { hash: false });
+      history.replaceState(null, '', location.pathname);
+      A.toast('บันทึกแล้ว · รหัสอ้างอิง ' + ref);
+    }, 700);
+  });
+
+  /* ---------- กู้ร่าง ---------- */
+  function applyDraft(d) {
+    restoring = true;
+    A.buildQtyPicker(qtyEl, d.counts || {});
+    $('i-donation').value = String(d.donation || 0);
+    [['i-name', 'name'], ['i-sid', 'studentId'], ['i-phone', 'phone'], ['i-email', 'email'],
+     ['i-line', 'lineId'], ['i-rname', 'recipient'], ['i-rphone', 'recipientPhone'],
+     ['i-addr', 'addrLine'], ['i-prov', 'province'], ['i-zip', 'zip'], ['i-shipnote', 'shipNote']
+    ].forEach(function (p) { $(p[0]).value = d[p[1]] || ''; });
+    $('i-consent').checked = !!d.consent;
+    /* ตั้งค่าหลังเติมช่องแล้ว เพราะ applySame() จะเขียนทับช่องผู้รับเมื่อติ๊กไว้ */
+    $('same-as-donor').checked = !!d.sameAsDonor;
+    applySame();
+    renderSummary();
+
+    /* เชื่อ maxIdx ของร่างไม่ได้ ต้องตรวจซ้ำ — ผู้ใช้อาจกลับมาแล้วข้อมูลไม่ครบเหมือนตอนจากไป */
+    var target = ORDER.indexOf(d.step) > -1 ? d.step : 'order';
+    if (!validOrder(false)) target = 'order';
+    else if ((target === 'pay' || target === 'slip') && !validInfo(false)) target = 'info';
+    maxIdx = Math.max(0, ORDER.indexOf(target));
+    go(target, { hash: false, quiet: true });
+    restoring = false;
+    saveDraft();
+  }
+
+  var draft = A.Draft.load();
+  var hasDraft = draft && (draft.donation > 0 || (draft.counts && Object.keys(draft.counts).length));
+  if (hasDraft) {
+    applyDraft(draft);
+    var o0 = order();
+    $('draft-sum').textContent = 'ยอดรวม ' + A.baht(o0.total) + ' บาท' +
+      (o0.qty ? ' · เสื้อ ' + A.sizeSummary(o0.sizes) : '');
+    $('draft-bar').hidden = false;
+  } else {
+    /* ไม่มีร่าง = ไม่มีข้อมูล จะ deep-link เข้าขั้นหลังไม่ได้ ต้องเริ่มที่ขั้นแรกเสมอ */
+    restoring = true;
+    renderSummary();
+    go('order', { hash: false, quiet: true });
+    restoring = false;
+    if (location.hash) history.replaceState(null, '', location.pathname);
+  }
+
+  $('draft-clear').addEventListener('click', function () {
+    A.Draft.clear();
+    location.href = location.pathname;
+  });
+
+  /* ค่าเริ่มต้นของเวลาโอน = ตอนนี้ คนส่วนใหญ่แนบสลิปทันทีหลังโอน */
+  (function () {
+    var n = new Date();
+    var pad = function (x) { return String(x).padStart(2, '0'); };
+    $('i-time').value = n.getFullYear() + '-' + pad(n.getMonth() + 1) + '-' + pad(n.getDate()) +
+      'T' + pad(n.getHours()) + ':' + pad(n.getMinutes());
+  })();
+})();
+</script>
+</body>
+</html>

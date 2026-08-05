@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>หน้าหลัก · AMS49 CMU Reunion 20 ปี</title>
+<meta name="description" content="รายการเงินบริจาคและสั่งเสื้อรุ่นของกองทุน AMS49 CMU Reunion 20 ปี — ทุกยอดตรวจสอบได้ ไม่ระบุตัวตนผู้บริจาค">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Graduate&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/system.css?v=6">
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปเนื้อหาหลัก</a>
+
+<div class="proto-bar">
+  <div class="wrap">
+    <strong>PROTOTYPE</strong>
+    <span>ตัวเลขทั้งหมดเป็นข้อมูลตัวอย่าง ยังไม่ใช่ยอดจริง · ข้อมูลเก็บในเครื่องคุณเท่านั้น</span>
+    <button id="reset-proto" class="btn btn-sm" style="margin-left:auto;background:#3B4152;color:#fff">รีเซ็ตข้อมูลตัวอย่าง</button>
+  </div>
+</div>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand-lock" href="index.html">
+      <img src="assets/img/ams-logo.png" alt="คณะเทคนิคการแพทย์ มหาวิทยาลัยเชียงใหม่">
+      <span class="sep" aria-hidden="true"></span>
+      <span>
+        <span class="wordmark">AMS49CMU</span>
+        <span class="yr" style="display:block">REUNION 20 ปี</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="เมนูหลัก">
+      <a href="index.html" aria-current="page">หน้าหลัก</a>
+      <a href="support.html">บริจาคและสั่งเสื้อรุ่น</a>
+      <a href="status.html">เช็คสถานะ</a>
+      <a href="admin.html" class="admin-link">แอดมิน</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO — ซ้ายบอกบริบท ขวาคือยอด ไม่จัดกลาง -->
+  <section class="wrap section" style="padding-bottom:var(--s6)">
+    <div style="display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--s7);align-items:end" class="hero-grid">
+      <div class="stack">
+        <p class="eyebrow">ประเพณีรับน้องขึ้นดอย · 2549 – 2569</p>
+        <h1>กองทุนคืนสู่เหย้า<br>เทคนิคการแพทย์ มช. รุ่น 49</h1>
+        <p class="body" style="color:var(--ink-muted)">
+          เลือกของและระบุยอดบริจาคในหน้าเดียว ระบบรวมให้เป็นยอดเดียว โอนครั้งเดียวแล้วแนบสลิป ·
+          ทุกยอดถูกตรวจสลิปโดยกรรมการรุ่น แล้วขึ้นในบัญชีสาธารณะด้านล่างภายใน 24 ชั่วโมง
+          <strong style="color:var(--ink)">โดยไม่เปิดเผยชื่อผู้บริจาค</strong>
+        </p>
+        <div class="row">
+          <a class="btn btn-primary btn-lg" href="support.html">บริจาคและสั่งเสื้อรุ่น</a>
+          <a class="btn btn-secondary btn-lg" href="status.html">เช็คสถานะด้วยรหัสอ้างอิง</a>
+        </div>
+        <p class="meta" style="border-top:1px solid var(--line);padding-top:var(--s3);margin-top:var(--s4)">
+          49111xxxx - ใจ๋เดียว ขึ้นดอย <strong style="color:var(--ink)">21 พฤศจิกายน 2569</strong>
+          <span id="countdown" class="mono"></span>
+        </p>
+      </div>
+
+      <div class="stack-sm">
+        <p class="eyebrow" style="display:flex;align-items:center;gap:8px">
+          เงินบริจาคที่ยืนยันแล้ว
+          <span style="width:7px;height:7px;border-radius:50%;background:var(--verified-fg);display:inline-block" aria-hidden="true"></span>
+          <span style="text-transform:none;letter-spacing:0;font-weight:400">อัปเดตสด</span>
+        </p>
+        <p style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+          <span class="total-figure" id="total">0</span>
+          <span style="font-size:1.5rem;font-weight:600;color:var(--navy-700)">บาท</span>
+        </p>
+        <div class="meter" role="img" aria-label="ความคืบหน้าของยอดบริจาค" id="meter-wrap">
+          <i id="meter" style="width:0%"></i>
+        </div>
+        <!-- เสื้อเป็นการซื้อขาย ไม่ใช่การบริจาค จึงไม่รวมในตัวเลขใหญ่ด้านบน -->
+        <p class="meta" style="border-top:1px solid var(--line);padding-top:var(--s3);margin-top:var(--s3)">
+          <strong style="color:var(--ink)">ยอดขายเสื้อรุ่น <span id="shirt-rev">—</span> บาท</strong>
+          <span id="shirt-n"></span> — นับแยกจากเงินบริจาค
+          เพราะต้นทุนเสื้อและค่าจัดส่งรวมแล้ว 400++ ต่อตัว
+          รายได้หลังหักค่าใช้จ่ายจะนำไปสมทบทุนบริจาคให้คณะฯ อีกทอดหนึ่ง
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAT STRIP — คั่นด้วยเส้น hairline ไม่ใช่การ์ดมนซ้ำ ๆ -->
+  <div class="wrap">
+    <div class="stat-strip">
+      <div>
+        <p class="stat-k">รอตรวจสอบ</p>
+        <p class="stat-v" id="s-pending">—</p>
+        <p class="meta" id="s-pending-c">—</p>
+      </div>
+      <div>
+        <p class="stat-k">จำนวนรายการที่ยืนยันแล้ว</p>
+        <p class="stat-v" id="s-count">—</p>
+        <p class="meta">ไม่นับรายการที่ตรวจไม่ผ่าน</p>
+      </div>
+      <div>
+        <p class="stat-k">เสื้อรุ่นที่ต้องจัดส่ง</p>
+        <p class="stat-v" id="s-shirt">—</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEDGER + RAIL -->
+  <section class="wrap section">
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:var(--s7);align-items:start" class="ledger-grid">
+
+      <div>
+        <div class="row-between" style="margin-bottom:var(--s4)">
+          <div>
+            <h2>รายการเงินบริจาคและสั่งเสื้อรุ่น</h2>
+            <p class="meta">แสดงเวลา ยอด และสถานะเท่านั้น — ไม่แสดงชื่อ ไม่แสดงตัวย่อ</p>
+          </div>
+          <div class="chips" role="group" aria-label="กรองตามสถานะ">
+            <button class="chip" data-filter="all" aria-pressed="true">ทั้งหมด</button>
+            <button class="chip" data-filter="verified" aria-pressed="false">ยืนยันแล้ว</button>
+            <button class="chip" data-filter="pending" aria-pressed="false">รอตรวจสอบ</button>
+          </div>
+        </div>
+
+        <div class="panel" style="overflow:hidden">
+          <div id="ledger-box">
+            <table class="ledger ledger-cards" id="ledger">
+              <caption class="sr">รายการบริจาคแบบไม่ระบุตัวตน</caption>
+              <thead>
+                <tr>
+                  <th scope="col">เวลาที่โอน</th>
+                  <th scope="col">รหัสอ้างอิง</th>
+                  <th scope="col">สถานะ</th>
+                  <th scope="col" style="text-align:right">ยอด (บาท)</th>
+                </tr>
+              </thead>
+              <tbody id="ledger-body"></tbody>
+            </table>
+          </div>
+          <div id="ledger-empty" class="state" hidden>
+            <h3>ยังไม่มีรายการในตัวกรองนี้</h3>
+            <p>ลองเลือก “ทั้งหมด” หรือรอรายการถัดไป</p>
+          </div>
+        </div>
+
+        <p class="meta" style="margin-top:var(--s3)">
+          รายการที่ตรวจไม่ผ่านจะยังคงแสดงไว้พร้อมเหตุผล เพื่อให้ตัวเลขรวมตรวจย้อนได้ทั้งเส้นทาง
+        </p>
+      </div>
+
+      <!-- RAIL -->
+      <aside class="stack" style="position:sticky;top:80px">
+        <div class="panel panel-navy panel-pad stack-sm">
+          <h3 style="color:#fff">สั่งก่อน แล้วค่อยโอน</h3>
+          <p class="meta" style="color:#B9C6E0">
+            เลือกเสื้อและระบุยอดบริจาคให้ครบก่อน ระบบจะบอกยอดที่ต้องโอนเป็นก้อนเดียว
+            แล้วจบด้วยการแนบสลิป — ระบบไม่ได้เชื่อมกับธนาคาร กรรมการต้องเทียบสลิปกับ statement ด้วยมือ
+            ยอดจึงขึ้นบัญชีหลังตรวจแล้วเท่านั้น
+          </p>
+          <a class="btn btn-secondary" href="support.html" style="width:100%">เริ่มสั่ง / บริจาค</a>
+        </div>
+
+        <div class="panel panel-pad stack-sm">
+          <span class="badge badge-shirt" id="shirt-badge"></span>
+          <h3>เสื้อรุ่น AMS49 เริ่มต้นตัวละ 500 บาท</h3>
+          <p class="meta">ไซส์ SS–XL ตัวละ 500 · 2XL–5XL เพิ่ม 20–50 บาทต่อตัว รวมค่าจัดส่งแล้ว
+            สั่งได้ไม่จำกัดจำนวน เลือกไซส์ผสมกันได้ และไม่ต้องบริจาคก่อน</p>
+          <!-- ของจริงบนตัวคนมาก่อน ลายสกรีนเป็นภาพประกอบ — คนตัดสินใจซื้อเสื้อจาก "ใส่แล้วเป็นยังไง"
+               ไม่ใช่จากไฟล์อาร์ตแบน ๆ ที่เห็นบนเสื้อในรูปอยู่แล้ว -->
+          <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:var(--s2);align-items:start">
+            <img src="assets/img/shirt-front.png"
+                 alt="นายแบบใส่เสื้อรุ่น AMS49 สีน้ำเงินกรม ทรง oversize สกรีน AMS49CMU ที่หน้าอก"
+                 style="border-radius:var(--r-md);border:1px solid var(--line);background:#fff"
+                 width="896" height="1193" loading="lazy">
+            <!-- ช่องขวาเป็นภาพย่อยสองใบ ความสูงรวมพอดีกับรูปหลัก ไม่เหลือช่องว่างค้าง -->
+            <div style="display:grid;gap:var(--s2)">
+              <img src="assets/img/shirt-print.jpg" alt="ลายสกรีนหน้าอก AMS49CMU ตัวอักษรขาวขอบน้ำเงิน"
+                   style="border-radius:var(--r-sm);border:1px solid var(--line)"
+                   width="1774" height="887" loading="lazy">
+              <img src="assets/img/shirt-back.png" alt="เสื้อรุ่นด้านหลัง มีเส้นไปป์ขาวตามตะเข็บข้าง"
+                   style="border-radius:var(--r-sm);border:1px solid var(--line);background:#fff"
+                   width="896" height="1193" loading="lazy">
+            </div>
+          </div>
+          <p class="meta">คอกลมทรงยุโรป oversize · เนื้อผ้า super soft นุ่มสบาย ·
+            สกรีนขาวขอบน้ำเงิน · มีเส้นไปป์ขาววิ่งตามตะเข็บข้างทั้งด้านหน้าและหลัง</p>
+          <a class="btn btn-secondary" href="support.html" style="width:100%">ดูเสื้อและตารางไซส์</a>
+        </div>
+
+        <div class="panel panel-pad stack-sm">
+          <h3 style="font-size:.9375rem">จำลองสถานการณ์ (เฉพาะ prototype)</h3>
+          <p class="meta">กดเพื่อดูว่าหน้านี้ตอบสนองอย่างไรเมื่อมีเงินเข้าใหม่</p>
+          <button class="btn btn-secondary btn-sm" id="sim">+ จำลองรายการใหม่</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<div class="action-bar">
+  <div class="wrap">
+    <a class="btn btn-primary" href="support.html">บริจาคและสั่งเสื้อ</a>
+    <a class="btn btn-secondary" href="status.html">เช็คสถานะ</a>
+  </div>
+</div>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div>
+      <img src="assets/img/ams-logo.png" alt="">
+      <p class="meta">
+        จัดโดยคณะกรรมการรุ่น 49 คณะเทคนิคการแพทย์ มหาวิทยาลัยเชียงใหม่<br>
+        เพื่อสนับสนุนกิจกรรมคืนสู่เหย้าและประเพณีรับน้องขึ้นดอย 21 พฤศจิกายน 2569
+      </p>
+    </div>
+    <div class="meta">
+      <p><strong style="color:var(--ink)">ข้อมูลส่วนบุคคล</strong></p>
+      <p>ชื่อ ที่อยู่ และเบอร์โทร ใช้เพื่อยืนยันยอดและจัดส่งเสื้อเท่านั้น
+         ไม่แสดงบนหน้าสาธารณะ และจะลบหลังปิดโครงการ</p>
+      <p style="margin-top:var(--s3)"><a href="admin.html">เข้าระบบแอดมิน</a></p>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<style>
+@media (max-width: 1000px) {
+  /* minmax(0,1fr) ไม่ใช่ 1fr — 1fr มีขั้นต่ำเป็น min-content ของตารางบัญชีข้างใน
+     ทำให้แทร็กโป่งเกินจอ 320px แล้วเลื่อนแนวนอนได้ */
+  .hero-grid { grid-template-columns: minmax(0,1fr) !important; gap: var(--s6) !important; align-items: start !important; }
+  .ledger-grid { grid-template-columns: minmax(0,1fr) !important; gap: var(--s6) !important; }
+  .ledger-grid aside { position: static !important; }
+}
+</style>
+
+<script src="assets/app.js?v=6"></script>
+<script>
+(function () {
+  var A = window.AMS, filter = 'all';
+
+  function render(animateTotal) {
+    var st = A.Store.stats();
+    var totalEl = document.getElementById('total');
+    if (animateTotal) A.countUp(totalEl, st.donation); else totalEl.textContent = A.baht(st.donation);
+
+    /* ไม่ประกาศตัวเลขเป้าหมายบนหน้าเว็บแล้ว แถบนี้จึงเหลือเป็นตัวบอกความคืบหน้าเฉย ๆ */
+    var pct = Math.min(100, Math.round(st.donation / st.goal * 100));
+    document.getElementById('meter').style.width = pct + '%';
+    document.getElementById('meter-wrap').setAttribute('aria-label',
+      'เงินบริจาคที่ยืนยันแล้ว ' + A.baht(st.donation) + ' บาท');
+
+    document.getElementById('shirt-rev').textContent = A.baht(st.shirtRevenue);
+    document.getElementById('shirt-n').textContent = st.shirts ? '(' + st.shirts + ' ตัว)' : '';
+
+    document.getElementById('s-pending').textContent = A.baht(st.pending);
+    document.getElementById('s-pending-c').textContent = st.pendingCount + ' รายการรอกรรมการตรวจสลิป';
+    document.getElementById('s-count').textContent = A.baht(st.verifiedCount);
+    document.getElementById('s-shirt').textContent = A.baht(st.shirts);
+    document.getElementById('shirt-badge').innerHTML = A.ICON.shirt + 'ของที่ระลึก';
+
+    var rows = A.Store.all().filter(function (r) { return filter === 'all' ? true : r.status === filter; });
+    var body = document.getElementById('ledger-body');
+    body.innerHTML = rows.map(function (r) {
+      var m = A.money(r);
+      /* r.note คือข้อความที่แอดมินพิมพ์เอง แล้วมาโผล่บนหน้าสาธารณะ — ต้อง esc() เสมอ
+         ไม่งั้นแท็ก HTML ในเหตุผลตีกลับจะถูกรันเป็นโค้ดบนเครื่องคนที่เปิดหน้าแรก */
+      var note = r.status === 'rejected' && r.note
+        ? '<div class="meta" style="color:var(--reject-fg)">' + A.esc(r.note) + '</div>' : '';
+      var shirt = m.shirtQty
+        ? ' <span class="badge badge-shirt" title="สั่งเสื้อรุ่น ' + m.shirtQty + ' ตัว">' +
+          A.ICON.shirt + 'เสื้อ ' + m.shirtQty + ' ตัว</span>'
+        : '';
+      /* แยกให้เห็นสองก้อนเสมอเมื่อมีเสื้อ ไม่งั้นยอดรวมจะดูเหมือนเงินบริจาคทั้งก้อน */
+      var split = m.shirtQty
+        ? '<div class="meta">บริจาค ' + A.baht(m.donation) + ' + เสื้อ ' + A.baht(m.shirtAmount) + '</div>'
+        : '';
+      return '<tr' + (r._new ? ' data-new="true"' : '') + '>' +
+        '<td class="c-time">' + A.thDate(r.transferAt) + '</td>' +
+        '<td class="c-ref">' + r.ref + '</td>' +
+        '<td class="c-status">' + A.badge(r.status) + shirt + note + '</td>' +
+        '<td class="c-amount">' + A.baht(m.total) + split + '</td>' +
+        '</tr>';
+    }).join('');
+
+    document.getElementById('ledger-box').hidden = rows.length === 0;
+    document.getElementById('ledger-empty').hidden = rows.length !== 0;
+  }
+
+  document.querySelectorAll('.chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      document.querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      c.setAttribute('aria-pressed', 'true');
+      filter = c.dataset.filter;
+      render(false);
+    });
+  });
+
+  document.getElementById('sim').addEventListener('click', function () {
+    var donations = [0, 300, 500, 1000, 1500, 2000, 3000];
+    var don = donations[Math.floor(Math.random() * donations.length)];
+    var qty = [0, 0, 1, 1, 2, 3][Math.floor(Math.random() * 6)];
+    if (!don && !qty) qty = 1; // อย่างน้อยต้องมีเงินเข้าสักก้อน
+    /* มีไซส์ที่บวกราคาปนด้วย เพื่อให้ยอดจำลองไม่ลงท้าย 00 เสมอ —
+       จะได้เห็นทันทีถ้ามีที่ไหนกลับไปคิดเงินแบบ qty × 500 */
+    var picks = ['S','M','L','XL','2XL','5XL'];
+    var now = new Date();
+    var pad = function (x) { return String(x).padStart(2, '0'); };
+    var iso = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) +
+              'T' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+    /* สร้างเป็น counts ก่อนแล้วค่อยแปลงเป็น sizes เหมือนที่ฟอร์มจริงทำ
+       จะได้เรียงไซส์เล็กไปใหญ่เหมือนกัน ไม่ใช่ลำดับสุ่ม */
+    var counts = {};
+    for (var i = 0; i < qty; i++) {
+      var s = picks[Math.floor(Math.random() * picks.length)];
+      counts[s] = (counts[s] || 0) + 1;
+    }
+    var sizes = A.countsToSizes(counts);
+    var ship = qty > 0;
+    var row = A.Store.add({
+      ref: A.newRef(), donation: don, shirtQty: qty, sizes: sizes,
+      transferAt: iso, status: 'verified',
+      name: 'ผู้บริจาคตัวอย่าง', studentId: '491119999', phone: '0800000000',
+      email: 'demo@example.com', lineId: '',
+      recipient: ship ? 'ผู้บริจาคตัวอย่าง' : '', recipientPhone: ship ? '0800000000' : '',
+      addrLine: ship ? '1 ถ.ตัวอย่าง ต.สุเทพ อ.เมือง' : '',
+      province: ship ? 'เชียงใหม่' : '', zip: ship ? '50200' : '', shipNote: '',
+      address: ship ? A.composeAddress({ line: '1 ถ.ตัวอย่าง ต.สุเทพ อ.เมือง', province: 'เชียงใหม่', zip: '50200' }) : '',
+      slip: 'slip_demo.jpg', submittedAt: iso, verifiedAt: iso, note: '', _new: true
+    });
+    var amt = don + A.money(row).shirtAmount;
+    render(true);
+    A.toast('มีรายการใหม่ ' + A.baht(amt) + ' บาท' +
+      (qty ? ' (บริจาค ' + A.baht(don) + ' + เสื้อ ' + A.sizeSummary(sizes) + ')' : '') + ' · ' + row.ref);
+    setTimeout(function () { A.Store.update(row.ref, { _new: false }); }, 1200);
+  });
+
+  // นับถอยหลังถึงวันงาน
+  (function () {
+    var target = new Date('2026-11-21T00:00:00');
+    var days = Math.ceil((target - new Date()) / 86400000);
+    var el = document.getElementById('countdown');
+    el.textContent = days > 0 ? ' · อีก ' + days + ' วัน' : ' · จัดไปแล้ว';
+  })();
+
+  render(true);
+})();
+</script>
+</body>
+</html>

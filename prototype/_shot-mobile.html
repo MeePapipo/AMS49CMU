@@ -1,0 +1,55 @@
+<!doctype html><meta charset="utf-8"><title>mobile shot</title>
+<!-- headless Chrome บังคับความกว้างหน้าต่างขั้นต่ำ ถ่ายที่ 320/360 ตรง ๆ ไม่ได้
+     จึงต้องใส่ iframe ที่ล็อกความกว้างไว้แทน -->
+<body style="margin:0;background:#333;font:12px/1.4 system-ui;color:#fff">
+<div id="row" style="display:flex;gap:10px;padding:10px;align-items:flex-start"></div>
+<script>
+var DRAFT = 'ams49.draft.v2';
+try { localStorage.removeItem(DRAFT); } catch (e) {}
+
+function fill(d, w, id, v) {
+  var el = d.getElementById(id); if (!el) return;
+  el.value = v;
+  el.dispatchEvent(new w.Event('input', { bubbles: true }));
+  el.dispatchEvent(new w.Event('change', { bubbles: true }));
+}
+function toStep(d, w, step) {
+  var el = d.querySelector('input[data-size="M"]');
+  el.value = '2'; el.dispatchEvent(new w.Event('input', { bubbles: true }));
+  var l = d.querySelector('input[data-size="L"]');
+  l.value = '1'; l.dispatchEvent(new w.Event('input', { bubbles: true }));
+  fill(d, w, 'i-donation', '500');
+  if (step === 'order') return;
+  d.querySelector('[data-next="info"]').click();
+  if (step === 'info') return;
+  ['i-name:ทดสอบ ระบบดี', 'i-phone:0812345678', 'i-rname:ผู้รับ ปลายทาง', 'i-rphone:0898765432',
+   'i-addr:99/9 หมู่ 2 ถ.ห้วยแก้ว ต.ช้างเผือก อ.เมือง', 'i-prov:เชียงใหม่', 'i-zip:50300']
+    .forEach(function (p) { var i = p.indexOf(':'); fill(d, w, p.slice(0, i), p.slice(i + 1)); });
+  d.getElementById('i-consent').checked = true;
+  d.querySelector('[data-next="pay"]').click();
+}
+
+var VIEWS = [
+  { cap: 'support ① @320', w: 320, h: 2000, url: 'support.html', prep: function (d, w) { toStep(d, w, 'order'); } },
+  { cap: 'support ② @360', w: 360, h: 2000, url: 'support.html', prep: function (d, w) { toStep(d, w, 'info'); } },
+  { cap: 'support ③ @360', w: 360, h: 2000, url: 'support.html', prep: function (d, w) { toStep(d, w, 'pay'); } },
+  { cap: 'index @360',     w: 360, h: 2000, url: 'index.html' },
+  { cap: 'admin @390',     w: 390, h: 2000, url: '_shot-admin.html', prep: function (d) {
+      var c = d.querySelector('.chip[data-f="all"]'); if (c) c.click(); } }
+];
+
+VIEWS.forEach(function (v) {
+  var box = document.createElement('div');
+  box.innerHTML = '<div style="padding:2px 0">' + v.cap + '</div>';
+  var f = document.createElement('iframe');
+  f.style.cssText = 'width:' + v.w + 'px;height:' + v.h + 'px;border:0;background:#fff;display:block';
+  f.src = v.url;
+  f.onload = function () {
+    setTimeout(function () {
+      try { if (v.prep) v.prep(f.contentDocument, f.contentWindow); } catch (e) {}
+    }, 300);
+  };
+  box.appendChild(f);
+  document.getElementById('row').appendChild(box);
+});
+</script>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!-- เครื่องมือตรวจ layout — ไม่ใช่ส่วนหนึ่งของเว็บ (robots.txt กันไว้แล้ว)
+
+     เปิดทุกหน้าทุกขั้นของ wizard ใน iframe ที่ล็อกความกว้างไว้ แล้วรายงานว่ามีอะไร
+     ล้นขอบจนเลื่อนแนวนอนได้ไหม พร้อมชี้ว่า element ไหนเป็นตัวดัน
+
+     ทำไมต้องใช้ iframe แทนการย่อหน้าต่างเบราว์เซอร์:
+     Edge headless บังคับความกว้างหน้าต่างขั้นต่ำ ถ่ายภาพที่ 320/360 ตรง ๆ ไม่ได้
+     ภาพจะออกมาเหมือนล้นทั้งที่ไม่ล้น (เพราะ viewport จริงกว้างกว่าที่สั่ง แล้วภาพถูกครอบ)
+
+     กับดักที่โครงการนี้เคยเสียเวลาไปแล้ว: grid-template-columns:1fr มีขั้นต่ำเป็น min-content
+     ของสิ่งข้างใน และข้อความไทยไม่มีช่องว่าง min-content จึงยาวทั้งประโยค → ต้องใช้ minmax(0,1fr) -->
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>ตรวจ layout ทุกความกว้าง</title>
+<link rel="stylesheet" href="/assets/fonts.css">
+<style>
+  body{font-family:'IBM Plex Sans Thai',sans-serif;margin:0;padding:20px;background:#F6F7FA;color:#0E1830}
+  h1{font-size:19px;margin:0 0 14px}
+  #out{font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.75}
+  .row{padding:3px 0;border-bottom:1px solid #E4E8F0}
+  .ok{color:#1B7A4B}
+  .bad{color:#B4241F;font-weight:600}
+  .sum{margin-top:16px;padding:12px 14px;border-radius:8px;font-weight:700;font-size:15px}
+  .sum.ok{background:#E4F5EC;color:#1B7A4B}
+  .sum.bad{background:#FBE7E6;color:#B4241F}
+  iframe{position:fixed;left:-9999px;top:0;border:0;height:2400px}
+</style>
+</head>
+<body>
+<h1>ตรวจการเลื่อนแนวนอนทุกหน้า ทุกขั้น ทุกความกว้าง</h1>
+<div id="out">กำลังตรวจ…</div>
+<iframe id="frame" title="หน้าที่กำลังตรวจ"></iframe>
+<script src="/_diag.js"></script>
+</body>
+</html>

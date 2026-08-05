@@ -1,0 +1,14 @@
+# หน้าแรกกับหน้าสั่งของให้ค้นเจอได้ ที่เหลือไม่ควรอยู่ในดัชนี
+# หมายเหตุ: robots.txt เป็นการ "ขอความร่วมมือ" ไม่ใช่การป้องกัน
+# สิ่งที่ป้องกันจริงคือ /api/admin/* ที่ตรวจสิทธิ์ฝั่งเซิร์ฟเวอร์
+# Pages เด้ง /x.html → /x จึงเขียนกันไว้ทั้งสองแบบ
+User-agent: *
+Allow: /$
+Allow: /support
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /status
+Disallow: /status.html
+Disallow: /api/
+Disallow: /_diag.html
+Disallow: /_og.html

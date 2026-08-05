@@ -1,0 +1,21 @@
+{
+  "name": "ams49-reunion",
+  "version": "1.0.0",
+  "private": true,
+  "description": "เว็บรับบริจาคและสั่งเสื้อรุ่น AMS49 CMU Reunion 20 ปี — Cloudflare Pages + Functions + D1 + R2",
+  "type": "module",
+  "scripts": {
+    "db:init": "wrangler d1 execute ams49 --local --file=./schema.sql",
+    "db:seed": "wrangler d1 execute ams49 --local --file=./scripts/seed-dev.sql",
+    "db:clear": "wrangler d1 execute ams49 --local --file=./scripts/clear-dev.sql",
+    "db:reset": "npm run db:init && npm run db:seed",
+    "db:init:remote": "wrangler d1 execute ams49 --remote --file=./schema.sql",
+    "dev": "wrangler pages dev --port 8788",
+    "smoke": "node scripts/smoke.mjs",
+    "hash": "node scripts/hash-password.mjs",
+    "deploy": "wrangler pages deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.42.0"
+  }
+}

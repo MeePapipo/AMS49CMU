@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>บริจาคและสั่งเสื้อรุ่น · AMS49 CMU Reunion 20 ปี</title>
+<meta name="description" content="เลือกเสื้อรุ่นและระบุยอดบริจาค ระบบรวมเป็นยอดเดียว โอนครั้งเดียวแล้วแนบสลิป">
+<meta property="og:type" content="website">
+<meta property="og:title" content="บริจาคและสั่งเสื้อรุ่น · AMS49 CMU Reunion 20 ปี">
+<meta property="og:description" content="เลือกของและระบุยอดบริจาค ระบบรวมเป็นยอดเดียวให้ โอนครั้งเดียวแล้วแนบสลิป ไม่ต้องบวกเลขเอง">
+<meta property="og:image" content="/assets/img/og.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/fonts.css?v=1">
+<link rel="stylesheet" href="/assets/system.css?v=1">
+</head>
+<body>
+<a class="skip" href="#main">ข้ามไปเนื้อหาหลัก</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand-lock" href="/">
+      <img src="/assets/img/ams-logo.png" alt="คณะเทคนิคการแพทย์ มหาวิทยาลัยเชียงใหม่">
+      <span class="sep" aria-hidden="true"></span>
+      <span><span class="wordmark">AMS49CMU</span><span class="yr" style="display:block">REUNION 20 ปี</span></span>
+    </a>
+    <nav class="nav" aria-label="เมนูหลัก">
+      <a href="/">หน้าหลัก</a>
+      <a href="/support" aria-current="page">บริจาคและสั่งเสื้อรุ่น</a>
+      <a href="/status">เช็คสถานะ</a>
+      <a href="/admin" class="admin-link">แอดมิน</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- INTRO — บอกให้จบว่าจ่ายครั้งเดียว ก่อนจะเจอฟอร์ม -->
+  <section class="wrap section" style="padding-bottom:var(--s5)">
+    <div style="max-width:64ch">
+      <h1>บริจาคและสั่งเสื้อรุ่น</h1>
+      <p class="body" style="color:var(--ink-muted);margin-top:var(--s2)">
+        เลือกเสื้อและระบุยอดที่อยากบริจาคก่อน ระบบจะรวมเป็น<strong style="color:var(--ink)">ยอดเดียว</strong>ให้
+        คุณโอนครั้งเดียวแล้วแนบสลิป ไม่ต้องบวกเลขเอง
+        จะบริจาคอย่างเดียว ซื้อเสื้ออย่างเดียว หรือทำทั้งสองอย่างก็ได้ ไม่มีขั้นต่ำ
+      </p>
+    </div>
+
+    <div class="callout callout-info" style="margin-top:var(--s5);max-width:78ch">
+      <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 9.4v4.4" stroke-linecap="round"/><circle cx="10" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+      <span>
+        <strong>เงินสองก้อนนี้นับแยกกัน</strong><br>
+        <strong style="color:var(--ink)">เงินบริจาค</strong> เข้าคณะเทคนิคการแพทย์ มช. เต็มจำนวนที่ระบุ ·
+        <strong style="color:var(--ink)">ค่าเสื้อตัวละ 500 บาท</strong> (ไซส์ 2XL ขึ้นไปเพิ่ม 20–50 บาท)
+        เป็นการซื้อของที่ระลึก
+        ต้นทุนเสื้อรวมค่าจัดส่งแล้ว 400++ ต่อตัว รายได้ส่วนที่เหลือจะนำไปสมทบทุนบริจาคให้คณะฯ อีกทอดหนึ่ง
+      </span>
+    </div>
+  </section>
+
+  <!-- STEPPER — ขั้นที่ผ่านแล้วกดย้อนกลับมาแก้ได้ -->
+  <div class="wrap" style="padding-bottom:var(--s5)">
+    <ol class="steps" id="stepper">
+      <li data-step="order" aria-current="step">
+        <button type="button"><b>1</b><span>เลือกของ + ยอดบริจาค</span></button>
+      </li>
+      <li data-step="info">
+        <button type="button" disabled><b>2</b><span>ข้อมูลผู้บริจาค</span></button>
+      </li>
+      <li data-step="pay">
+        <button type="button" disabled><b>3</b><span>โอนยอดรวม</span></button>
+      </li>
+      <li data-step="slip">
+        <button type="button" disabled><b>4</b><span>แนบสลิป</span></button>
+      </li>
+    </ol>
+  </div>
+
+  <div class="wrap section" style="padding-top:0">
+    <div class="wiz-grid" style="display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:var(--s7);align-items:start">
+      <div id="wiz-col">
+
+        <!-- ================= ขั้น 1 · เลือกของ ================= -->
+        <section id="step-order" class="stack-lg" aria-labelledby="h-order">
+          <div>
+            <h2 class="h1" id="h-order" tabindex="-1">เลือกเสื้อและระบุยอดบริจาค</h2>
+            <p class="meta">เลือกอย่างใดอย่างหนึ่งหรือทั้งคู่ก็ได้ ระบบจะรวมเป็นยอดเดียวให้ในขั้นถัดไป</p>
+          </div>
+
+          <!-- ตัวเสื้อคือของจริงที่ต้องตัดสินใจจากภาพ ภาพจึงมาก่อนตัวนับ -->
+          <div class="panel panel-pad stack">
+            <div class="hero-shirt" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s5);align-items:start">
+              <div class="stack-sm">
+                <span class="badge badge-shirt"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M5.6 2L2 3.9l1.2 2.6 1.3-.6V14h7V5.9l1.3.6L14 3.9 10.4 2A2.4 2.4 0 015.6 2z"/></svg>ของที่ระลึก</span>
+                <h3>เสื้อรุ่น AMS49CMU · เริ่มต้นตัวละ 500 บาท</h3>
+                <p class="meta">เสื้อยืดคอกลมทรงยุโรป (oversize) สีน้ำเงินกรม
+                  <strong style="color:var(--ink)">เนื้อผ้า super soft นุ่มสบาย</strong>
+                  สกรีนหน้าอก <span class="mono">AMS49CMU</span> ตัวอักษรขาวขอบน้ำเงิน
+                  มีเส้นไปป์ขาววิ่งตามตะเข็บข้างทั้งด้านหน้าและหลัง</p>
+                <dl style="margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px var(--s4);font-size:.875rem;border-top:1px solid var(--line);padding-top:var(--s3)">
+                  <dt style="color:var(--ink-muted)">ราคา</dt><dd style="margin:0"><strong>500 บาทต่อตัว</strong> สำหรับไซส์ SS–XL รวมค่าจัดส่งแล้ว<br>
+                    <span style="color:var(--ink-muted)">ไซส์ใหญ่บวกเพิ่มต่อตัว — 2XL +20 · 3XL +30 · 4XL +40 · 5XL +50</span></dd>
+                  <dt style="color:var(--ink-muted)">ไซส์</dt><dd style="margin:0">SS – 5XL</dd>
+                  <dt style="color:var(--ink-muted)">จำนวน</dt><dd style="margin:0">สั่งได้ไม่จำกัด เลือกไซส์ผสมกันได้</dd>
+                  <dt style="color:var(--ink-muted)">จัดส่ง</dt><dd style="margin:0">คาดว่าจัดส่งได้หลังจากปิดยอดสั่งประมาณ 3 สัปดาห์</dd>
+                </dl>
+              </div>
+              <figure style="margin:0;display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)">
+                <img src="/assets/img/shirt-front.png" alt="เสื้อรุ่นด้านหน้า สีน้ำเงินกรม สกรีน AMS49CMU ที่หน้าอก"
+                     style="border-radius:var(--r-md);border:1px solid var(--line);background:#fff" width="896" height="1193" loading="lazy">
+                <img src="/assets/img/shirt-back.png" alt="เสื้อรุ่นด้านหลัง สีน้ำเงินกรม มีเส้นไปป์ขาวตามตะเข็บข้าง"
+                     style="border-radius:var(--r-md);border:1px solid var(--line);background:#fff" width="896" height="1193" loading="lazy">
+              </figure>
+            </div>
+          </div>
+
+          <!-- ตัวนับรายไซส์ — ตารางนี้ทำหน้าที่เป็นตารางเทียบไซส์ในตัว
+               เนื้อในวาดจาก /api/config จึงไม่มีทางคิดราคาคนละแบบกับเซิร์ฟเวอร์ -->
+          <div class="panel" style="overflow:hidden">
+            <div class="panel-head">
+              <div class="grow">
+                <h3>ใส่จำนวนเสื้อที่ต้องการในแต่ละไซส์</h3>
+                <p class="meta">ตัวเลขเป็นนิ้ว วัดจากตัวเสื้อวางราบ · ไม่สั่งเสื้อก็ปล่อยว่างไว้ทั้งหมด</p>
+              </div>
+            </div>
+            <div class="panel-pad stack">
+              <div id="qty"><div class="skeleton" style="height:280px"></div></div>
+
+              <!-- งานตัดเย็บไม่เป๊ะเท่าเครื่องจักร — บอกไว้ก่อนเลือก ดีกว่ามาเถียงกันตอนของถึงมือ -->
+              <p class="meta" style="border-top:1px solid var(--line);padding-top:var(--s3)">
+                <strong style="color:var(--ink)">หมายเหตุ</strong> ขนาดเสื้ออาจคลาดเคลื่อน
+                <strong style="color:var(--ink)">+ หรือ − ไม่เกิน 1 นิ้ว</strong> จากมาตรฐานในตาราง
+                ถือเป็นเรื่องปกติของงานตัดเย็บ · ไซส์ 2XL ขึ้นไปมีส่วนเพิ่มจากราคาฐาน 500 บาท
+                ตามตัวเลขที่กำกับไว้ข้างรหัสไซส์
+              </p>
+
+              <p class="err" id="err-qty" role="alert" style="display:none"></p>
+
+              <div class="callout callout-warn" id="bulk-note" hidden>
+                <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 6.2v4.6" stroke-linecap="round"/><circle cx="10" cy="13.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+                <span>สั่งไว้ <strong><span id="bulk-n"></span> ตัว</strong> — สั่งได้ไม่จำกัด
+                  แต่กรรมการจะโทรยืนยันจำนวนกับคุณก่อนส่งเข้าโรงงาน กันกดพลาด</span>
+              </div>
+
+              <div class="stack" style="border-top:1px solid var(--line);padding-top:var(--s4)">
+                <div>
+                  <h4 style="font-size:.9375rem">ตารางไซส์ต้นฉบับจากผู้ผลิต และวิธีวัด</h4>
+                  <p class="meta">เอาเสื้อที่ใส่พอดีมาวางราบ วัดรอบอกจากใต้วงแขนข้างหนึ่งไปอีกข้างแล้วคูณสอง
+                    ทรงนี้เป็น oversize ถ้าไม่อยากหลวมมาก เลือกไซส์ที่รอบอกใกล้เคียงเสื้อตัวโปรด</p>
+                </div>
+                <img src="/assets/img/size-chart.jpg" alt="ตารางไซส์ต้นฉบับจากผู้ผลิต เสื้อยืดคอกลมทรงยุโรป ไซส์ SS ถึง 3XL บอกรอบอก ไหล่กว้าง และความยาวเสื้อเป็นนิ้ว"
+                     style="border:1px solid var(--line);border-radius:var(--r-md)" loading="lazy">
+                <!-- ภาพต้นฉบับมีถึง 3XL เท่านั้น 4XL/5XL เพิ่มมาทีหลัง ต้องบอกไว้ ไม่งั้นดูเหมือนตกหล่น -->
+                <p class="meta">ภาพนี้เป็นตารางต้นฉบับจากผู้ผลิตซึ่งมีถึง <strong style="color:var(--ink)">3XL</strong> เท่านั้น
+                  — ไซส์ <strong style="color:var(--ink)">4XL</strong> (รอบอก 52" ไหล่ 22" ยาว 33") และ
+                  <strong style="color:var(--ink)">5XL</strong> (รอบอก 54" ไหล่ 22.5" ยาว 34") เป็นไซส์ที่เพิ่มเข้ามาภายหลัง
+                  จึงยังไม่อยู่ในภาพ ให้ยึดตารางเลือกจำนวนด้านบนซึ่งครบทุกไซส์</p>
+
+                <div style="border-top:1px solid var(--line);padding-top:var(--s4)">
+                  <h4 style="font-size:.9375rem">ตัวอย่างการแต่งตัว</h4>
+                  <p class="meta">เสื้อทรง oversize แมตช์ได้หลายแบบ — ดูไว้ประกอบการเลือกไซส์ว่าอยากได้ทรงหลวมแค่ไหน</p>
+                </div>
+                <img src="/assets/img/shirt-detail.jpg" alt="ตัวอย่างการแต่งตัวกับเสื้อรุ่น 6 แบบ ได้แก่ กางเกงขากว้างสีดำ กางเกงคาร์โก้สีเทาเข้ม ยีนส์ทรงตรงสีน้ำเงินเข้ม กระโปรงพลีทยาวสีดำ กระโปรงยีนส์ยาวผ่าหน้า และกางเกงผ้าทรงตรงสีครีม"
+                     style="border:1px solid var(--line);border-radius:var(--r-md)" loading="lazy">
+              </div>
+            </div>
+          </div>
+
+          <!-- เงินบริจาค -->
+          <div class="panel panel-pad stack" style="border-top:3px solid var(--navy-700)">
+            <div>
+              <h3>เงินบริจาคให้คณะเทคนิคการแพทย์ มช.</h3>
+              <p class="meta">เข้าคณะฯ เต็มจำนวนที่ระบุ ไม่มีขั้นต่ำ · ไม่อยากบริจาคก็ใส่ 0 ได้</p>
+            </div>
+
+            <div class="chips" role="group" aria-label="ยอดบริจาคที่ใช้บ่อย" id="amount-quick">
+              <button type="button" class="chip" data-amt="0">ไม่บริจาค</button>
+              <button type="button" class="chip" data-amt="500">500</button>
+              <button type="button" class="chip" data-amt="1000">1,000</button>
+              <button type="button" class="chip" data-amt="2000">2,000</button>
+              <button type="button" class="chip" data-amt="5000">5,000</button>
+            </div>
+
+            <div class="field" id="f-donation" style="max-width:280px">
+              <label for="i-donation">ยอดบริจาค (บาท)</label>
+              <input class="input input-money num" id="i-donation" type="text" inputmode="numeric"
+                     value="0" autocomplete="off" aria-describedby="h-donation">
+              <p class="hint" id="h-donation">ตัวเลขเท่านั้น ไม่ต้องใส่ลูกน้ำ</p>
+              <p class="err" role="alert"></p>
+            </div>
+          </div>
+
+          <div class="wizard-nav">
+            <span class="grow"></span>
+            <button type="button" class="btn btn-primary btn-lg" data-next="info">ถัดไป · กรอกข้อมูลผู้บริจาค</button>
+          </div>
+        </section>
+
+        <!-- ================= ขั้น 2 · ข้อมูลผู้บริจาค ================= -->
+        <section id="step-info" class="stack-lg" aria-labelledby="h-info" hidden>
+          <div>
+            <h2 class="h1" id="h-info" tabindex="-1">ข้อมูลผู้บริจาค</h2>
+            <p class="meta">กรรมการใช้ข้อมูลนี้จับคู่กับสลิปและติดต่อกลับ — ไม่แสดงบนหน้าสาธารณะ</p>
+          </div>
+
+          <div class="panel panel-pad stack">
+            <div class="field" id="f-name">
+              <label for="i-name">ชื่อ–นามสกุล <span class="req" aria-hidden="true">*</span></label>
+              <input class="input" id="i-name" type="text" autocomplete="name" placeholder="เช่น สมชาย ใจดี" maxlength="120">
+              <p class="err" role="alert"></p>
+            </div>
+
+            <div class="grid-2">
+              <div class="field" id="f-phone">
+                <label for="i-phone">เบอร์โทรติดต่อกลับ <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="i-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="08xxxxxxxx" maxlength="15">
+                <p class="hint">ใช้กรณีสลิปไม่ชัดหรือยอดไม่ตรง</p>
+                <p class="err" role="alert"></p>
+              </div>
+              <div class="field" id="f-sid">
+                <label for="i-sid">รหัสนักศึกษา</label>
+                <input class="input mono" id="i-sid" type="text" inputmode="numeric" placeholder="49xxxxxxx" autocomplete="off" maxlength="10">
+                <p class="hint">ไม่บังคับ — ช่วยกรรมการยืนยันว่าเป็นคนรุ่นเรา</p>
+                <p class="err" role="alert"></p>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field" id="f-email">
+                <label for="i-email">อีเมล</label>
+                <input class="input" id="i-email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="160">
+                <p class="err" role="alert"></p>
+              </div>
+              <div class="field" id="f-line">
+                <label for="i-line">LINE ID</label>
+                <input class="input" id="i-line" type="text" autocomplete="off" maxlength="60">
+                <p class="hint">ไม่บังคับ — กรรมการทักได้เร็วกว่าโทร</p>
+                <p class="err" role="alert"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ไม่ได้สั่งเสื้อ = ไม่มีของต้องส่ง = ไม่ต้องถามที่อยู่ -->
+          <div class="callout callout-info" id="no-ship-note" hidden>
+            <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 9.4v4.4" stroke-linecap="round"/><circle cx="10" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+            <span>รายการนี้เป็นเงินบริจาคอย่างเดียว ไม่มีของต้องจัดส่ง — <strong>ไม่ต้องกรอกที่อยู่</strong></span>
+          </div>
+
+          <div class="panel panel-pad stack" id="ship-panel" style="border-top:3px solid var(--purple-500)" hidden>
+            <div class="row-between">
+              <div>
+                <h3>ที่อยู่จัดส่งเสื้อ</h3>
+                <p class="meta">เห็นเฉพาะกรรมการที่ดูแลการส่งของ · ใช้ทำใบปะหน้าพัสดุแล้วลบทิ้งเมื่อกดว่าส่งแล้ว</p>
+              </div>
+              <span class="badge badge-shirt" id="ship-qty"></span>
+            </div>
+
+            <!-- ตัวเลือกนี้คุมทั้งชื่อและเบอร์ จึงอยู่เหนือทั้งคู่ ไม่ใช่ซ่อนเป็นลิงก์ใต้ช่องใดช่องหนึ่ง
+                 ติ๊กแล้วช่องจะล็อกและตามค่าผู้บริจาคตลอด — แก้ชื่อผู้บริจาคทีหลังก็ไม่ค้างของเก่า -->
+            <label class="check" style="padding:var(--s3);border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface-2)">
+              <input type="checkbox" id="same-as-donor">
+              <span class="meta"><strong style="color:var(--ink)">ผู้รับเป็นคนเดียวกับผู้บริจาค</strong><br>
+                ใช้ชื่อและเบอร์โทรเดียวกัน ไม่ต้องกรอกซ้ำ</span>
+            </label>
+
+            <div class="grid-2">
+              <div class="field" id="f-rname">
+                <label for="i-rname">ชื่อผู้รับ <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="i-rname" type="text" autocomplete="name" maxlength="120">
+                <p class="hint" id="h-rname">ชื่อที่จะให้ขนส่งเรียกตอนเข้าส่ง</p>
+                <p class="err" role="alert"></p>
+              </div>
+              <div class="field" id="f-rphone">
+                <label for="i-rphone">เบอร์โทรผู้รับ <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="i-rphone" type="tel" inputmode="tel" autocomplete="tel" maxlength="15">
+                <p class="hint">ขนส่งจะโทรหาเบอร์นี้ตอนเข้าส่ง</p>
+                <p class="err" role="alert"></p>
+              </div>
+            </div>
+
+            <div class="field" id="f-addr">
+              <label for="i-addr">ที่อยู่ <span class="req" aria-hidden="true">*</span></label>
+              <textarea class="textarea" id="i-addr" autocomplete="street-address" maxlength="300"
+                        placeholder="บ้านเลขที่ หมู่ ซอย ถนน แขวง/ตำบล เขต/อำเภอ"></textarea>
+              <p class="hint">ใส่ให้ครบถึงระดับตำบล/แขวง</p>
+              <p class="err" role="alert"></p>
+            </div>
+
+            <div class="grid-2">
+              <div class="field" id="f-prov">
+                <label for="i-prov">จังหวัด <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="i-prov" type="text" autocomplete="address-level1" maxlength="60">
+                <p class="err" role="alert"></p>
+              </div>
+              <div class="field" id="f-zip">
+                <label for="i-zip">รหัสไปรษณีย์ <span class="req" aria-hidden="true">*</span></label>
+                <input class="input mono" id="i-zip" type="text" inputmode="numeric" maxlength="5">
+                <p class="err" role="alert"></p>
+              </div>
+            </div>
+
+            <div class="field" id="f-shipnote">
+              <label for="i-shipnote">หมายเหตุการจัดส่ง</label>
+              <input class="input" id="i-shipnote" type="text" placeholder="เช่น ฝากไว้ที่ป้อมยาม / โทรก่อนส่ง" maxlength="200">
+            </div>
+          </div>
+
+          <div class="panel panel-pad">
+            <label class="check">
+              <input type="checkbox" id="i-consent">
+              <span class="meta">ยินยอมให้กรรมการรุ่นเก็บชื่อ เบอร์โทร ที่อยู่ และสลิป
+                เพื่อตรวจสอบยอดและจัดส่งของที่ระลึก · ที่อยู่จะถูกลบทันทีที่กรรมการกดว่าส่งของแล้ว
+                และข้อมูลที่เหลือจะถูกลบเมื่อปิดโครงการ</span>
+            </label>
+            <p class="err" id="err-consent" role="alert" style="display:none;margin-top:var(--s2)"></p>
+          </div>
+
+          <div class="wizard-nav">
+            <button type="button" class="btn btn-quiet" data-back="order">ย้อนกลับ</button>
+            <span class="grow"></span>
+            <button type="button" class="btn btn-primary btn-lg" data-next="pay">ถัดไป · ดูยอดที่ต้องโอน</button>
+          </div>
+        </section>
+
+        <!-- ================= ขั้น 3 · โอน ================= -->
+        <section id="step-pay" class="stack-lg" aria-labelledby="h-pay" hidden>
+          <div>
+            <h2 class="h1" id="h-pay" tabindex="-1">โอนยอดนี้ครั้งเดียว</h2>
+            <p class="meta">ยอดนี้รวมค่าเสื้อและเงินบริจาคไว้แล้ว — โอนให้ตรงเป๊ะ กรรมการจะเทียบกับ statement</p>
+          </div>
+
+          <!-- ยอดตรงนี้มาจากเซิร์ฟเวอร์เสมอ ไม่ใช่เลขคณิตในเบราว์เซอร์
+               ถ้าขอยอดไม่สำเร็จ จะขึ้นกล่องแดงแทนตัวเลข ไม่แสดงเลขเดา -->
+          <div class="panel panel-navy" style="overflow:hidden">
+            <div class="pay-slate">
+              <p class="pay-k">ยอดที่ต้องโอน</p>
+              <p class="pay-v"><span id="pay-total">—</span> <span class="pay-unit">บาท</span></p>
+              <p class="pay-break" id="pay-break"></p>
+              <button type="button" class="cf-btn" id="copy-total" data-copy="0">
+                <span class="cf-btn-label">คัดลอกยอด</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="callout callout-danger" id="quote-error" hidden role="alert">
+            <span aria-hidden="true">!</span>
+            <span class="grow"><strong>ขอยอดจากเซิร์ฟเวอร์ไม่สำเร็จ</strong><br>
+              <span id="quote-error-msg"></span><br>
+              <strong>อย่าเพิ่งโอนเงิน</strong> จนกว่าตัวเลขด้านบนจะขึ้นครบ</span>
+            <button type="button" class="btn btn-sm btn-secondary" id="quote-retry">ลองใหม่</button>
+          </div>
+
+          <div class="panel panel-pad stack-lg">
+            <div class="copyfield">
+              <span class="cf-label" id="lbl-acc">เลขที่บัญชี · <span id="bank-branch"></span></span>
+              <div class="cf-row">
+                <span class="cf-val" id="acc-val" aria-labelledby="lbl-acc"></span>
+                <button type="button" class="cf-btn" id="copy-acc" data-copy="">
+                  <span class="cf-btn-label">คัดลอก</span>
+                </button>
+              </div>
+              <p class="meta">คัดลอกแล้วจะได้เป็นตัวเลขล้วน <span class="mono" id="acc-plain"></span> วางในแอปธนาคารได้ทันที</p>
+            </div>
+
+            <div class="copyfield">
+              <span class="cf-label" id="lbl-name">ชื่อบัญชี — เป็นบัญชีร่วม 2 ชื่อ</span>
+              <div class="cf-row">
+                <span class="cf-val" id="acc-name" data-plain aria-labelledby="lbl-name"></span>
+                <button type="button" class="cf-btn" id="copy-accname" data-copy="" aria-label="คัดลอกชื่อบัญชี">
+                  <span class="cf-btn-label">คัดลอก</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="callout callout-warn">
+              <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 6.2v4.6" stroke-linecap="round"/><circle cx="10" cy="13.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+              <span>
+                <strong>ตรวจชื่อปลายทางก่อนกดยืนยันทุกครั้ง</strong><br>
+                แอปธนาคารจะขึ้นชื่อทั้งสองท่าน ถ้าขึ้นชื่อเดียวหรือชื่ออื่น แปลว่าเลขบัญชีผิด กรุณาหยุดแล้วคัดลอกใหม่
+              </span>
+            </div>
+
+            <!-- เหตุผลที่ไม่มี QR ต้องอยู่ตรงนี้ ไม่งั้นทุกคนจะถามซ้ำว่าทำไมไม่ทำ -->
+            <div class="callout callout-info">
+              <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 9.4v4.4" stroke-linecap="round"/><circle cx="10" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+              <span><strong>ไม่มี QR พร้อมเพย์</strong> — บัญชีนี้เป็นบัญชีร่วมสองชื่อ ซึ่งผูกพร้อมเพย์ไม่ได้
+                จึงต้องพิมพ์ยอดเอง ใช้ปุ่ม “คัดลอกยอด” ด้านบนแล้ววางในแอปธนาคารจะปลอดภัยกว่าพิมพ์</span>
+            </div>
+          </div>
+
+          <div class="panel panel-pad stack">
+            <div class="row-between">
+              <h3>รายการที่จะโอน</h3>
+              <button type="button" class="btn btn-secondary btn-sm" data-back="order">แก้รายการ</button>
+            </div>
+            <dl class="sum-list" id="pay-recap"></dl>
+            <div class="sum-total"><span>รวมที่ต้องโอน</span><b><span id="pay-total-2">—</span> บาท</b></div>
+            <!-- ระบบไม่ได้เก็บร่างไว้ในเครื่องแล้ว ข้อความตรงนี้จึงต้องเตือนตามความจริง
+                 ไม่ใช่บอกว่า "ปิดหน้าไปแล้วกลับมาต่อได้" เหมือนเดิม -->
+            <p class="meta" style="border-top:1px solid var(--line);padding-top:var(--s3)">
+              <strong style="color:var(--ink)">อย่าปิดหรือรีเฟรชหน้านี้</strong>
+              ระบบไม่ได้เก็บสิ่งที่คุณกรอกไว้ ปิดแล้วต้องกรอกใหม่ทั้งหมด —
+              ถ้าจะเปิดแอปธนาคาร ให้สลับแอปหรือเปิดแท็บใหม่ อย่าปิดแท็บนี้
+            </p>
+          </div>
+
+          <div class="wizard-nav">
+            <button type="button" class="btn btn-quiet" data-back="info">ย้อนกลับ</button>
+            <span class="grow"></span>
+            <button type="button" class="btn btn-primary btn-lg" data-next="slip">โอนแล้ว · ไปแนบสลิป</button>
+          </div>
+        </section>
+
+        <!-- ================= ขั้น 4 · แนบสลิป ================= -->
+        <section id="step-slip" class="stack-lg" aria-labelledby="h-slip" hidden>
+          <div>
+            <h2 class="h1" id="h-slip" tabindex="-1">แนบสลิปให้กรรมการตรวจ</h2>
+            <p class="meta">ระบบไม่ได้เชื่อมกับธนาคาร กรรมการต้องเปิด statement เทียบกับสลิปทีละรายการ</p>
+          </div>
+
+          <div class="panel panel-pad stack-lg">
+            <!-- ไม่ต้องกรอกยอดซ้ำ — ยอดคือค่าที่เซิร์ฟเวอร์คำนวณไว้แล้ว นี่คือกำไรของ flow นี้ -->
+            <div class="callout callout-info" style="align-items:center">
+              <span aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10" cy="10" r="7.6"/><path d="M10 9.4v4.4" stroke-linecap="round"/><circle cx="10" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></span>
+              <span class="grow">ยอดในสลิปต้องเป็น <strong class="num" id="slip-total">—</strong> บาทพอดี
+                ไม่ต้องกรอกยอดเอง ระบบใช้ยอดที่คำนวณไว้
+                <br><span class="meta">ถ้าโอนไปแล้วยอดไม่ตรง กรรมการจะตีกลับพร้อมเหตุผล แล้วค่อยแจ้งใหม่</span></span>
+            </div>
+
+            <div class="field" id="f-time" style="max-width:320px">
+              <label for="i-time">วัน–เวลาที่โอน <span class="req" aria-hidden="true">*</span></label>
+              <input class="input" id="i-time" type="datetime-local">
+              <p class="hint">ดูจากสลิป ต้องตรงถึงระดับนาที</p>
+              <p class="err" role="alert"></p>
+            </div>
+
+            <div class="field" id="f-slip">
+              <label for="i-slip">ไฟล์สลิป <span class="req" aria-hidden="true">*</span></label>
+              <input type="file" id="i-slip" accept="image/png,image/jpeg,image/webp,application/pdf"
+                     class="sr" aria-describedby="h-slipfile">
+              <div class="drop" id="drop" data-state="empty" role="button" tabindex="0"
+                   aria-controls="i-slip" aria-label="เลือกไฟล์สลิป หรือลากไฟล์มาวาง">
+                <div id="drop-empty">
+                  <p style="font-weight:600">ลากไฟล์สลิปมาวาง หรือกดเพื่อเลือก</p>
+                  <p class="meta">JPG, PNG, WEBP หรือ PDF · ไม่เกิน 5 MB</p>
+                </div>
+                <div id="drop-filled" class="drop-preview" hidden>
+                  <img id="drop-img" alt="ตัวอย่างสลิปที่แนบ" src="">
+                  <div class="grow" style="min-width:0">
+                    <p style="font-weight:600;word-break:break-all" id="drop-name"></p>
+                    <p class="meta" id="drop-size"></p>
+                  </div>
+                  <button type="button" class="btn btn-sm btn-danger" id="drop-clear">เอาออก</button>
+                </div>
+              </div>
+              <p class="hint" id="h-slipfile">ต้องเห็น <strong>ยอดเงิน</strong> <strong>วันเวลา</strong>
+                และ <strong>เลขบัญชีปลายทาง</strong> ครบ</p>
+              <p class="err" role="alert"></p>
+            </div>
+
+            <!-- Turnstile — โผล่เฉพาะเมื่อเปิดสวิตช์ใน wrangler.toml -->
+            <div id="turnstile-slot" hidden></div>
+
+            <p class="err" id="err-submit" role="alert" style="display:none"></p>
+          </div>
+
+          <div class="wizard-nav">
+            <button type="button" class="btn btn-quiet" data-back="pay">ย้อนกลับ</button>
+            <span class="grow"></span>
+            <button type="button" class="btn btn-primary btn-lg" id="btn-submit">
+              <span class="btn-spin" aria-hidden="true"></span><span>ส่งให้กรรมการตรวจสอบ</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ================= สำเร็จ ================= -->
+        <section id="step-done" hidden aria-labelledby="h-done">
+          <div class="panel" style="overflow:hidden;max-width:640px">
+            <div style="background:var(--verified-bg);border-bottom:1px solid var(--verified-line);padding:var(--s5)">
+              <div class="row" style="gap:var(--s3)">
+                <span style="width:34px;height:34px;border-radius:50%;background:var(--verified-fg);color:#fff;display:grid;place-items:center" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>
+                </span>
+                <div>
+                  <h2 id="h-done" tabindex="-1" style="font-size:1.375rem;color:var(--verified-fg)">ส่งเรียบร้อย</h2>
+                  <p class="meta" style="color:var(--verified-fg)">รายการขึ้นบัญชีสาธารณะแล้วในสถานะ “รอตรวจสอบ”</p>
+                </div>
+              </div>
+            </div>
+            <div class="panel-pad stack-lg">
+              <div class="copyfield">
+                <span class="cf-label" id="lbl-ref">รหัสอ้างอิงของคุณ — เก็บไว้ให้ดี</span>
+                <div class="cf-row">
+                  <span class="cf-val" id="done-ref" aria-labelledby="lbl-ref"></span>
+                  <button type="button" class="cf-btn" id="done-copy" data-copy="">
+                    <span class="cf-btn-label">คัดลอก</span>
+                  </button>
+                </div>
+                <p class="meta">ไม่มีระบบค้นด้วยชื่อ เพื่อไม่ให้ใครสืบย้อนว่าใครบริจาคเท่าไร —
+                  รหัสนี้คือทางเดียวที่จะเปิดดูรายการของคุณ</p>
+              </div>
+
+              <dl class="sum-list" id="done-recap" style="border-top:1px solid var(--line);padding-top:var(--s5)"></dl>
+
+              <div class="row">
+                <a class="btn btn-secondary" id="done-status-link" href="/status">ดูสถานะรายการนี้</a>
+                <a class="btn btn-quiet" href="/">กลับหน้าหลัก</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- สรุปยอดสด — เห็นตลอดตอนกรอก -->
+      <aside id="summary-rail" class="stack" style="position:sticky;top:80px">
+        <div class="panel panel-pad stack-sm">
+          <h3>สรุปยอด</h3>
+          <dl class="sum-list" id="rail-list"></dl>
+          <div class="sum-total"><span>รวมที่ต้องโอน</span><b><span id="rail-total">0</span> บาท</b></div>
+          <p class="meta" id="rail-sizes"></p>
+        </div>
+        <div class="panel panel-pad stack-sm">
+          <h3 style="font-size:.9375rem">ทำไมต้องแนบสลิปเอง</h3>
+          <p class="meta">บัญชีนี้เป็นบัญชีร่วมของกรรมการรุ่น ไม่ใช่บัญชีนิติบุคคลที่ต่อ API ธนาคารได้
+            ระบบจึงไม่เห็นเงินเข้าเอง กรรมการต้องเปิด statement เทียบกับสลิปทีละรายการ
+            นี่คือเหตุผลที่มีสถานะ “รอตรวจสอบ”</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- แถบล่างจอมือถือ — ต้องเห็นยอดรวมตลอด ไม่ใช่แค่ปุ่ม -->
+<div class="action-bar" id="bar">
+  <div class="wrap">
+    <span class="bar-total">
+      <span class="bar-k">ยอดรวม</span>
+      <span class="bar-v"><span id="bar-amount">0</span> บาท</span>
+    </span>
+    <button type="button" class="btn btn-primary" id="bar-btn">ถัดไป</button>
+  </div>
+</div>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div>
+      <img src="/assets/img/ams-logo.png" alt="">
+      <p class="meta">คณะกรรมการรุ่น 49 คณะเทคนิคการแพทย์ มหาวิทยาลัยเชียงใหม่</p>
+    </div>
+    <div class="meta">
+      <p><strong style="color:var(--ink)">ความปลอดภัยและข้อมูลของคุณ</strong></p>
+      <p>หน้านี้แสดงเลขบัญชีเป็นข้อความเท่านั้น ไม่เผยแพร่ภาพถ่ายสมุดบัญชี
+         เพราะภาพต้นฉบับมีลายเซ็นและตราประทับธนาคารติดมาด้วย ·
+         ที่อยู่ที่กรอกใช้เพื่อจัดส่งเสื้อเท่านั้น กรรมการดึงออกมาเป็นใบปะหน้าพัสดุ
+         แล้วระบบลบทิ้งทันทีที่กดว่าส่งของแล้ว</p>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<style>
+@media (max-width:1000px){
+  /* ต้องเป็น minmax(0,1fr) ไม่ใช่ 1fr — 1fr มีขั้นต่ำเป็น min-content ของสิ่งที่อยู่ข้างใน
+     พอมีตารางไซส์อยู่ในนั้น แทร็กจะโป่งออกจนจอ 320px เลื่อนแนวนอนได้ */
+  .wiz-grid{ grid-template-columns:minmax(0,1fr) !important; gap:var(--s6) !important; }
+  .wiz-grid aside{ position:static !important; }
+  /* rail ซ้ำกับแถบยอดล่างจอ — บนมือถือเก็บเฉพาะกล่องอธิบาย ไม่ต้องโชว์ยอดสองที่ */
+  #summary-rail > div:first-child{ display:none; }
+}
+@media (max-width:760px){
+  .hero-shirt{ grid-template-columns:1fr !important; }
+  .hero-shirt figure{ order:-1; max-width:420px; }
+}
+</style>
+
+<script src="/assets/app.js?v=1"></script>
+<script src="/assets/page-support.js?v=1"></script>
+</body>
+</html>

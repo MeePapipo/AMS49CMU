@@ -1,0 +1,26 @@
+<!doctype html><meta charset="utf-8"><title>card shot</title>
+<!-- ส่องเฉพาะการ์ดเสื้อในคอลัมน์ขวาของ index ที่ความกว้างจริงของ rail (320px) และแบบมือถือ -->
+<body style="margin:0;background:#333;font:12px system-ui;color:#fff">
+<div style="display:flex;gap:12px;padding:10px;align-items:flex-start">
+  <div><div style="padding:2px">rail จริง (desktop 1280)</div>
+    <iframe id="a" src="index.html" style="width:1280px;height:780px;border:0;background:#fff"></iframe></div>
+  <div><div style="padding:2px">มือถือ 360</div>
+    <iframe id="b" src="index.html" style="width:360px;height:780px;border:0;background:#fff"></iframe></div>
+</div>
+<script>
+/* เลื่อนหน้าใน iframe ไปที่การ์ดเสื้อพอดี ไม่ต้องถ่ายทั้งหน้า
+   ใช้ offsetTop + scrollTo แทน scrollIntoView เพราะ smooth scroll ของหน้าจริงทำให้ถ่ายไม่ทัน */
+['a', 'b'].forEach(function (id) {
+  var f = document.getElementById(id);
+  f.onload = function () {
+    setTimeout(function () {
+      var d = f.contentDocument;
+      /* system.css ตั้ง scroll-behavior:smooth ไว้ ถ้าไม่ปิดก่อน ภาพจะถ่ายตอนยังเลื่อนไม่ถึง */
+      d.documentElement.style.scrollBehavior = 'auto';
+      var card = d.getElementById('shirt-badge').closest('.panel');
+      var y = card.getBoundingClientRect().top + f.contentWindow.pageYOffset;
+      f.contentWindow.scrollTo(0, y - 90);
+    }, 500);
+  };
+});
+</script>

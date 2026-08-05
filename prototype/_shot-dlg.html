@@ -1,0 +1,18 @@
+<!doctype html><meta charset="utf-8"><title>dlg shot</title>
+<body style="margin:0">
+<iframe id="f" src="admin.html" style="width:100%;height:1000px;border:0"></iframe>
+<script>
+try { sessionStorage.setItem('ams49.admin', '1'); } catch (e) {}
+var f = document.getElementById('f');
+f.onload = function () {
+  setTimeout(function () {
+    var d = f.contentDocument;
+    var chip = d.querySelector('.chip[data-f="all"]');
+    if (chip) chip.click();
+    setTimeout(function () {
+      var b = d.querySelector('[data-open="AMS49-H3TV"]') || d.querySelector('[data-open]');
+      if (b) b.click();
+    }, 200);
+  }, 300);
+};
+</script>
