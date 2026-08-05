@@ -2,7 +2,7 @@
   "name": "ams49-reunion",
   "version": "1.0.0",
   "private": true,
-  "description": "เว็บรับบริจาคและสั่งเสื้อรุ่น AMS49 CMU Reunion 20 ปี — Cloudflare Pages + Functions + D1 + R2",
+  "description": "เว็บรับบริจาคและสั่งเสื้อรุ่น AMS49 CMU Reunion 20 ปี — Cloudflare Pages + Functions + D1 + KV",
   "type": "module",
   "scripts": {
     "db:init": "wrangler d1 execute ams49 --local --file=./schema.sql",
@@ -16,6 +16,6 @@
     "deploy": "wrangler pages deploy"
   },
   "devDependencies": {
-    "wrangler": "^4.42.0"
+    "wrangler": "^4.35.0"
   }
 }

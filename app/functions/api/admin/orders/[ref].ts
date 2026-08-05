@@ -89,7 +89,7 @@ export const onRequestPatch: PagesFunction<Env, string, AdminData> = async ({ re
     }
 
     case 'purge': {
-      /* ลบไฟล์สลิปออกจาก R2 จริง ๆ ไม่ใช่แค่ตัดลิงก์ในฐานข้อมูล */
+      /* ลบไฟล์สลิปออกจากที่เก็บจริง ๆ ไม่ใช่แค่ตัดลิงก์ในฐานข้อมูล */
       if (row.slip_key) await env.SLIPS.delete(row.slip_key).catch(() => {});
       await env.DB
         .prepare(

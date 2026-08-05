@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS orders (
   zip             TEXT NOT NULL DEFAULT '',
   ship_note       TEXT NOT NULL DEFAULT '',
 
-  -- สลิป — ไฟล์จริงอยู่ใน R2 ตาราง D1 เก็บแค่กุญแจ
+  -- สลิป — ไฟล์จริงอยู่ใน Workers KV ตาราง D1 เก็บแค่กุญแจกับชนิดไฟล์ที่ตรวจได้
   slip_key        TEXT,
   slip_type       TEXT,
   slip_size       INTEGER,
@@ -87,7 +87,8 @@ CREATE INDEX IF NOT EXISTS idx_audit_at ON audit(at DESC);
 -- ---------------------------------------------------------------------------
 -- rate — ตัวนับสำหรับจำกัดอัตราการเรียก
 -- bucket = ชนิดการเรียก + hash ของ IP · reset_at เป็น epoch ms
--- D1 ทำงานนี้ได้พอ เพราะปริมาณของงานนี้เล็กมาก (ไม่ต้องเสียเงินซื้อ KV)
+-- ใช้ D1 ไม่ใช่ KV เพราะตัวนับต้องอ่าน-เขียนทันทีในคำขอเดียวกัน ส่วน KV เป็น
+-- eventually consistent ซึ่งนับผิดได้ (KV ในโปรเจกต์นี้ใช้เก็บไฟล์สลิปอย่างเดียว)
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS rate (
   bucket   TEXT PRIMARY KEY,

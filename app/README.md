@@ -1,6 +1,6 @@
 # AMS49 CMU · เว็บรับบริจาคและสั่งเสื้อรุ่น (ตัวจริง)
 
-Cloudflare Pages + Functions + D1 + R2 — ฟรีทั้งหมด ไม่ต้องผูกบัตร ไม่ sleep
+Cloudflare Pages + Functions + D1 + KV — ฟรีทั้งหมด ไม่ต้องผูกบัตร ไม่ sleep
 งาน 21 พฤศจิกายน 2569 · ประเพณีรับน้องขึ้นดอย
 
 ต้นแบบ static เดิมอยู่ที่ `../prototype/` และยังเปิดดูได้ตามปกติ **ไม่ถูกแตะ**
@@ -81,7 +81,7 @@ functions/
     quote.ts                  POST  คิดยอดให้ (ยอดจริงที่ระบบยอมรับ)
     stats.ts                  GET   ยอดรวม + บัญชีสาธารณะ
     status/[ref].ts           GET   สถานะรายรายการ
-    orders.ts                 POST  สร้างรายการ + อัปโหลดสลิปเข้า R2
+    orders.ts                 POST  สร้างรายการ + เก็บไฟล์สลิปลง KV
     admin/                    ทุกอย่างหลัง _middleware
 public/
   index.html support.html status.html admin.html  _og.html

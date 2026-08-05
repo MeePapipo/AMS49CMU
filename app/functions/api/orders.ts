@@ -126,17 +126,20 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       { status: 400 });
   }
 
-  /* 7 · เขียน — R2 ก่อน แล้วค่อย D1
+  /* 7 · เขียน — ไฟล์ก่อน แล้วค่อย D1
      ถ้าเขียน D1 ไม่สำเร็จ ต้องลบไฟล์ทิ้ง ไม่งั้นจะเหลือสลิปกำพร้าที่ไม่มีใครเป็นเจ้าของ
-     กลับกัน ถ้าเขียน D1 ก่อนแล้วอัปโหลดพัง จะได้รายการที่กรรมการตรวจไม่ได้เลย */
+     กลับกัน ถ้าเขียน D1 ก่อนแล้วอัปโหลดพัง จะได้รายการที่กรรมการตรวจไม่ได้เลย
+
+     ที่เก็บเป็น KV (ดูเหตุผลใน wrangler.toml) จึงเก็บได้แค่ไบต์ล้วน ไม่มี httpMetadata
+     ชนิดไฟล์ที่ตรวจได้จริงถูกบันทึกลง D1 คอลัมน์ slip_type แล้วเอามาใช้ตอนเสิร์ฟ
+     metadata ของ KV เก็บซ้ำไว้เผื่อวันหนึ่งต้องกู้ไฟล์โดยไม่มี D1 */
   const ref = await allocateRef(env.DB);
   const now = thNow();
   const ext = SLIP_EXT.get(realType) as string;
   const key = `slips/${now.slice(0, 4)}/${ref}.${ext}`;
 
   await env.SLIPS.put(key, bytes, {
-    httpMetadata: { contentType: realType, cacheControl: 'no-store' },
-    customMetadata: { ref, uploadedAt: now }
+    metadata: { ref, type: realType, uploadedAt: now }
   });
 
   try {

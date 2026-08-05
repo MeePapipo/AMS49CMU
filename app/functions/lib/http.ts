@@ -2,7 +2,9 @@
 
 export interface Env {
   DB: D1Database;
-  SLIPS: R2Bucket;
+  /* ที่เก็บไฟล์สลิป — เป็น KV ไม่ใช่ R2 เพราะการเปิด R2 ต้องผูกบัตร (ดู wrangler.toml)
+     ชนิดไฟล์และขนาดเก็บไว้ใน D1 (slip_type / slip_size) ไม่ได้พึ่ง metadata ของ KV */
+  SLIPS: KVNamespace;
   SESSION_SECRET?: string;
   ADMIN_USERS?: string;
   TURNSTILE_ENABLED?: string;

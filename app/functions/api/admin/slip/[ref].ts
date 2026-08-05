@@ -1,12 +1,11 @@
-/* GET /api/admin/slip/:ref — สตรีมไฟล์สลิปจาก R2
+/* GET /api/admin/slip/:ref — สตรีมไฟล์สลิปจากที่เก็บ (Workers KV)
 
-   bucket ตั้งเป็น "ไม่ public" ทางเดียวที่จะเห็นไฟล์คือผ่าน endpoint นี้
-   ซึ่งอยู่หลัง _middleware ของ /api/admin/* แล้ว
-   ถ้าวันหนึ่งเผลอเปิด bucket ให้ public เมื่อไร ใครเดา URL ถูกจะเห็นสลิปของทุกคนทันที
-   — ห้ามเปิดเด็ดขาด ตรงนี้เขียนไว้ใน DEPLOY.md ด้วย
+   KV namespace ไม่มี URL สาธารณะให้เข้าถึงตรง ๆ อยู่แล้ว ทางเดียวที่จะเห็นไฟล์
+   คือผ่าน endpoint นี้ ซึ่งอยู่หลัง _middleware ของ /api/admin/* แล้ว
 
    Content-Disposition เป็น inline เพื่อให้เปิดดูในหน้าเว็บได้ แต่บังคับ content-type
-   จากที่ตรวจไบต์ไว้ตอนอัปโหลด ไม่ใช่จากชื่อไฟล์ และมี nosniff จาก middleware หลักแล้ว */
+   จากที่ตรวจไบต์ไว้ตอนอัปโหลด (เก็บใน D1 คอลัมน์ slip_type) ไม่ใช่จากชื่อไฟล์
+   และมี nosniff จาก middleware หลักแล้ว */
 
 import { Env, badRequest, notFound } from '../../../lib/http';
 import { normalizeRef, REF_PATTERN } from '../../../lib/ref';
@@ -25,13 +24,13 @@ export const onRequestGet: PagesFunction<Env, string, AdminData> = async ({ env,
 
   if (!row || !row.slip_key) return notFound('ไม่มีไฟล์สลิปของรายการนี้');
 
-  const obj = await env.SLIPS.get(row.slip_key);
-  if (!obj) return notFound('ไฟล์สลิปหายไปจากที่เก็บ');
+  const body = await env.SLIPS.get(row.slip_key, 'stream');
+  if (!body) return notFound('ไฟล์สลิปหายไปจากที่เก็บ');
 
   /* บันทึกทุกครั้งที่มีคนเปิดดูสลิป — เอกสารการเงินของคนอื่น ต้องรู้ว่าใครเปิดเมื่อไร */
   waitUntil(log(env.DB, data.admin.actor, 'view-slip', ref));
 
-  return new Response(obj.body, {
+  return new Response(body, {
     headers: {
       'content-type': row.slip_type || 'application/octet-stream',
       'content-disposition': `inline; filename="${ref}"`,

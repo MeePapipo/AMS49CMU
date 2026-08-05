@@ -23,16 +23,24 @@ npx wrangler login          # เปิดเบราว์เซอร์ใ�
 
 ```bash
 npx wrangler d1 create ams49
-npx wrangler r2 bucket create ams49-slips
+npx wrangler kv namespace create SLIPS
 ```
 
-คำสั่งแรกจะพิมพ์ `database_id` ออกมา — **เอาไปใส่ใน `wrangler.toml`** แทนเลขศูนย์ทั้งแถว
+> **ถ้า `wrangler` ฟ้องว่า `You are not authenticated` ทั้งที่ล็อกอินแล้ว**
+> เครื่องที่อยู่หลัง proxy ขององค์กรจะตรวจใบรับรอง TLS ไม่ผ่าน ให้นำหน้าคำสั่งด้วย
+> `NODE_TLS_REJECT_UNAUTHORIZED=0` เช่น `NODE_TLS_REJECT_UNAUTHORIZED=0 npx wrangler d1 create ams49`
+
+ทั้งสองคำสั่งจะพิมพ์ id ออกมา — **เอาไปใส่ใน `wrangler.toml`** ให้ตรงช่อง
 
 ```toml
 [[d1_databases]]
 binding = "DB"
 database_name = "ams49"
-database_id = "เลขที่ได้จากคำสั่งข้างบน"
+database_id = "เลขที่ได้จาก d1 create"
+
+[[kv_namespaces]]
+binding = "SLIPS"
+id = "เลขที่ได้จาก kv namespace create"
 ```
 
 แล้วสร้างตารางบนฐานจริง
@@ -44,10 +52,16 @@ npm run db:init:remote
 > `schema.sql` ใช้ `CREATE TABLE IF NOT EXISTS` ทั้งไฟล์ จึงรันซ้ำได้ไม่พังข้อมูล
 > **อย่ารัน `scripts/seed-dev.sql` กับฐานจริงเด็ดขาด** — บรรทัดแรกของมันคือ `DELETE FROM orders`
 
-> **bucket `ams49-slips` ต้องเป็นแบบไม่ public ตลอดไป**
-> ในหน้า R2 ของ dashboard จะมีปุ่ม "Allow Access / Public Development URL" — **ห้ามกด**
-> ถ้ากดเมื่อไร ใครเดา URL ถูกจะเปิดดูสลิปของทุกคนได้โดยไม่ต้องล็อกอิน
-> ทางเดียวที่ควรเข้าถึงไฟล์คือผ่าน `/api/admin/slip/:ref` ซึ่งตรวจสิทธิ์ก่อนเสมอ
+> **ทำไมเก็บสลิปใน KV ไม่ใช่ R2 ทั้งที่ R2 เหมาะกับไฟล์มากกว่า**
+> การเปิดใช้ R2 ครั้งแรกต้องผูกบัตรกับ Cloudflare แม้ 10 GB แรกจะฟรี
+> ผู้จัดงานไม่ต้องการผูกบัตร จึงใช้ KV ซึ่งอยู่ในแผนฟรีของ Workers อยู่แล้ว
+>
+> ข้อจำกัดที่ต้องรู้: พื้นที่รวม **1 GB** · เขียน 1,000 ครั้ง/วัน · ไฟล์ละไม่เกิน 25 MB
+> สลิปจากมือถือปกติ 100–500 KB → เก็บได้ราว 2,000–10,000 ใบ เกินพอสำหรับรุ่นเดียว
+> ถ้าวันหนึ่งใกล้เต็ม ให้ไล่กด "ลบข้อมูลส่วนบุคคล" ของรายการที่ปิดจบแล้ว
+>
+> KV namespace ไม่มี URL สาธารณะอยู่แล้ว ทางเดียวที่จะเห็นไฟล์คือผ่าน
+> `/api/admin/slip/:ref` ซึ่งตรวจสิทธิ์ก่อนเสมอ
 
 ---
 
@@ -84,15 +98,28 @@ npx wrangler pages secret put SESSION_SECRET
 
 ## 3 · ขึ้นเว็บ
 
+**ถ้าต่อ Pages เข้ากับ GitHub ไว้แล้ว** (วิธีที่โครงการนี้ใช้อยู่) — แค่ push
+Cloudflare จะ build ให้เองทุกครั้งที่มี commit ใหม่บน `main`
+
+```bash
+git add -A && git commit -m "..." && git push
+```
+
+ตอนสร้างโปรเจกต์ใน Pages ต้องตั้ง **Root directory = `app`** ไม่งั้นจะหาไฟล์ไม่เจอ
+(build command เว้นว่าง · build output directory = `public`)
+bindings ทั้งหมดอ่านจาก `wrangler.toml` ในโฟลเดอร์นี้ ไม่ต้องไปกดเพิ่มในหน้าเว็บ
+
+**ถ้าไม่อยากพึ่ง GitHub** deploy ตรงจากเครื่องก็ได้
+
 ```bash
 npm run deploy
 ```
 
-ครั้งแรกจะถามชื่อโปรเจกต์ (ใช้ `ams49-reunion`) แล้วได้ URL กลับมา
-เข้า `https://ams49-reunion.pages.dev/admin.html` ลองล็อกอินด้วยบัญชีที่เพิ่งสร้าง
+จากนั้นเข้า `https://<โปรเจกต์>.pages.dev/admin` ลองล็อกอินด้วยบัญชีที่เพิ่งสร้าง
 
 ถ้าล็อกอินแล้วขึ้นว่า "ระบบยังตั้งค่าไม่ครบ" แปลว่า secret ยังไม่ติด — ตรวจที่
-dashboard → Workers & Pages → ams49-reunion → Settings → Variables and Secrets
+dashboard → Workers & Pages → โปรเจกต์ → Settings → Variables and Secrets
+(secret ที่ตั้งใหม่จะมีผลกับ **deployment ถัดไป** ต้อง push หรือกด Retry deployment อีกครั้ง)
 
 ---
 
@@ -182,7 +209,7 @@ ACCESS_EMAILS = "a@gmail.com,b@gmail.com"
 | เมื่อไร | ทำอะไร |
 |---|---|
 | ส่งเสื้อให้คนหนึ่งเสร็จ | เปิดรายการนั้น → **ส่งของแล้ว · ลบที่อยู่** → ชื่อผู้รับ เบอร์ และที่อยู่ถูกลบทันที |
-| ปิดโครงการ (หลัง พ.ย. 2569) | เปิดทีละรายการ → **ปิดโครงการ/ลบข้อมูล** (action `purge`) → ลบ PII ทั้งชุดและไฟล์สลิปออกจาก R2 เหลือแค่ยอดกับรหัสไว้ตรวจสอบย้อนหลัง |
+| ปิดโครงการ (หลัง พ.ย. 2569) | เปิดทีละรายการ → กาง **"ปิดโครงการ · ลบข้อมูลส่วนบุคคล"** ในกล่องตรวจสลิป → ลบ PII ทั้งชุดและไฟล์สลิปออกจาก KV เหลือแค่ยอดกับรหัสไว้ตรวจสอบย้อนหลัง |
 
 พิมพ์ใบปะหน้าพัสดุให้ครบก่อนกด "ส่งของแล้ว" — กดแล้วเอาที่อยู่กลับมาไม่ได้
 ทุกการลบถูกบันทึกใน "บันทึกการใช้งาน" ว่าใครกดเมื่อไร
@@ -198,8 +225,9 @@ npx wrangler d1 execute ams49 --remote --command "
   WHERE purged_at IS NULL"
 ```
 
-แล้วลบไฟล์ใน R2 ตามด้วย (`npx wrangler r2 object delete ams49-slips/<key>` ทีละไฟล์
-หรือลบทั้ง bucket แล้วสร้างใหม่ถ้าปิดโครงการจริง ๆ)
+แล้วลบไฟล์สลิปตามด้วย — วิธีที่เร็วที่สุดคือลบ namespace ทิ้งทั้งอันแล้วสร้างใหม่
+(`npx wrangler kv namespace delete --namespace-id <id>` แล้ว `kv namespace create SLIPS`
+อย่าลืมเอา id ใหม่ใส่ `wrangler.toml` แล้ว deploy) — ทำเฉพาะตอนปิดโครงการจริง ๆ เท่านั้น
 
 ---
 
@@ -224,7 +252,7 @@ npx wrangler d1 export ams49 --remote --output "backup-$(date +%F).sql"
 | Pages (โฮสต์หน้าเว็บ) | ไม่จำกัด | — |
 | Pages Functions | 100,000 คำขอ/วัน | หลักร้อยถึงหลักพัน |
 | D1 | 5 GB · อ่าน 5 ล้านแถว/วัน | หลักร้อยแถว |
-| R2 | 10 GB · เขียน 1 ล้านครั้ง/เดือน | สลิปละ ~200 KB |
+| Workers KV | 1 GB · เขียน 1,000 ครั้ง/วัน · อ่าน 100,000 ครั้ง/วัน | สลิปละ ~200 KB |
 | Turnstile | ไม่จำกัด | — |
 | Zero Trust Access | 50 ผู้ใช้ | กรรมการไม่กี่คน |
 
