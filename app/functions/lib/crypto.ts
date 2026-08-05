@@ -115,10 +115,24 @@ export function readCookie(req: Request, name: string): string | null {
 }
 
 export const SESSION_COOKIE = 'ams49_sess';
-export const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
 
-export function sessionCookieHeader(token: string, url: URL, maxAgeSec: number): string {
-  /* Secure ปิดเฉพาะตอน dev บน http://localhost ไม่งั้นเบราว์เซอร์ทิ้ง cookie ทิ้งทั้งอัน */
+/* เพดานแข็งของอายุ session ตรวจที่เซิร์ฟเวอร์จาก exp ที่เซ็นไว้ใน token
+   ต่อให้ cookie ถูกก๊อปไปหรือถูกเบราว์เซอร์กู้กลับมา ก็ใช้ได้ไม่เกินเวลานี้นับจากตอนล็อกอิน
+   ลดจาก 8 ชั่วโมงเหลือ 3 เพราะรอบตรวจสลิปจริงใช้เวลาไม่กี่สิบนาที
+   และหน้านี้เห็นชื่อ เบอร์ ที่อยู่ และสลิปของทุกคน */
+export const SESSION_TTL_MS = 3 * 60 * 60 * 1000;
+
+export function sessionCookieHeader(token: string, url: URL): string {
+  /* **ตั้งใจไม่ใส่ Max-Age / Expires** — ทำให้เป็น session cookie ที่เบราว์เซอร์
+     ลบทิ้งเองเมื่อปิดโปรแกรม ก่อนหน้านี้ใส่ Max-Age=8h ซึ่งเขียนลงดิสก์เป็น
+     persistent cookie แล้วรอดข้ามการปิดเบราว์เซอร์ — กรรมการที่ลืมกดออกจากระบบ
+     จึงเปิดเว็บมาใหม่แล้วเข้าหน้าแอดมินได้เลย
+
+     ชั้นนี้ไม่ได้กันได้ 100%: Chrome/Edge ที่เปิด "เปิดต่อจากที่ค้างไว้" จะกู้
+     session cookie กลับมาให้ และเบราว์เซอร์มือถือแทบไม่เคยถูกปิดจริง
+     ตัวที่กันได้จริงคือ SESSION_TTL_MS ด้านบน กับตัวจับเวลาไม่ใช้งานใน page-admin.js
+
+     Secure ปิดเฉพาะตอน dev บน http://localhost ไม่งั้นเบราว์เซอร์ทิ้ง cookie ทั้งอัน */
   const secure = url.protocol === 'https:' ? '; Secure' : '';
-  return `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAgeSec}${secure}`;
+  return `${SESSION_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax${secure}`;
 }

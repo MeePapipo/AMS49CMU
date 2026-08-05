@@ -70,6 +70,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   return json(
     { ok: true, actor: found.u, name: found.name || found.u, via: 'password',
       expiresAt: new Date(now + SESSION_TTL_MS).toISOString() },
-    { headers: { 'set-cookie': sessionCookieHeader(token, new URL(request.url), SESSION_TTL_MS / 1000) } }
+    { headers: { 'set-cookie': sessionCookieHeader(token, new URL(request.url)) } }
   );
 };

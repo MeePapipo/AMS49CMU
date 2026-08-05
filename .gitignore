@@ -29,9 +29,8 @@ dist/
 
 # ---- ไฟล์ชั่วคราว ----
 *.log
-_shot-*.png
-_diag.png
-_m*.png
+# ภาพหน้าจอที่ถ่ายไว้ตอนตรวจงาน ไม่ใช่ส่วนหนึ่งของโปรเจกต์
+_*.png
 .DS_Store
 Thumbs.db
 desktop.ini

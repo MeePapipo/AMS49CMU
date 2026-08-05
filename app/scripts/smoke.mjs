@@ -208,6 +208,10 @@ const main = async () => {
   const cookie = setCookie.split(';')[0];
   ok('ได้ session cookie แบบ HttpOnly', /HttpOnly/i.test(setCookie));
   ok('cookie ตั้ง SameSite=Lax', /SameSite=Lax/i.test(setCookie));
+  /* ห้ามมี Max-Age/Expires — ไม่งั้นเบราว์เซอร์เขียนลงดิสก์แล้วรอดข้ามการปิดโปรแกรม
+     กรรมการที่ลืมกดออกจากระบบจะเปิดเว็บมาใหม่แล้วเข้าคอนโซลได้เลย */
+  ok('cookie เป็นแบบหายเมื่อปิดเบราว์เซอร์ (ไม่มี Max-Age / Expires)',
+    !/Max-Age|Expires/i.test(setCookie), setCookie.replace(/=[^;]+/, '=<hidden>'));
 
   if (!cookie.startsWith('ams49_sess=')) {
     console.log('\n  หยุดเทสต์หลังบ้าน เพราะล็อกอินไม่สำเร็จ\n');
@@ -229,7 +233,7 @@ const main = async () => {
     (list.data?.orders || []).find((o) => o.ref === ref)?.name === 'ทดสอบ ระบบ');
 
   const slip = await call(`/api/admin/slip/${ref}`, { cookie });
-  ok('เปิดไฟล์สลิปจาก R2 ได้', slip.status === 200);
+  ok('เปิดไฟล์สลิปจาก KV ได้', slip.status === 200);
   ok('สลิปถูกเสิร์ฟเป็น image/png ตามไบต์จริง',
     (slip.res.headers.get('content-type') || '').includes('image/png'));
   ok('สลิปห้ามถูกแคช', /no-store/.test(slip.res.headers.get('cache-control') || ''));

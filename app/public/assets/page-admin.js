@@ -16,6 +16,7 @@
   var searchTimer = null;
   var current = null;   // รายการที่เปิดอยู่ในกล่องตรวจสลิป
   var byRef = {};
+  var me = null;        // ตัวเราเป็นใคร — ใช้ตัดสินว่าตอนหมดเวลาต้องทำแบบไหน
 
   /* ---------- เข้าระบบ ---------- */
   function showOnly(id) {
@@ -24,13 +25,71 @@
     });
   }
 
-  function enterConsole(me) {
-    $('who').textContent = me.name + (me.via === 'access' ? ' · Cloudflare Access' : '');
-    $('logout').hidden = me.via === 'access';   // Access ต้องออกจากระบบที่ฝั่ง Cloudflare
+  function enterConsole(who) {
+    me = who;
+    $('who').textContent = who.name + (who.via === 'access' ? ' · Cloudflare Access' : '');
+    $('logout').hidden = who.via === 'access';   // Access ต้องออกจากระบบที่ฝั่ง Cloudflare
+    $('idle-note').hidden = true;
     showOnly('console');
+    armIdle();
     load();
     loadAudit();
   }
+
+  /* ---------- ออกจากระบบอัตโนมัติเมื่อไม่มีการใช้งาน ----------
+     ปัญหาที่แก้: กรรมการลืมกดออกจากระบบแล้วลุกไปทำอย่างอื่น หรือปิดเบราว์เซอร์ไป
+     แล้วเปิดมาใหม่ยังอยู่ในคอนโซล ซึ่งหน้านี้เห็นชื่อ เบอร์ ที่อยู่ และสลิปของทุกคน
+
+     cookie ถูกเปลี่ยนเป็น session cookie แล้ว (ปิดเบราว์เซอร์แล้วหาย) แต่ชั้นนั้นไม่พอ
+     เพราะ Chrome/Edge ที่ตั้ง "เปิดต่อจากที่ค้างไว้" จะกู้กลับมาให้ และเครื่องที่เปิดทิ้งไว้
+     เฉย ๆ ก็ไม่ได้ปิดอยู่แล้ว — ตัวจับเวลาตรงนี้คือชั้นที่กันเคสนั้นได้จริง
+
+     20 นาทีเลือกจากงานจริง: ตรวจสลิปหนึ่งรายการใช้เวลาไม่กี่นาที ส่วนการเปิด statement
+     ธนาคารเทียบยอดนับเป็น "ไม่ใช้งาน" ก็จริง แต่ 20 นาทีเผื่อไว้พอสมควรแล้ว
+     ถ้าสั้นไปหรือยาวไปแก้ค่าเดียวตรงนี้ */
+  var IDLE_MS = 20 * 60 * 1000;
+  var idleTimer = null;
+
+  function armIdle() {
+    clearTimeout(idleTimer);
+    if (!me) return;
+    idleTimer = setTimeout(idleLogout, IDLE_MS);
+  }
+  function disarmIdle() { clearTimeout(idleTimer); idleTimer = null; }
+
+  function idleLogout() {
+    disarmIdle();
+    var viaPassword = me && me.via === 'password';
+    me = null;
+
+    /* ล้างข้อมูลส่วนบุคคลออกจากหน้าจอก่อนอย่างอื่น — ตารางในหน้ามีชื่อ เบอร์
+       และที่อยู่ของทุกคนค้างอยู่ใน DOM ต่อให้ cookie ถูกลบไปแล้วก็ยังอ่านจากจอได้ */
+    try { dlg.close(); } catch (e) {}
+    $('a-body').innerHTML = '';
+    $('audit-list').innerHTML = '';
+    $('d-slip-img').removeAttribute('src');
+    byRef = {};
+    current = null;
+
+    if (!viaPassword) {
+      /* โหมด Cloudflare Access — session คุมที่ Zero Trust ไม่ใช่ที่เรา
+         โหลดหน้าใหม่เพื่อล้างจอ แล้วให้ Access เป็นคนตัดสินว่าต้องล็อกอินซ้ำไหม */
+      location.reload();
+      return;
+    }
+
+    A.API.admin.logout().catch(function () {}).then(function () {
+      $('idle-note').hidden = false;
+      showOnly('login');
+      $('i-pin').value = '';
+    });
+  }
+
+  /* รีเซ็ตตัวจับเวลาเมื่อมีการใช้งานจริง — ผูกครั้งเดียวตอนโหลดหน้า
+     ใช้ passive:true เพื่อไม่ให้ scroll สะดุด */
+  ['mousedown', 'keydown', 'scroll', 'touchstart', 'pointermove'].forEach(function (ev) {
+    document.addEventListener(ev, function () { if (me) armIdle(); }, { passive: true });
+  });
 
   function checkSession() {
     A.API.admin.me().then(enterConsole).catch(function (err) {
@@ -68,6 +127,9 @@
   ['i-user', 'i-pin'].forEach(function (id) {
     $(id).addEventListener('input', function () {
       A.clearInvalid($('f-user')); A.clearInvalid($('f-pin'));
+      /* เก็บข้อความ "ออกจากระบบอัตโนมัติ" ทันทีที่เริ่มพิมพ์ ไม่งั้นมันจะค้างอยู่
+         คู่กับข้อความ error ตอนล็อกอินผิด แล้วอ่านสับสน */
+      $('idle-note').hidden = true;
     });
   });
 
