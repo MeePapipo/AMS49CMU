@@ -26,7 +26,8 @@ npm run smoke           # ยิง API จริงกับเซิร์ฟ�
 
 | อะไร | ทำยังไง | ต้องได้ |
 |---|---|---|
-| API ทั้งระบบ | `npm run smoke` | `ALL PASS` 58 ข้อ |
+| API ทั้งระบบ | `npm run smoke` | `ALL PASS` 62 ข้อ |
+| รายชื่อแอดมินก่อนขึ้น production | `npm run check-admins -- admin-users.json` | `✓ ผ่านทั้งหมด` |
 | layout ทุกความกว้าง | เปิด `http://localhost:8788/_diag.html` | "ไม่มีการเลื่อนแนวนอน" 30 การตรวจ |
 
 `_diag.html` เปิดหน้าจริงใส่ iframe ที่ล็อกความกว้าง 320/360/390/768/1024 แล้วเดินครบทั้ง 4 ขั้น
@@ -87,7 +88,7 @@ public/
   index.html support.html status.html admin.html  _og.html
   assets/ system.css  app.js  page-*.js  fonts/  img/
 scripts/
-  hash-password.mjs  seed-dev.sql  smoke.mjs
+  hash-password.mjs  check-admin-users.mjs  seed-dev.sql  smoke.mjs
 schema.sql   wrangler.toml   DEPLOY.md
 ```
 

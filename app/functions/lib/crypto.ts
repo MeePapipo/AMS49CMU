@@ -54,15 +54,29 @@ export async function hashPassword(password: string, iterations = DEFAULT_ITERAT
   return `pbkdf2-sha256$${iterations}$${b64uEncode(salt)}$${b64uEncode(hash)}`;
 }
 
-export async function verifyPassword(password: string, stored: string): Promise<boolean> {
+/* ตรวจแค่ "รูปแบบ" ของแฮช ยังไม่ได้ตรวจรหัสผ่าน
+   แยกออกมาเป็นฟังก์ชันของตัวเองเพราะแฮชที่พังจะทำให้ verifyPassword คืน false เงียบ ๆ
+   แยกไม่ออกจากรหัสผ่านผิด — เคสจริงคือแฮชถูกก๊อปวางแล้วขาด `$` ไปท่อนหนึ่ง
+   หรือถูกตัดท้ายตอนวางในช่อง secret แล้วกรรมการคนนั้นเข้าไม่ได้อยู่คนเดียว
+   หน้าล็อกอินเรียกตัวนี้เพื่อเขียนสาเหตุจริงลงบันทึก โดยยังไม่บอกผู้ใช้ */
+export function isHashFormatValid(stored: string): boolean {
   const parts = String(stored || '').split('$');
   if (parts.length !== 4 || parts[0] !== 'pbkdf2-sha256') return false;
   const iterations = parseInt(parts[1], 10);
   if (!Number.isFinite(iterations) || iterations < 1000 || iterations > 1_000_000) return false;
-  let salt: Uint8Array, expected: Uint8Array;
-  try { salt = b64uDecode(parts[2]); expected = b64uDecode(parts[3]); } catch { return false; }
-  const actual = await pbkdf2(password, salt, iterations);
-  return timingSafeEqual(actual, expected);
+  try {
+    b64uDecode(parts[2]);
+    return b64uDecode(parts[3]).length === 32;   // SHA-256 = 32 ไบต์ สั้นกว่านี้คือโดนตัดมา
+  } catch {
+    return false;
+  }
+}
+
+export async function verifyPassword(password: string, stored: string): Promise<boolean> {
+  if (!isHashFormatValid(stored)) return false;
+  const parts = stored.split('$');
+  const actual = await pbkdf2(password, b64uDecode(parts[2]), parseInt(parts[1], 10));
+  return timingSafeEqual(actual, b64uDecode(parts[3]));
 }
 
 /* ---- session cookie -------------------------------------------------------

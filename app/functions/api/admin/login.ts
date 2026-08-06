@@ -9,9 +9,10 @@
 
 import { Env, json, badRequest, fail, clientIp } from '../../lib/http';
 import {
-  verifyPassword, signSession, sessionCookieHeader, SESSION_TTL_MS, DEFAULT_ITERATIONS, hashPassword
+  verifyPassword, signSession, sessionCookieHeader, SESSION_TTL_MS, DEFAULT_ITERATIONS,
+  hashPassword, isHashFormatValid
 } from '../../lib/crypto';
-import { parseAdminUsers } from '../../lib/auth';
+import { parseAdminUsers, normUser } from '../../lib/auth';
 import { consume, refund, bucketFor } from '../../lib/rate';
 import { log } from '../../lib/audit';
 
@@ -48,27 +49,44 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       'ยังไม่ได้ตั้งรายชื่อแอดมิน (ADMIN_USERS) — ดูขั้นตอนใน DEPLOY.md');
   }
 
-  const found = users.find((u) => u.u === user);
+  const wanted = normUser(user);
+  const found = users.find((u) => normUser(u.u) === wanted);
+
+  /* แฮชที่ผิดรูปจะถูก verifyPassword ปฏิเสธทันทีโดยไม่ทันได้คำนวณ ซึ่งตอบเร็วผิดปกติ
+     จึงสลับไปใช้แฮชหลอกแทน ให้ทุกเส้นทางที่ล้มเสียเวลาเท่ากันหมด */
+  const brokenHash = !!found && !isHashFormatValid(found.hash);
   if (!dummyHash) dummyHash = await hashPassword('x'.repeat(32), DEFAULT_ITERATIONS);
-  const ok = await verifyPassword(password, found ? found.hash : dummyHash);
+  const ok = await verifyPassword(password, found && !brokenHash ? found.hash : dummyHash);
 
   if (!found || !ok) {
-    await log(env.DB, user || '(ว่าง)', 'login-failed', null, 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+    /* ข้อความที่ตอบกลับต้องเหมือนกันทุกกรณี — บอกต่างกันเมื่อไรก็เท่ากับใบ้ว่าชื่อไหนมีจริง
+       แต่ "เหมือนกันหมด" ทำให้ตอนกรรมการคนหนึ่งเข้าไม่ได้ ไม่มีใครบอกได้ว่าเพราะอะไร
+       จึงแยกสาเหตุไว้ในบันทึกฝั่งเซิร์ฟเวอร์แทน ซึ่งเห็นได้เฉพาะคนที่เข้าระบบได้แล้ว
+         no_such_user   → ไม่มีชื่อนี้ใน ADMIN_USERS (หรือ entry โดนกรองทิ้งเพราะคีย์ผิด)
+         malformed_hash → มีชื่อ แต่แฮชใน secret พัง วางไม่ครบ หรือขาด $ ไปท่อนหนึ่ง
+         bad_password   → ทุกอย่างถูก เหลือแค่รหัสผ่านผิดจริง ๆ */
+    const reason = !found ? 'no_such_user' : brokenHash ? 'malformed_hash' : 'bad_password';
+    console.warn('login-failed', { user, reason });
+    await log(env.DB, user || '(ว่าง)', 'login-failed', null,
+      `ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง (${reason})`);
     return fail(401, 'bad_credentials', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
   }
 
   /* เข้าถูกแล้วคืนโควตาให้ — ไม่อย่างนั้นคนที่เข้าออกวันละหลายครั้งจะโดนล็อกเอง */
   await refund(env.DB, bucket);
 
+  /* ลง audit ด้วยชื่อที่ผ่าน normUser แล้ว ไม่ใช่ค่าดิบจาก secret — ถ้าใครวาง `Pin `
+     ที่มีช่องว่างท้ายเข้ามา บันทึกจะได้ไม่มีทั้ง `pin` และ `Pin ` ปนกันจนนับไม่ตรง */
+  const actor = normUser(found.u);
   const now = Date.now();
   const token = await signSession(
-    { u: found.u, n: found.name || found.u, iat: now, exp: now + SESSION_TTL_MS },
+    { u: actor, n: found.name || actor, iat: now, exp: now + SESSION_TTL_MS },
     env.SESSION_SECRET
   );
-  await log(env.DB, found.u, 'login', null, '');
+  await log(env.DB, actor, 'login', null, '');
 
   return json(
-    { ok: true, actor: found.u, name: found.name || found.u, via: 'password',
+    { ok: true, actor, name: found.name || actor, via: 'password',
       expiresAt: new Date(now + SESSION_TTL_MS).toISOString() },
     { headers: { 'set-cookie': sessionCookieHeader(token, new URL(request.url)) } }
   );

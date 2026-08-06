@@ -41,6 +41,23 @@ export function parseAdminUsers(env: Env): AdminUser[] {
   }
 }
 
+/* อักขระที่มองไม่เห็นแต่ติดมากับการก๊อปวางจากไลน์ Word หรือ PDF
+   soft hyphen, zero-width ทั้งตระกูล, ตัวสั่งทิศทางข้อความ, BOM */
+const INVISIBLE = /[\u00AD\u200B-\u200F\u2028\u2029\u202A-\u202E\u2060\uFEFF]/g;
+
+/* เทียบชื่อผู้ใช้ตาม "สิ่งที่คนตั้งใจพิมพ์" ไม่ใช่ตามไบต์
+
+   เดิมเทียบด้วย === ตรง ๆ ซึ่งแปลว่า `Jib` `jib ` และ `jib` เป็นคนละคน
+   ค่าที่ผู้ใช้พิมพ์เข้ามาถูก trim แล้ว แต่ค่าที่อยู่ใน secret ไม่เคยถูก trim
+   ช่องว่างท้ายชื่อที่ติดมาตอนวาง JSON จึงทำให้คนนั้นล็อกอินไม่ได้ตลอดกาล
+   โดยไม่มีอะไรบอกสาเหตุ เพราะข้อความที่ตอบกลับเหมือนรหัสผ่านผิดทุกประการ
+
+   ชื่อผู้ใช้ที่นี่เป็นชื่อเล่นภาษาอังกฤษของกรรมการไม่กี่คน การไม่แยกตัวพิมพ์
+   ไม่ได้ลดความปลอดภัยลงเลย เพราะความปลอดภัยอยู่ที่รหัสผ่านสุ่ม 94 บิต */
+export function normUser(s: string): string {
+  return String(s || '').replace(INVISIBLE, '').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
 /* ---- Cloudflare Access JWT ------------------------------------------------ */
 
 interface Jwks { keys: JsonWebKey[] & { kid?: string }[] }
@@ -121,9 +138,11 @@ export async function resolveAdmin(request: Request, env: Env): Promise<AdminIde
   const payload = await verifySession(token, env.SESSION_SECRET);
   if (!payload) return null;
 
-  /* ผู้ใช้ที่ถูกถอดออกจาก ADMIN_USERS แล้ว ต้องใช้ cookie เก่าต่อไม่ได้ */
+  /* ผู้ใช้ที่ถูกถอดออกจาก ADMIN_USERS แล้ว ต้องใช้ cookie เก่าต่อไม่ได้
+     เทียบด้วย normUser ให้ตรงกับตอนล็อกอิน ไม่งั้นถ้ามีใครแก้ตัวพิมพ์ในชื่อที่ secret
+     คนที่ล็อกอินค้างอยู่จะโดนเตะออกกลางคันโดยไม่มีเหตุผลที่อธิบายได้ */
   const users = parseAdminUsers(env);
-  if (!users.some((u) => u.u === payload.u)) return null;
+  if (!users.some((u) => normUser(u.u) === normUser(payload.u))) return null;
 
   return { actor: payload.u, name: payload.n || payload.u, via: 'password' };
 }

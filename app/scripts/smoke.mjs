@@ -204,6 +204,28 @@ const main = async () => {
   });
   ok('ล็อกอินถูกต้อง → 200', login.status === 200, `ได้ ${login.status} ${JSON.stringify(login.data).slice(0, 120)}`);
 
+  /* ชื่อผู้ใช้ต้องเทียบแบบไม่แยกตัวพิมพ์และไม่สนช่องว่าง
+     เคสจริง: กรรมการคนหนึ่งเข้าไม่ได้ทั้งที่รหัสถูก เพราะค่าใน ADMIN_USERS
+     มีช่องว่างท้ายชื่อติดมาจากการก๊อปวาง ส่วนค่าที่พิมพ์เข้ามาถูก trim ไปแล้ว
+     ตัว actor ที่คืนกลับต้องเป็นรูปแบบเดียวเสมอ ไม่งั้นบันทึกจะนับคนซ้ำ */
+  for (const variant of [ADMIN_USER.toUpperCase(), `  ${ADMIN_USER}  `]) {
+    const r = await call('/api/admin/login', {
+      method: 'POST', json: { user: variant, password: ADMIN_PASS }, ip: nextIp()
+    });
+    ok(`ล็อกอินด้วย ${JSON.stringify(variant)} ก็เข้าได้ และ actor เป็นรูปแบบเดียวกัน`,
+      r.status === 200 && r.data?.actor === ADMIN_USER.toLowerCase(),
+      `ได้ ${r.status} actor=${JSON.stringify(r.data?.actor)}`);
+  }
+
+  /* ชื่อที่ไม่มีอยู่จริงต้องได้ข้อความเดียวกับรหัสผิดเป๊ะ ๆ ต่างกันเมื่อไรก็ใบ้ให้เดา
+     ได้ว่าชื่อไหนมีอยู่ในระบบ (สาเหตุที่แท้จริงไปอยู่ในบันทึกฝั่งเซิร์ฟเวอร์แทน) */
+  const noSuchUser = await call('/api/admin/login', {
+    method: 'POST', json: { user: 'ไม่มีคนนี้แน่นอน', password: ADMIN_PASS }, ip: nextIp()
+  });
+  ok('ชื่อผู้ใช้ที่ไม่มีจริง ได้คำตอบเหมือนรหัสผิดทุกประการ',
+    noSuchUser.status === wrongPass.status && noSuchUser.data?.message === wrongPass.data?.message,
+    `${noSuchUser.status} ${noSuchUser.data?.message}`);
+
   const setCookie = login.res.headers.get('set-cookie') || '';
   const cookie = setCookie.split(';')[0];
   ok('ได้ session cookie แบบ HttpOnly', /HttpOnly/i.test(setCookie));

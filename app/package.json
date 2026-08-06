@@ -13,6 +13,7 @@
     "dev": "wrangler pages dev --port 8788",
     "smoke": "node scripts/smoke.mjs",
     "hash": "node scripts/hash-password.mjs",
+    "check-admins": "node scripts/check-admin-users.mjs",
     "deploy": "wrangler pages deploy"
   },
   "devDependencies": {
